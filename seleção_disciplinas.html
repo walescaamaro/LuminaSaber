@@ -167,7 +167,6 @@ label.full {
 const form = document.getElementById("form");
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
 const error = document.getElementById("error");
-
 form.addEventListener("submit", function(e) {
     const checked = document.querySelectorAll("input[type='checkbox']:checked");
 
@@ -175,8 +174,18 @@ form.addEventListener("submit", function(e) {
         e.preventDefault();
         error.style.display = "block";
     } else {
+        e.preventDefault();
         error.style.display = "none";
-        alert("Disciplinas selecionadas com sucesso!");
+
+        const materias = [];
+
+        checked.forEach(item => {
+            materias.push(item.nextElementSibling.textContent);
+        });
+
+        localStorage.setItem("materias", JSON.stringify(materias));
+
+        window.location.href = "tela_exercícios/exercicios.html";
     }
 });
 
