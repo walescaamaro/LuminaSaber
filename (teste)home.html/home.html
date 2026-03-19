@@ -1,0 +1,192 @@
+<!-- rodar código: python3 -m http.server 8000 -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        body {
+            background-color: #00e1e1;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .retangulo {
+            background-color: rgba(255, 255, 255, 0.616);
+            width: 50%;
+            max-width: 610px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 3;
+        }
+
+        .btn {
+            background-color: #bbbeff;
+            border: 2px solid #000;
+            padding: 10px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-contato {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #bbbeff;
+            border: 2px solid #000;
+            padding: 10px 20px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .logo {
+            position: fixed;
+            top: 8vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: clamp(180px, 35vw, 500px);
+    
+        }
+
+        .menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 3;
+        }
+
+        .onda {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: clamp(180px, 30vw, 510px);
+            height: auto;
+
+        }
+
+        .estudantes {
+            position: fixed;
+            bottom: 0;
+            right: 1vw;
+            width: clamp(180px, 28vw, 380px);
+        }
+
+        .livros {
+            position: fixed;
+            bottom: 5vh;
+            left: 2vw;
+            width: clamp(80px, 12vw, 180px);
+            transform: rotate(-12deg);
+        }
+
+        .estrela {
+            position: fixed;
+            bottom: 200px;
+            left: 40px;
+            width: 150px;
+            height: auto;
+            transform: rotate(-2deg);
+            z-index: 1;
+        }
+
+        .giz {
+            position: fixed;
+            bottom: 300px;
+            left: 200px;
+            width: 100px;
+            height: auto;
+            transform: rotate(-2deg);
+            z-index: 1;
+        }
+
+        .cadernos {
+            position: fixed;
+            bottom: 430px;
+            right: 200px;
+            width: 120px;
+            height: auto;
+            transform: rotate(-1deg);
+            z-index: 1;
+        }
+
+        .foguete {
+            position: fixed;
+            bottom: 430px;
+            right: 40px;
+            width: 80px;
+            height: auto;
+            transform: rotate(-1deg);
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="onda.png" class="onda" alt="Ilustração">
+    <img src="logo.png" class="logo" alt="LuminaSaber">
+    <img src="estudante.png" class="estudantes" alt="Estudantes">
+    <img src="livros.png" class="livros" alt="Livros">
+    <img src="caderno.png" class="cadernos" alt="Caderno">
+    <img src="foguete.png" class="foguete" alt="Ilustração">
+    <img src="star.png" class="estrela" alt="Ilustração">
+    <img src="giz.png" class="giz" alt="Ilustração">
+
+    <div class="menu">HOME | SOBRE A PLATAFORMA</div>
+
+    <div class="container">
+        <button class="btn">Cadastro</button>
+        <button class="btn">Login</button>
+    </div>
+
+    <div class="retangulo">
+        <p><b>
+            LuminaSaber é uma plataforma web gamificada e gratuita, criada para auxiliar a aprendizagem de estudantes da educação básica (jardim de infância ao 9º ano).
+            Aqui oferecemos exercícios de múltipla escolha que se adaptam às dificuldades do aluno.
+            Temos diversas matérias como Matemática, Português e Ciências.
+            A plataforma também ajuda na organização dos estudos com relatórios de desempenho e um espaço para anotações digitais.
+        </b></p>
+    </div>
+
+    <button class="btn-contato">Contato e Suporte</button>
+</body>
+</html>
+
