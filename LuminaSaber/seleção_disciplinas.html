@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Seleção de Disciplinas</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: #00e1e1;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    color: #000000;
+    width: 600px;
+    max-width: 90%;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+h1::before {
+    content: "";
+    position: absolute;
+    left: -100px;
+    bottom: -2px;
+    width: calc(20% + 550px);
+    height: 55px;
+    background-color: rgba(255, 255, 255, 0.658);
+    z-index: -1;
+    border-radius: 2px;
+}
+
+p {
+    margin-bottom: 30px;
+    font-size: 15px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.disciplinas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+label {
+    padding: 14px;
+    background-color: rgba(255,255,255,0.85);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.25s;
+    border: 2px solid transparent;
+    text-align: center;
+}
+
+input[type="checkbox"]:checked + label {
+    border: 2px solid #ac03c2;
+    background-color: #fff;
+}
+
+button {
+    padding: 14px 50px;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: #22609b;
+    color: #fff;
+
+}
+
+button {
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #daa700;
+    color: #ffffff;
+}
+
+.error {
+    margin-top: 15px;
+    font-weight: 600;
+    display: none;
+}
+
+label.full {
+    grid-column: span 2;   
+    justify-self: center; 
+    width: 50%;           
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>SELEÇÃO DE DISCIPLINAS</h1>
+    <p>Selecione as disciplinas que deseja estudar agora!</p>
+
+    <form id="form">
+        <div class="disciplinas">
+
+            <input type="checkbox" id="mat">
+            <label for="mat">Matemática</label>
+
+            <input type="checkbox" id="port">
+            <label for="port">Português</label>
+
+            <input type="checkbox" id="hist">
+            <label for="hist">História</label>
+
+            <input type="checkbox" id="geo">
+            <label for="geo">Geografia</label>
+
+            <input type="checkbox" id="art">
+            <label for="art">Artes</label>
+
+            <input type="checkbox" id="ing">
+            <label for="ing">Inglês</label>
+
+            <input type="checkbox" id="cien">
+            <label for="cien" class="full">Ciências</label>
+
+        </div>
+
+        <button type="submit">Pronto</button>
+        <div class="error" id="error">
+            Escolha pelo menos 1 e no máximo 3 disciplinas!
+        </div>
+    </form>
+</div>
+
+<script>
+const form = document.getElementById("form");
+const checkboxes = document.querySelectorAll("input[type='checkbox']");
+const error = document.getElementById("error");
+form.addEventListener("submit", function(e) {
+    const checked = document.querySelectorAll("input[type='checkbox']:checked");
+
+    if (checked.length === 0) {
+        e.preventDefault();
+        error.textContent = "Você deve escolher pelo menos 1 disciplina.";
+        error.style.display = "block";
+        return;
+    }
+
+    if (checked.length > 2) {
+        e.preventDefault();
+        error.textContent = "Não pode selecionar mais de 2 disciplinas!";
+        error.style.display = "block";
+        return;
+    }
+
+    e.preventDefault();
+    error.style.display = "none";
+
+    const materias = [];
+
+    checked.forEach(item => {
+        materias.push(item.nextElementSibling.textContent);
+    });
+
+    localStorage.setItem("materias", JSON.stringify(materias));
+
+    window.location.href = "tela_exercícios/exercicios.html";
+});
+
+checkboxes.forEach(box => {
+    box.addEventListener("change", () => {
+        const checked = document.querySelectorAll("input[type='checkbox']:checked");
+        if (checked.length > 2) {
+            box.checked = false;
+            error.textContent = "Não pode selecionar mais de 2 disciplinas!";
+            error.style.display = "block";
+        } else {
+            error.style.display = "none";
+        }
+    });
+});
+</script>
+
+</body>
+</html>
