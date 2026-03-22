@@ -22,12 +22,12 @@ export async function carregarQuestoes() {
 div.querySelectorAll(".alternativa").forEach(alt => {
     alt.addEventListener("click", () => {
 
-        // limpa todas
+
         div.querySelectorAll(".alternativa").forEach(a => {
             a.style.backgroundColor = "";
         });
 
-        // marca só a clicada
+    
         alt.style.backgroundColor = "#c3e2f7";
 
     });
