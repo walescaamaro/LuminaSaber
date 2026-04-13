@@ -1,0 +1,13 @@
+{
+  "name": "luminasaber-backend",
+  "version": "1.0.0",
+  "description": "Back-end para a plataforma LuminaSaber",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "morgan": "^1.10.1"
+  }
+}
