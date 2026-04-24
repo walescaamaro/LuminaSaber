@@ -1,0 +1,32 @@
+[
+  {
+    "materia": "Matemática",
+    "nivel": "Fácil",
+    "enunciado": "Quanto é 8 + 7?",
+    "alternativas": ["13", "14", "15", "16"]
+  },
+  {
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual palavra está escrita corretamente?",
+    "alternativas": ["Excessão", "Exceção", "Excesssão", "Exeção"]
+  },
+  {
+    "materia": "Geografia",
+    "nivel": "Fácil",
+    "enunciado": "Qual é o maior país da América do Sul?",
+    "alternativas": ["Argentina", "Chile", "Brasil", "Peru"]
+  },
+  {
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Quem foi o primeiro presidente do Brasil?",
+    "alternativas": ["Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek", "Dom Pedro II"]
+  },
+  {
+    "materia": "Ciências",
+    "nivel": "Fácil",
+    "enunciado": "Qual órgão bombeia sangue no corpo humano?",
+    "alternativas": ["Pulmão", "Fígado", "Coração", "Rim"]
+  }
+]
