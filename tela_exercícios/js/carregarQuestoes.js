@@ -1,38 +1,39 @@
+// Busca questões via API em vez de ler o JSON local
 export async function carregarQuestoes() {
-    const resposta = await fetch('./data/questoes.json');
-    const questoes = await resposta.json();
+    try {
+        const resposta = await fetch('/api/questoes');
 
-    const lista = document.getElementById("listaQuestoes");
+        if (!resposta.ok) {
+            throw new Error(`Erro ao buscar questões: ${resposta.status}`);
+        }
 
-    questoes.forEach((q, index) => {
-        const div = document.createElement("div");
+        const questoes = await resposta.json();
+        const lista = document.getElementById("listaQuestoes");
 
-        div.classList.add("questao");
-
-        div.innerHTML = `
-            <span class="nivel">${q.nivel}</span>
-            <h4>Questão ${index + 1}</h4>
-            <p><strong>${q.enunciado}</strong></p>
-            <p class="alternativa">a) ${q.alternativas[0]}</p>
-            <p class="alternativa">b) ${q.alternativas[1]}</p>
-            <p class="alternativa">c) ${q.alternativas[2]}</p>
-            <p class="alternativa">d) ${q.alternativas[3]}</p>
-        `;
-
-div.querySelectorAll(".alternativa").forEach(alt => {
-    alt.addEventListener("click", () => {
-
-
-        div.querySelectorAll(".alternativa").forEach(a => {
-            a.style.backgroundColor = "";
+        questoes.forEach((q, index) => {
+            const div = document.createElement("div");
+            div.classList.add("questao");
+            div.innerHTML = `
+                <span class="nivel">${q.nivel}</span>
+                <h4>Questão ${index + 1}</h4>
+                <p><strong>${q.enunciado}</strong></p>
+                <p class="alternativa">a) ${q.alternativas[0]}</p>
+                <p class="alternativa">b) ${q.alternativas[1]}</p>
+                <p class="alternativa">c) ${q.alternativas[2]}</p>
+                <p class="alternativa">d) ${q.alternativas[3]}</p>
+            `;
+            div.querySelectorAll(".alternativa").forEach(alt => {
+                alt.addEventListener("click", () => {
+                    div.querySelectorAll(".alternativa").forEach(a => a.style.backgroundColor = "");
+                    alt.style.backgroundColor = "#c3e2f7";
+                });
+            });
+            lista.appendChild(div);
         });
 
-    
-        alt.style.backgroundColor = "#c3e2f7";
-
-    });
-});
-
-        lista.appendChild(div);
-    });
+    } catch (erro) {
+        console.error("Erro ao carregar questões:", erro);
+        document.getElementById("listaQuestoes").innerHTML =
+            "<p>Não foi possível carregar as questões. Verifique se o servidor está rodando.</p>";
+    }
 }

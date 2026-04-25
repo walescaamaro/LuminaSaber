@@ -5,12 +5,34 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const frontendDir = path.join(__dirname, '..', 'tela_exercícios');
-app.use(express.static(frontendDir));
+// ===== DIRETÓRIOS DO PROJETO =====
+const rootDir  = path.join(__dirname, '..');
+const homeDir  = path.join(__dirname, '..', '(teste)home.html');
+const exercDir = path.join(__dirname, '..', 'tela_exercícios');
 
+// ===== MIDDLEWARES =====
 app.use(express.json());
 app.use(morgan('dev'));
 
+// ===== ARQUIVOS ESTÁTICOS =====
+app.use(express.static(homeDir));
+app.use(express.static(exercDir));
+app.use(express.static(rootDir));
+
+// ===== ROTAS DE PÁGINAS =====
+app.get('/', (req, res) => {
+  res.sendFile(path.join(homeDir, 'home.html'));
+});
+
+app.get('/selecao', (req, res) => {
+  res.sendFile(path.join(rootDir, 'seleção_disciplinas.html'));
+});
+
+app.get('/exercicios', (req, res) => {
+  res.sendFile(path.join(exercDir, 'exercicios.html'));
+});
+
+// ===== DADOS TEMPORÁRIOS (array em memória) =====
 const questoes = [
   {
     id: 1,
@@ -42,47 +64,30 @@ app.get('/api/questoes', (req, res) => {
 // GET - Obter uma questão específica pelo ID
 app.get('/api/questoes/:id', (req, res) => {
   const { id } = req.params;
-  
-  // Validar se o ID é um número válido
   if (isNaN(id)) {
     return res.status(400).json({ error: 'ID deve ser um número' });
   }
-
-  // Procurar a questão
   const questao = questoes.find(q => q.id === parseInt(id));
-  
   if (!questao) {
     return res.status(404).json({ error: 'Questão não encontrada' });
   }
-
   res.status(200).json(questao);
 });
 
 // POST - Criar uma nova questão
 app.post('/api/questoes', (req, res) => {
   const novaQuestao = req.body;
-
-  // Validação de dados obrigatórios
   if (!novaQuestao || !novaQuestao.enunciado || !novaQuestao.alternativas) {
     return res.status(400).json({ error: 'Dados da questão incompletos. Obrigatório: enunciado e alternativas' });
   }
-
-  // Validar se alternativas é um array
   if (!Array.isArray(novaQuestao.alternativas)) {
     return res.status(400).json({ error: 'Alternativas deve ser um array' });
   }
-
-  // Validar se há pelo menos 2 alternativas
   if (novaQuestao.alternativas.length < 2) {
     return res.status(400).json({ error: 'A questão deve ter pelo menos 2 alternativas' });
   }
-
-  // Atribuir ID automaticamente (próximo número)
   novaQuestao.id = questoes.length > 0 ? Math.max(...questoes.map(q => q.id)) + 1 : 1;
-  
-  // Adicionar à lista
   questoes.push(novaQuestao);
-
   res.status(201).json(novaQuestao);
 });
 
@@ -90,25 +95,16 @@ app.post('/api/questoes', (req, res) => {
 app.put('/api/questoes/:id', (req, res) => {
   const { id } = req.params;
   const dadosAtualizados = req.body;
-
-  // Validar se o ID é um número válido
   if (isNaN(id)) {
     return res.status(400).json({ error: 'ID deve ser um número' });
   }
-
-  // Procurar a questão
   const questao = questoes.find(q => q.id === parseInt(id));
-  
   if (!questao) {
     return res.status(404).json({ error: 'Questão não encontrada' });
   }
-
-  // Validação dos dados enviados
   if (!dadosAtualizados || (!dadosAtualizados.enunciado && !dadosAtualizados.alternativas && !dadosAtualizados.nivel)) {
     return res.status(400).json({ error: 'Envie pelo menos um campo para atualizar (enunciado, alternativas ou nivel)' });
   }
-
-  // Atualizar apenas os campos fornecidos
   if (dadosAtualizados.enunciado) questao.enunciado = dadosAtualizados.enunciado;
   if (dadosAtualizados.alternativas) {
     if (!Array.isArray(dadosAtualizados.alternativas) || dadosAtualizados.alternativas.length < 2) {
@@ -117,41 +113,27 @@ app.put('/api/questoes/:id', (req, res) => {
     questao.alternativas = dadosAtualizados.alternativas;
   }
   if (dadosAtualizados.nivel) questao.nivel = dadosAtualizados.nivel;
-
   res.status(200).json(questao);
 });
 
 // DELETE - Deletar uma questão
 app.delete('/api/questoes/:id', (req, res) => {
   const { id } = req.params;
-
-  // Validar se o ID é um número válido
   if (isNaN(id)) {
     return res.status(400).json({ error: 'ID deve ser um número' });
   }
-
-  // Procurar o índice da questão
   const indice = questoes.findIndex(q => q.id === parseInt(id));
-  
   if (indice === -1) {
     return res.status(404).json({ error: 'Questão não encontrada' });
   }
-
-  // Remover a questão
   const questaoRemovida = questoes.splice(indice, 1);
-
-  res.status(200).json({ 
+  res.status(200).json({
     mensagem: 'Questão deletada com sucesso',
     questao: questaoRemovida[0]
   });
 });
 
-// ===== ROTAS GERAIS =====
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(frontendDir, 'exercicios.html'));
-});
-
+// ===== INICIAR SERVIDOR =====
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });

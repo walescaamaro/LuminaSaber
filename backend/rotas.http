@@ -1,0 +1,40 @@
+### GET - Listar todas as questões
+GET http://localhost:3000/api/questoes
+
+###
+
+### GET - Buscar por ID (existe)
+GET http://localhost:3000/api/questoes/1
+
+###
+
+### GET - Buscar por ID (não existe)
+GET http://localhost:3000/api/questoes/999
+
+###
+
+### POST - Criar nova questão
+POST http://localhost:3000/api/questoes
+Content-Type: application/json
+
+{
+  "nivel": "Fácil",
+  "enunciado": "Quanto é 2 + 2?",
+  "alternativas": ["1", "2", "3", "4"]
+}
+
+###
+
+### PUT - Atualizar questão
+PUT http://localhost:3000/api/questoes/1
+Content-Type: application/json
+
+{
+  "enunciado": "Qual é a capital de São Paulo?",
+  "nivel": "Médio"
+}
+
+###
+
+### DELETE - Deletar questão
+DELETE http://localhost:3000/api/questoes/2

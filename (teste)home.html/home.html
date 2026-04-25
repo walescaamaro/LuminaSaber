@@ -1,26 +1,14 @@
-
-<!-- rodar código: python3 -m http.server 8000 -->
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>LuminaSaber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
     <style>
-        * {
-            box-sizing: border-box;
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-        }
-
+        * { box-sizing: border-box; }
         body {
             background-color: #00e1e1;
             font-family: 'DM Sans', sans-serif;
@@ -32,7 +20,6 @@
             position: relative;
             overflow-x: hidden;
         }
-
         .retangulo {
             background-color: rgba(255, 255, 255, 0.616);
             width: 50%;
@@ -42,7 +29,7 @@
             text-align: center;
             margin-top: 100px;
         }
-
+        /* Botões no canto superior direito: Suporte, Cadastro, Login */
         .container {
             position: fixed;
             top: 20px;
@@ -51,7 +38,6 @@
             gap: 12px;
             z-index: 3;
         }
-
         .btn {
             background-color: #bbbeff;
             border: 2px solid #000;
@@ -61,106 +47,36 @@
             font-weight: 700;
             cursor: pointer;
         }
-
-        .btn-contato {
+        /* Botão "Começar a Estudar" na parte inferior */
+        .btn-comecar {
             position: fixed;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             background-color: #bbbeff;
+            color: #000000;
             border: 2px solid #000;
-            padding: 10px 20px;
+            padding: 12px 28px;
             border-radius: 18px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             z-index: 3;
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
-
-        .logo {
-            position: fixed;
-            top: 8vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: clamp(180px, 35vw, 500px);
-    
-        }
-
-        .menu {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            z-index: 3;
-        }
-
-        .onda {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: clamp(180px, 30vw, 510px);
-            height: auto;
-
-        }
-
-        .estudantes {
-            position: fixed;
-            bottom: 0;
-            right: 1vw;
-            width: clamp(180px, 28vw, 380px);
-        }
-
-        .livros {
-            position: fixed;
-            bottom: 5vh;
-            left: 2vw;
-            width: clamp(80px, 12vw, 180px);
-            transform: rotate(-12deg);
-        }
-
-        .estrela {
-            position: fixed;
-            bottom: 200px;
-            left: 40px;
-            width: 150px;
-            height: auto;
-            transform: rotate(-2deg);
-            z-index: 1;
-        }
-
-        .giz {
-            position: fixed;
-            bottom: 300px;
-            left: 200px;
-            width: 100px;
-            height: auto;
-            transform: rotate(-2deg);
-            z-index: 1;
-        }
-
-        .cadernos {
-            position: fixed;
-            bottom: 430px;
-            right: 200px;
-            width: 120px;
-            height: auto;
-            transform: rotate(-1deg);
-            z-index: 1;
-        }
-
-        .foguete {
-            position: fixed;
-            bottom: 430px;
-            right: 40px;
-            width: 80px;
-            height: auto;
-            transform: rotate(-1deg);
-            z-index: 1;
-        }
+        .btn-comecar:hover { background-color: #daa700; }
+        .logo { position: fixed; top: 8vh; left: 50%; transform: translateX(-50%); width: clamp(180px, 35vw, 500px); }
+        .menu { position: fixed; top: 20px; left: 20px; font-size: 14px; font-weight: 700; z-index: 3; }
+        .onda { position: fixed; top: 0; left: 0; width: clamp(180px, 30vw, 510px); height: auto; }
+        .estudantes { position: fixed; bottom: 0; right: 1vw; width: clamp(180px, 28vw, 380px); }
+        .livros { position: fixed; bottom: 5vh; left: 2vw; width: clamp(80px, 12vw, 180px); transform: rotate(-12deg); }
+        .estrela { position: fixed; bottom: 200px; left: 40px; width: 150px; transform: rotate(-2deg); z-index: 1; }
+        .giz { position: fixed; bottom: 300px; left: 200px; width: 100px; transform: rotate(-2deg); z-index: 1; }
+        .cadernos { position: fixed; bottom: 430px; right: 200px; width: 120px; transform: rotate(-1deg); z-index: 1; }
+        .foguete { position: fixed; bottom: 430px; right: 40px; width: 80px; transform: rotate(-1deg); z-index: 1; }
     </style>
 </head>
-
 <body>
     <img src="onda.png" class="onda" alt="Ilustração">
     <img src="logo.png" class="logo" alt="LuminaSaber">
@@ -173,7 +89,9 @@
 
     <div class="menu">HOME | SOBRE A PLATAFORMA</div>
 
+    <!-- Suporte adicionado ao lado de Login -->
     <div class="container">
+        <button class="btn">Contato e Suporte</button>
         <button class="btn">Cadastro</button>
         <button class="btn">Login</button>
     </div>
@@ -187,7 +105,7 @@
         </b></p>
     </div>
 
-    <button class="btn-contato">Contato e Suporte</button>
+    <!-- Botão "Começar a Estudar" substitui "Contato e Suporte" -->
+    <a href="/selecao" class="btn-comecar">Começar a Estudar</a>
 </body>
 </html>
-
