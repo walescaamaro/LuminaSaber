@@ -145,7 +145,8 @@ O LuminaSaber pode evoluir para incluir:
 
 ## 👩‍💻 Equipe
 
-* Rayssa Priscila Silva Nascimento
 * Walesca Amaro Rodrigues
+* Rayssa Priscila Silva Nascimento
+
 
 
