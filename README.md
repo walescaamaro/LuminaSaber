@@ -48,9 +48,8 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 
 - **Back-end:** Node.js + Express + Morgan
 - **Front-end:** HTML, CSS, JavaScript
-- **Fontes:** Google Fonts (DM Sans)
 - **Testes de API:** REST Client (VSCode)
-- **Versionamento:** Git + GitHub
+- **Versionamento:** Git
 
 ---
 
