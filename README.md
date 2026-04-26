@@ -4,6 +4,8 @@
 
 **Plataforma web gamificada e gratuita de apoio ao aprendizado da educação básica**
 </div>
+
+
 ---
 
 ## 📖 Sobre o Projeto
