@@ -25,8 +25,8 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 
 | Nome | Matrícula |
 |------|-----------|
-| Rayssa Priscila Silva Nascimento | 20241780013 |
 | Walesca Amaro Rodrigues | 20241780019 |
+| Rayssa Priscila Silva Nascimento | 20241780013 |
 
 ---
 
