@@ -1,155 +1,99 @@
+<div align="center">
+
 # 🌟 LuminaSaber
 
-> Uma plataforma web educacional focada em tornar o aprendizado mais acessível, personalizado e eficiente.
+**Plataforma web gamificada e gratuita de apoio ao aprendizado da educação básica**
+
+![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
+![Express](https://img.shields.io/badge/Express-4.x-blue)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
+</div>
 
 ---
 
-## 📚 Sobre o projeto
+## 📖 Sobre o Projeto
 
-O **LuminaSaber** é uma plataforma desenvolvida com o objetivo de auxiliar estudantes da educação básica (do ensino infantil ao 9º ano) no processo de aprendizagem.
+O **LuminaSaber** é uma plataforma web voltada para estudantes da educação básica (jardim de infância ao 9º ano), oferecendo exercícios de múltipla escolha adaptados ao ritmo de cada aluno, de forma **gratuita, inclusiva e organizada**.
 
-A proposta é simples, mas poderosa: oferecer um ambiente digital onde o aluno possa estudar de forma organizada, prática e adaptada às suas dificuldades — sem depender de recursos pagos ou suporte externo.
-
----
-
-## 🚀 Problema
-
-Apesar da grande quantidade de sites educacionais disponíveis hoje, muitos apresentam limitações como:
-
-* Conteúdo superficial
-* Explicações pouco detalhadas
-* Recursos importantes bloqueados por pagamento
-* Falta de personalização no aprendizado
-
-Isso acaba dificultando o progresso de alunos que precisam de mais apoio.
+A proposta é incentivar a autonomia nos estudos, com recursos como:
+- 📝 Exercícios de múltipla escolha por disciplina
+- 📊 Relatórios de desempenho
+- 🗒️ Canto de anotações digitais
+- 🔍 Barra de pesquisa de conteúdos
+- 📁 Organização de anotações em pastas
 
 ---
 
-## 💡 Solução
+## 👩‍💻 Equipe
 
-O **LuminaSaber** surge como uma alternativa gratuita e acessível, oferecendo:
-
-* 📖 Exercícios de múltipla escolha em diversas disciplinas
-* 🎯 Estudo personalizado baseado nas dificuldades do aluno
-* 📊 Relatórios de desempenho detalhados
-* 🧠 Dicas automáticas ao errar questões
-* 📝 Sistema de anotações integrado
-* 📂 Organização de estudos por pastas
-
-Tudo isso em um ambiente intuitivo e adaptativo.
+| Nome | Matrícula |
+|------|-----------|
+| Rayssa Priscila Silva Nascimento | 20241780013 |
+| Walesca Amaro Rodrigues | 20241780019 |
 
 ---
 
-## 🎯 Objetivo
+## 🗂️ Módulos da Aplicação
 
-O principal objetivo do projeto é:
-
-> Ajudar estudantes a aprender no próprio ritmo, com autonomia e eficiência.
-
-A plataforma permite que o usuário:
-
-* Escolha o que estudar
-* Defina tempo e metas
-* Receba feedback imediato
-* Acompanhe sua evolução
-
----
-
-## 🧩 Funcionalidades principais
-
-### 👤 Usuário
-
-* Cadastro e login
-* Escolha de disciplinas
-* Definição de tempo de estudo e meta de questões
-
-### 📚 Estudo
-
-* Exercícios de múltipla escolha
-* Correção automática
-* Dicas em caso de erro
-* Barra de pesquisa por conteúdo
-
-### 📊 Desempenho
-
-* Relatório com:
-
-  * Acertos e erros
-  * Pontos fortes
-  * Pontos a melhorar
-
-### 📝 Anotações
-
-* Criação de anotações após o estudo
-* Organização por pastas
-* Edição, exclusão e exportação (podendo imprimir ou baixar como pdf)
-
-### 🕓 Histórico
-
-* Registro de questões feitas
-* Possibilidade de refazer exercícios
-
-### ⚙️ Administração
-
-* Gerenciamento de usuários
-* Controle de questões
-* Configuração do sistema
+| Módulo | Descrição | Acesso |
+|--------|-----------|--------|
+| 🏠 **Cadastro** | Apresentação do site, cadastro de usuário e login | Público |
+| 📚 **Início** | Seleção de disciplinas e definição do tempo/meta de estudo | Usuário logado |
+| ✏️ **Exercício** | Questões de múltipla escolha, barra de pesquisa, relatório e anotações | Usuário logado |
+| 🗒️ **Anotações** | Gerenciamento e organização de anotações por pastas | Usuário logado |
+| 📅 **Histórico** | Visualização e revisão de questões respondidas anteriormente | Usuário logado |
+| ⚙️ **Configuração** | Gerenciamento geral da plataforma | Administrador |
+| 📋 **Cadastro de Exercícios** | Inserção, edição e remoção de questões | Administrador |
 
 ---
 
-## 🏗️ Estrutura do sistema
+## 🚀 Tecnologias Utilizadas
 
-O sistema é dividido em módulos:
-
-* Cadastro
-* Início
-* Exercícios
-* Anotações
-* Histórico
-* Configuração (admin)
-* Cadastro de exercícios (admin)
+- **Back-end:** Node.js + Express + Morgan
+- **Front-end:** HTML, CSS, JavaScript
+- **Fontes:** Google Fonts (DM Sans)
+- **Testes de API:** REST Client (VSCode)
+- **Versionamento:** Git + GitHub
 
 ---
 
-## 🧠 Diferenciais
+## 📁 Estrutura do Projeto
 
-O que torna o LuminaSaber interessante:
-
-* Sistema adaptativo (foca nas dificuldades do aluno)
-* Aprendizado gamificado
-* Acompanhamento contínuo do progresso
-* Totalmente gratuito
-* Foco em autonomia do estudante
-
----
-
-## 🔐 Requisitos não-funcionais
-
-* Suporte a múltiplos usuários simultâneos
-* Segurança de dados (criptografia e autenticação)
-* Disponibilidade contínua
-* Interface simples e intuitiva
-* Facilidade de manutenção e expansão
-
----
-
-## 🌍 Visão futura
-
-O LuminaSaber pode evoluir para incluir:
-
-* Inteligência artificial para personalização avançada
-* Gamificação mais aprofundada
-* Integração com escolas
+```
+LuminaSaber/
+├── (teste)home.html/        # Tela inicial (home)
+│   ├── home.html
+│   └── assets (imagens)
+├── tela_exercícios/         # Módulo de exercícios
+│   ├── exercicios.html
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── main.js
+│   │   ├── carregarQuestoes.js
+│   │   └── filtros.js
+│   └── data/
+│       └── questoes.json
+├── backend/                 # Servidor Node.js
+│   ├── server.js
+│   ├── rotas.http
+│   └── package.json
+├── seleção_disciplinas.html
+└── cadastro.html
+```
 
 ---
 
 ## ⚙️ Como Rodar o Projeto
-Pré-requisitos
 
-Node.js instalado
+### Pré-requisitos
+- [Node.js](https://nodejs.org/) instalado
 
-Passo a passo
+### Passo a passo
 
+```bash
 # 1. Clone o repositório
 git clone https://github.com/walescaamaro/LuminaSaber.git
 
@@ -161,14 +105,77 @@ npm install
 
 # 4. Inicie o servidor
 node server.js
+```
 
-Acesse no navegador: http://localhost:3000
+Acesse no navegador: **http://localhost:3000**
 
 ---
-## 👩‍💻 Equipe
 
-* Walesca Amaro Rodrigues
-* Rayssa Priscila Silva Nascimento
+## 🔌 Rotas da API (padrão REST)
 
+Base URL: `http://localhost:3000`
 
+| Método | Rota | Descrição | Status |
+|--------|------|-----------|--------|
+| `GET` | `/api/questoes` | Lista todas as questões | 200 |
+| `GET` | `/api/questoes/:id` | Busca questão por ID | 200 / 404 |
+| `POST` | `/api/questoes` | Cria nova questão | 201 / 400 |
+| `PUT` | `/api/questoes/:id` | Atualiza questão existente | 200 / 404 |
+| `DELETE` | `/api/questoes/:id` | Remove uma questão | 200 / 404 |
 
+### Exemplo de requisição POST
+
+```json
+POST /api/questoes
+Content-Type: application/json
+
+{
+  "nivel": "Fácil",
+  "materia": "Matemática",
+  "enunciado": "Quanto é 2 + 2?",
+  "alternativas": ["1", "2", "3", "4"],
+  "correta": 3
+}
+```
+
+---
+
+## 📚 Disciplinas Disponíveis
+
+- 📐 Matemática
+- 📖 Português
+- 🔬 Ciências
+- 🌍 Geografia
+- 🏛️ História
+- 🎨 Artes
+- 🇬🇧 Inglês
+
+---
+
+## 🗄️ Banco de Dados
+
+O projeto possui um modelo relacional com as seguintes tabelas:
+
+`USUARIO` · `DISCIPLINA` · `CONTEÚDO` · `QUESTÃO` · `HISTÓRICO` · `PASTA` · `ANOTAÇÃO` · `SUPORTE` · `RELATÓRIO` · `ESTUDA` · `POSSUI` · `CONTÉM`
+
+---
+
+## 📌 Funcionalidades Previstas
+
+- [x] Tela Home com navegação
+- [x] Seleção de disciplinas
+- [x] Tela de exercícios com filtro por matéria
+- [x] Feedback de acerto/erro nas questões
+- [x] API REST com CRUD de questões
+- [x] Testes de rotas com REST Client
+- [ ] Cadastro e login de usuários
+- [ ] Relatório de desempenho
+- [ ] Canto de anotações
+- [ ] Módulo de histórico
+- [ ] Painel do administrador
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins educacionais no **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
