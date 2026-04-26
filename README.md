@@ -143,6 +143,28 @@ O LuminaSaber pode evoluir para incluir:
 
 ---
 
+## ⚙️ Como Rodar o Projeto
+Pré-requisitos
+
+Node.js instalado
+
+Passo a passo
+
+# 1. Clone o repositório
+git clone https://github.com/walescaamaro/LuminaSaber.git
+
+# 2. Entre na pasta do backend
+cd LuminaSaber/backend
+
+# 3. Instale as dependências
+npm install
+
+# 4. Inicie o servidor
+node server.js
+
+Acesse no navegador: http://localhost:3000
+
+---
 ## 👩‍💻 Equipe
 
 * Walesca Amaro Rodrigues
