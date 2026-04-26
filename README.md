@@ -1,15 +1,8 @@
-<div align="center">
+
 
 # 🌟 LuminaSaber
 
 **Plataforma web gamificada e gratuita de apoio ao aprendizado da educação básica**
-
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
-![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
-![Express](https://img.shields.io/badge/Express-4.x-blue)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
-
-</div>
 
 ---
 
