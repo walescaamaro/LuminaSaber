@@ -129,7 +129,7 @@ Content-Type: application/json
   "materia": "Matemática",
   "enunciado": "Quanto é 2 + 2?",
   "alternativas": ["1", "2", "3", "4"],
-  "correta": 4
+  "correta": 3
 }
 ```
 
@@ -143,7 +143,7 @@ Content-Type: application/json
 - 🌍 Geografia
 - 🏛️ História
 - 🎨 Artes
-- 🇬🇧 Inglês
+- 🇺🇸 Inglês
 
 ---
 
