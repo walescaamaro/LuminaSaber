@@ -125,11 +125,11 @@ O que torna o LuminaSaber interessante:
 
 ## 🔐 Requisitos não-funcionais
 
-* ⚡ Suporte a múltiplos usuários simultâneos
-* 🔒 Segurança de dados (criptografia e autenticação)
-* 🌐 Disponibilidade contínua
-* 📱 Interface simples e intuitiva
-* 🔧 Facilidade de manutenção e expansão
+* Suporte a múltiplos usuários simultâneos
+* Segurança de dados (criptografia e autenticação)
+* Disponibilidade contínua
+* Interface simples e intuitiva
+* Facilidade de manutenção e expansão
 
 ---
 
@@ -147,5 +147,5 @@ O LuminaSaber pode evoluir para incluir:
 
 * Rayssa Priscila Silva Nascimento
 * Walesca Amaro Rodrigues
-profissional nível dev full stack 😏
+
 
