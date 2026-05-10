@@ -6,7 +6,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // ===== DIRETÓRIOS DO PROJETO =====
-const rootDir  = path.join(__dirname, '..');
 const publicDir = path.join(__dirname, '..', 'public');
 
 // ===== MIDDLEWARES =====
@@ -16,144 +15,9 @@ app.use(morgan('dev'));
 // ===== ARQUIVOS ESTÁTICOS =====
 app.use(express.static(publicDir));
 
-// ===== ROTAS DE PÁGINAS =====
-app.get('/', (req, res) => {
-  res.sendFile(path.join(publicDir, 'home.html'));
-});
-
-app.get('/selecao', (req, res) => {
-  res.sendFile(path.join(publicDir, 'seleção_disciplinas.html'));
-});
-
-app.get('/exercicios', (req, res) => {
-  res.sendFile(path.join(publicDir, 'tela_exercicios', 'exercicios.html'));
-});
-
-app.get('/cadastro', (req, res) => {
-  res.sendFile(path.join(publicDir, 'cadastro.html'));
-});
-
-app.get('/cadastro-exercicios', (req, res) => {
-  res.sendFile(path.join(publicDir, 'cadastro_exercicios.html'));
-});
-
-// ===== DADOS TEMPORÁRIOS (array em memória) =====
-const questoes = [
-  { id: 1, materia: "Matemática", nivel: "Fácil", enunciado: "Quanto é 8 + 7?", alternativas: ["13", "14", "15", "16"], correta: 2 },
-  { id: 2, materia: "Matemática", nivel: "Fácil", enunciado: "Qual o resultado de 12 × 3?", alternativas: ["36", "30", "24", "32"], correta: 0 },
-  { id: 3, materia: "Matemática", nivel: "Médio", enunciado: "Se x + 5 = 17, quanto vale x?", alternativas: ["12", "11", "13", "10"], correta: 0 },
-  { id: 4, materia: "Matemática", nivel: "Médio", enunciado: "Qual é a fração equivalente a 0,75?", alternativas: ["3/4", "7/10", "1/2", "2/3"], correta: 0 },
-  { id: 5, materia: "Matemática", nivel: "Difícil", enunciado: "Qual é a área de um triângulo com base 10 cm e altura 8 cm?", alternativas: ["40 cm²", "80 cm²", "20 cm²", "50 cm²"], correta: 0 },
-  { id: 6, materia: "Matemática", nivel: "Difícil", enunciado: "Qual é o valor de 5² + 3³?", alternativas: ["52", "34", "45", "35"], correta: 0 },
-  { id: 7, materia: "Português", nivel: "Fácil", enunciado: "Qual palavra está escrita corretamente?", alternativas: ["Excessão", "Exceção", "Excesssão", "Exeção"], correta: 1 },
-  { id: 8, materia: "Português", nivel: "Fácil", enunciado: "Qual é o plural de 'cidadão'?", alternativas: ["Cidadãos", "Cidadaos", "Cidadães", "Cidadãoss"], correta: 0 },
-  { id: 9, materia: "Português", nivel: "Médio", enunciado: "Qual classe gramatical é a palavra 'rápido'?", alternativas: ["Adjetivo", "Substantivo", "Verbo", "Advérbio"], correta: 0 },
-  { id: 10, materia: "Português", nivel: "Médio", enunciado: "Qual é o sujeito da frase 'O menino jogou bola'?", alternativas: ["O menino", "jogou bola", "bola", "O"], correta: 0 },
-  { id: 11, materia: "Português", nivel: "Difícil", enunciado: "Marque a opção com a forma verbal correta: 'Ele ___ estudar'.", alternativas: ["vai", "vou", "vão", "vamos"], correta: 0 },
-  { id: 12, materia: "Português", nivel: "Difícil", enunciado: "Assinale o período composto por subordinação:", alternativas: ["Fui ao parque porque estava sol", "Fiz o dever e joguei", "Ele estuda, ele dorme", "Choveu muito e ventou forte"], correta: 0 },
-  { id: 13, materia: "Geografia", nivel: "Fácil", enunciado: "Qual é o maior país da América do Sul?", alternativas: ["Argentina", "Chile", "Brasil", "Peru"], correta: 2 },
-  { id: 14, materia: "Geografia", nivel: "Fácil", enunciado: "Qual é o nome do continente que abriga o Brasil?", alternativas: ["América do Sul", "África", "Ásia", "Europa"], correta: 0 },
-  { id: 15, materia: "Geografia", nivel: "Médio", enunciado: "Qual dos seguintes rios está no Brasil?", alternativas: ["Amazonas", "Nilo", "Mississippi", "Danúbio"], correta: 0 },
-  { id: 16, materia: "Geografia", nivel: "Médio", enunciado: "Qual tipo climático prevalece no sertão nordestino?", alternativas: ["Semiárido", "Tropical", "Equatorial", "Temperado"], correta: 0 },
-  { id: 17, materia: "Geografia", nivel: "Difícil", enunciado: "A Linha do Equador divide a Terra em quais hemisférios?", alternativas: ["Norte e Sul", "Leste e Oeste", "Norte e Leste", "Sul e Oeste"], correta: 0 },
-  { id: 18, materia: "História", nivel: "Fácil", enunciado: "Quem foi o primeiro presidente do Brasil?", alternativas: ["Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek", "Dom Pedro II"], correta: 1 },
-  { id: 19, materia: "História", nivel: "Fácil", enunciado: "Quem descobriu o Brasil em 1500?", alternativas: ["Pedro Álvares Cabral", "Cristóvão Colombo", "Vasco da Gama", "Fernão de Magalhães"], correta: 0 },
-  { id: 20, materia: "História", nivel: "Médio", enunciado: "Qual era a principal atividade econômica do Brasil colonial?", alternativas: ["Cana-de-açúcar", "Ouro", "Café", "Soja"], correta: 0 },
-  { id: 21, materia: "História", nivel: "Médio", enunciado: "Quem foi Tiradentes?", alternativas: ["Líder da Inconfidência Mineira", "Imperador do Brasil", "Rei de Portugal", "Governador de São Paulo"], correta: 0 },
-  { id: 22, materia: "História", nivel: "Difícil", enunciado: "Em que ano a Independência do Brasil foi declarada?", alternativas: ["1822", "1808", "1889", "1815"], correta: 0 },
-  { id: 23, materia: "Ciências", nivel: "Fácil", enunciado: "Qual órgão bombeia sangue no corpo humano?", alternativas: ["Pulmão", "Fígado", "Coração", "Rim"], correta: 2 },
-  { id: 24, materia: "Ciências", nivel: "Fácil", enunciado: "Qual é a principal fonte de energia para as plantas?", alternativas: ["Luz solar", "Água", "Terra", "Ar"], correta: 0 },
-  { id: 25, materia: "Ciências", nivel: "Médio", enunciado: "Qual osso protege o cérebro?", alternativas: ["Crânio", "Fêmur", "Úmero", "Vértebra"], correta: 0 },
-  { id: 26, materia: "Ciências", nivel: "Difícil", enunciado: "Em qual sistema o coração está inserido?", alternativas: ["Circulatório", "Digestivo", "Respiratório", "Excretor"], correta: 0 },
-  { id: 27, materia: "Ciências", nivel: "Difícil", enunciado: "Qual é o processo de transformação da lagarta em borboleta?", alternativas: ["Metamorfose", "Fotossíntese", "Erosão", "Digestão"], correta: 0 },
-  { id: 28, materia: "Artes", nivel: "Fácil", enunciado: "Qual instrumento você utiliza para misturar tintas?", alternativas: ["Pincel", "Furadeira", "Serra", "Ralador"], correta: 0 },
-  { id: 29, materia: "Artes", nivel: "Médio", enunciado: "A Mona Lisa foi pintada por qual artista?", alternativas: ["Leonardo da Vinci", "Pablo Picasso", "Vincent van Gogh", "Michelangelo"], correta: 0 },
-  { id: 30, materia: "Artes", nivel: "Difícil", enunciado: "O que é perspectiva em desenho?", alternativas: ["Técnica para criar profundidade", "Tipo de tinta", "A forma de cortar papel", "Nome de pintura"], correta: 0 },
-  { id: 31, materia: "Inglês", nivel: "Fácil", enunciado: "Como se diz 'olá' em inglês?", alternativas: ["Hello", "Hola", "Bonjour", "Ciao"], correta: 0 },
-  { id: 32, materia: "Inglês", nivel: "Médio", enunciado: "O que significa 'book' em português?", alternativas: ["Livro", "Mesa", "Casa", "Carro"], correta: 0 },
-  { id: 33, materia: "Inglês", nivel: "Difícil", enunciado: "Complete: I ___ football every weekend.", alternativas: ["play", "plays", "played", "playing"], correta: 0 },
-  { id: 34, materia: "Inglês", nivel: "Médio", enunciado: "Qual expressão significa 'bom dia'?", alternativas: ["Good morning", "Good evening", "Good night", "Bye bye"], correta: 0 },
-  { id: 35, materia: "Inglês", nivel: "Difícil", enunciado: "Como se pergunta 'Onde você mora?' em inglês?", alternativas: ["Where do you live?", "How are you?", "What is your name?", "When do you study?"], correta: 0 }
-];
-
-// ===== CRUD DE QUESTÕES =====
-
-// GET - Listar todas as questões
-app.get('/api/questoes', (req, res) => {
-  res.status(200).json(questoes);
-});
-
-// GET - Obter uma questão específica pelo ID
-app.get('/api/questoes/:id', (req, res) => {
-  const { id } = req.params;
-  if (isNaN(id)) {
-    return res.status(400).json({ error: 'ID deve ser um número' });
-  }
-  const questao = questoes.find(q => q.id === parseInt(id));
-  if (!questao) {
-    return res.status(404).json({ error: 'Questão não encontrada' });
-  }
-  res.status(200).json(questao);
-});
-
-// POST - Criar uma nova questão
-app.post('/api/questoes', (req, res) => {
-  const novaQuestao = req.body;
-  if (!novaQuestao || !novaQuestao.enunciado || !novaQuestao.alternativas) {
-    return res.status(400).json({ error: 'Dados da questão incompletos. Obrigatório: enunciado e alternativas' });
-  }
-  if (!Array.isArray(novaQuestao.alternativas)) {
-    return res.status(400).json({ error: 'Alternativas deve ser um array' });
-  }
-  if (novaQuestao.alternativas.length < 2) {
-    return res.status(400).json({ error: 'A questão deve ter pelo menos 2 alternativas' });
-  }
-  novaQuestao.id = questoes.length > 0 ? Math.max(...questoes.map(q => q.id)) + 1 : 1;
-  questoes.push(novaQuestao);
-  res.status(201).json(novaQuestao);
-});
-
-// PUT - Atualizar uma questão existente
-app.put('/api/questoes/:id', (req, res) => {
-  const { id } = req.params;
-  const dadosAtualizados = req.body;
-  if (isNaN(id)) {
-    return res.status(400).json({ error: 'ID deve ser um número' });
-  }
-  const questao = questoes.find(q => q.id === parseInt(id));
-  if (!questao) {
-    return res.status(404).json({ error: 'Questão não encontrada' });
-  }
-  if (!dadosAtualizados || (!dadosAtualizados.enunciado && !dadosAtualizados.alternativas && !dadosAtualizados.nivel)) {
-    return res.status(400).json({ error: 'Envie pelo menos um campo para atualizar (enunciado, alternativas ou nivel)' });
-  }
-  if (dadosAtualizados.enunciado) questao.enunciado = dadosAtualizados.enunciado;
-  if (dadosAtualizados.alternativas) {
-    if (!Array.isArray(dadosAtualizados.alternativas) || dadosAtualizados.alternativas.length < 2) {
-      return res.status(400).json({ error: 'Alternativas deve ser um array com pelo menos 2 itens' });
-    }
-    questao.alternativas = dadosAtualizados.alternativas;
-  }
-  if (dadosAtualizados.nivel) questao.nivel = dadosAtualizados.nivel;
-  res.status(200).json(questao);
-});
-
-// DELETE - Deletar uma questão
-app.delete('/api/questoes/:id', (req, res) => {
-  const { id } = req.params;
-  if (isNaN(id)) {
-    return res.status(400).json({ error: 'ID deve ser um número' });
-  }
-  const indice = questoes.findIndex(q => q.id === parseInt(id));
-  if (indice === -1) {
-    return res.status(404).json({ error: 'Questão não encontrada' });
-  }
-  const questaoRemovida = questoes.splice(indice, 1);
-  res.status(200).json({
-    mensagem: 'Questão deletada com sucesso',
-    questao: questaoRemovida[0]
-  });
-});
+// ===== ROTAS =====
+const configureRoutes = require('./routes');
+configureRoutes(app, publicDir);
 
 // ===== INICIAR SERVIDOR =====
 app.listen(port, () => {
