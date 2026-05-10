@@ -1,6 +1,10 @@
-const express = require('express');
-const morgan = require('morgan');
-const path = require('path');
+import express from 'express';
+import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url'; // necessário para recriar __dirname
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,7 +20,7 @@ app.use(morgan('dev'));
 app.use(express.static(publicDir));
 
 // ===== ROTAS =====
-const configureRoutes = require('./routes');
+import configureRoutes from './routes.js';
 configureRoutes(app, publicDir);
 
 // ===== INICIAR SERVIDOR =====

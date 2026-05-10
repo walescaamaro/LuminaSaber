@@ -1,6 +1,11 @@
-const path = require('path');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
-module.exports = function(app, publicDir) {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default function configureRoutes(app, publicDir) {
   // ===== ROTAS DE PÁGINAS =====
   app.get('/', (req, res) => {
     res.sendFile(path.join(publicDir, 'home.html'));
@@ -23,8 +28,9 @@ module.exports = function(app, publicDir) {
   });
 
   // ===== DADOS TEMPORÁRIOS (array em memória) =====
-  const questoes = require('./data/questoes.json');
-
+ const questoes = JSON.parse(
+  readFileSync(path.join(__dirname, './data/questoes.json'), 'utf-8')
+);
 
   // ===== CRUD DE QUESTÕES =====
   app.get('/api/questoes', (req, res) => {

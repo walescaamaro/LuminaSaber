@@ -1,6 +1,7 @@
 {
   "name": "luminasaber-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Back-end para a plataforma LuminaSaber",
   "main": "server.js",
   "scripts": {
