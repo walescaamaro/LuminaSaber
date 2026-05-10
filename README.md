@@ -57,25 +57,27 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 
 ```
 LuminaSaber/
-├── (teste)home.html/        # Tela inicial (home)
-│   ├── home.html
-│   └── assets (imagens)
-├── tela_exercícios/         # Módulo de exercícios
-│   ├── exercicios.html
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   ├── main.js
-│   │   ├── carregarQuestoes.js
-│   │   └── filtros.js
-│   └── data/
-│       └── questoes.json
+├── public/                  # Arquivos front-end
+│   ├── home.html            # Tela inicial
+│   ├── cadastro.html        # Página de cadastro
+│   ├── cadastro_exercicios.html  # Cadastro de exercícios
+│   ├── seleção_disciplinas.html  # Seleção de disciplinas
+│   ├── tela_exercicios/     # Módulo de exercícios
+│   │   ├── exercicios.html
+│   │   ├── css/
+│   │   │   └── style.css
+│   │   ├── js/
+│   │   │   ├── main.js
+│   │   │   ├── carregarQuestoes.js
+│   │   │   └── filtros.js
+│   │   └── data/
+│   │       └── questoes.json
+│   └── assets/              # Imagens (onda.png, logo.png, etc.)
 ├── backend/                 # Servidor Node.js
 │   ├── server.js
 │   ├── rotas.http
 │   └── package.json
-├── seleção_disciplinas.html
-└── cadastro.html
+└── README.md
 ```
 
 ---

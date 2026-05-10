@@ -7,29 +7,34 @@ const port = process.env.PORT || 3000;
 
 // ===== DIRETÓRIOS DO PROJETO =====
 const rootDir  = path.join(__dirname, '..');
-const homeDir  = path.join(__dirname, '..', '(teste)home.html');
-const exercDir = path.join(__dirname, '..', 'tela_exercícios');
+const publicDir = path.join(__dirname, '..', 'public');
 
 // ===== MIDDLEWARES =====
 app.use(express.json());
 app.use(morgan('dev'));
 
 // ===== ARQUIVOS ESTÁTICOS =====
-app.use(express.static(homeDir));
-app.use(express.static(exercDir));
-app.use(express.static(rootDir));
+app.use(express.static(publicDir));
 
 // ===== ROTAS DE PÁGINAS =====
 app.get('/', (req, res) => {
-  res.sendFile(path.join(homeDir, 'home.html'));
+  res.sendFile(path.join(publicDir, 'home.html'));
 });
 
 app.get('/selecao', (req, res) => {
-  res.sendFile(path.join(rootDir, 'seleção_disciplinas.html'));
+  res.sendFile(path.join(publicDir, 'seleção_disciplinas.html'));
 });
 
 app.get('/exercicios', (req, res) => {
-  res.sendFile(path.join(exercDir, 'exercicios.html'));
+  res.sendFile(path.join(publicDir, 'tela_exercicios', 'exercicios.html'));
+});
+
+app.get('/cadastro', (req, res) => {
+  res.sendFile(path.join(publicDir, 'cadastro.html'));
+});
+
+app.get('/cadastro-exercicios', (req, res) => {
+  res.sendFile(path.join(publicDir, 'cadastro_exercicios.html'));
 });
 
 // ===== DADOS TEMPORÁRIOS (array em memória) =====
