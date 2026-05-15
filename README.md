@@ -49,7 +49,7 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 - **Back-end:** Node.js + Express + Morgan
 - **Front-end:** HTML, CSS, JavaScript (ES Modules)
 - **Testes de API:** REST Client (VSCode)
-- **Banco de Dados:** PostgreSQL — *[repositório separado](https://github.com/walescaamaro/DataBase-LuminaSaber)*
+- **Banco de Dados:** SQLite — *[repositório separado](https://github.com/walescaamaro/DataBase-LuminaSaber)*
 - **Versionamento:** Git
 ---
  
@@ -153,7 +153,7 @@ Content-Type: application/json
  
 ## 🗄️ Banco de Dados
  
-O projeto possui um modelo relacional completo desenvolvido em **PostgreSQL**. Os scripts estão organizados em um repositório dedicado:
+O projeto possui um modelo relacional completo desenvolvido em **SQLite**. Os scripts estão organizados em um repositório dedicado:
  
 📂 **[github.com/walescaamaro/DataBase-LuminaSaber](https://github.com/walescaamaro/DataBase-LuminaSaber)**
  
