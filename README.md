@@ -183,7 +183,7 @@ As tabelas do modelo são: `USUARIO` · `DISCIPLINA` · `CONTEÚDO` · `QUESTÃO
 - Módulo de anotações com criação de pastas, edição, exclusão e exportação em PDF
 - Módulo de histórico com opção de refazer questões anteriores
 - Painel do administrador (configurações gerais e gerenciamento de usuários)
-- Integração com o banco de dados PostgreSQL
+- Integração com o banco de dados SQLite
 - Sistema adaptativo que prioriza conteúdos com maior dificuldade para o aluno
 
 ---
