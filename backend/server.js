@@ -1,29 +1,29 @@
 import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
-import { fileURLToPath } from 'url'; // necessário para recriar __dirname
+import { fileURLToPath } from 'url';
+
+// Importando as rotas separadas
+import questaoRoutes from './src/routes/questaoRoutes.js';
+import configurePageRoutes from './src/routes/pageRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-// ===== DIRETÓRIOS DO PROJETO =====
 const publicDir = path.join(__dirname, '..', 'public');
 
-// ===== MIDDLEWARES =====
+// Middlewares
 app.use(express.json());
 app.use(morgan('dev'));
-
-// ===== ARQUIVOS ESTÁTICOS =====
 app.use(express.static(publicDir));
 
-// ===== ROTAS =====
-import configureRoutes from './routes.js';
-configureRoutes(app, publicDir);
+// Usando o padrão MVC
+app.use(questaoRoutes);                     // API (Vai para o Controller)
+app.use(configurePageRoutes(publicDir));    // Páginas HTML
 
-// ===== INICIAR SERVIDOR =====
+// Iniciar o Servidor
 app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
