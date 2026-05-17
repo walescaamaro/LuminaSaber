@@ -1,0 +1,125 @@
+# requests.http
+# Testes da API com REST Client (VSCode)
+
+### GET - Listar todas as questões
+GET http://localhost:3000/api/questoes
+Accept: application/json
+
+###
+
+### GET - Buscar por ID (existe)
+GET http://localhost:3000/api/questoes/11154
+Accept: application/json
+
+###
+
+### GET - Buscar por ID (não existe → 404)
+GET http://localhost:3000/api/questoes/99999
+Accept: application/json
+
+###
+
+### GET - ID inválido (→ 400)
+GET http://localhost:3000/api/questoes/abc
+Accept: application/json
+
+###
+
+### POST - Criar nova questão (→ 201)
+POST http://localhost:3000/api/questoes
+Content-Type: application/json
+
+{
+  "cod_disc": 82211,
+  "enunciado": "Quanto é 9 × 9?",
+  "alternativa_A": "81",
+  "alternativa_B": "72",
+  "alternativa_C": "63",
+  "alternativa_D": "90",
+  "alternativa_correta": "a",
+  "dificuldade": "fácil"
+}
+
+###
+
+### POST - Campos faltando (→ 400)
+POST http://localhost:3000/api/questoes
+Content-Type: application/json
+
+{
+  "enunciado": "Questão incompleta"
+}
+
+###
+
+### POST - Letra inválida (→ 400)
+POST http://localhost:3000/api/questoes
+Content-Type: application/json
+
+{
+  "cod_disc": 82211,
+  "enunciado": "Quanto é 4 + 4?",
+  "alternativa_A": "6",
+  "alternativa_B": "7",
+  "alternativa_C": "8",
+  "alternativa_D": "9",
+  "alternativa_correta": "e",
+  "dificuldade": "fácil"
+}
+
+###
+
+### PUT - Atualizar enunciado (→ 200)
+PUT http://localhost:3000/api/questoes/11154
+Content-Type: application/json
+
+{
+  "enunciado": "Quanto é 8 + 7? (revisado)"
+}
+
+###
+
+### PUT - Atualizar alternativa correta e dificuldade (→ 200)
+PUT http://localhost:3000/api/questoes/22468
+Content-Type: application/json
+
+{
+  "alternativa_correta": "b",
+  "dificuldade": "médio"
+}
+
+###
+
+### PUT - Questão inexistente (→ 404)
+PUT http://localhost:3000/api/questoes/99999
+Content-Type: application/json
+
+{
+  "enunciado": "Isso não existe"
+}
+
+###
+
+### PUT - Nenhum campo enviado (→ 400)
+PUT http://localhost:3000/api/questoes/11154
+Content-Type: application/json
+
+{}
+
+###
+
+### DELETE - Deletar questão (→ 200)
+DELETE http://localhost:3000/api/questoes/90003
+Accept: application/json
+
+###
+
+### DELETE - Questão inexistente (→ 404)
+DELETE http://localhost:3000/api/questoes/99999
+Accept: application/json
+
+###
+
+### DELETE - ID inválido (→ 400)
+DELETE http://localhost:3000/api/questoes/xyz
+Accept: application/json
