@@ -99,6 +99,8 @@ cd LuminaSaber/backend
  
 # 3. Instale as dependências
 npm install
+npm run migrate
+npm run seed
  
 # 4. Inicie o servidor
 node server.js
