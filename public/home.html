@@ -75,8 +75,27 @@
         .giz { position: fixed; bottom: 300px; left: 200px; width: 100px; transform: rotate(-2deg); z-index: 1; }
         .cadernos { position: fixed; bottom: 430px; right: 200px; width: 120px; transform: rotate(-1deg); z-index: 1; }
         .foguete { position: fixed; bottom: 430px; right: 40px; width: 80px; transform: rotate(-1deg); z-index: 1; }
+
+
+        .btn-admin {
+            position: fixed;
+            bottom: 25px;
+            left: 20px;
+            background-color: transparent;
+            color: #00000066;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 3;
+            text-decoration: none;
+        }
+        .btn-admin:hover { color: #000; }
+    
+    
     </style>
 </head>
+    <a href="/cadastro-exercicios" class="btn-admin">⚙ Admin: Cadastrar Questão</a>
 <body>
     <img src="onda.png" class="onda" alt="Ilustração">
     <img src="logo.png" class="logo" alt="LuminaSaber">
@@ -92,7 +111,7 @@
     <!-- Suporte adicionado ao lado de Login -->
     <div class="container">
         <button class="btn">Contato e Suporte</button>
-        <button class="btn">Cadastro</button>
+        <button class="btn" onclick="location.href='/cadastro'">Cadastro</button>
         <button class="btn">Login</button>
     </div>
 

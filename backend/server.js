@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 
 // Importando as rotas separadas
 import questaoRoutes from './src/routes/questaoRoutes.js';
+import usuarioRoutes from './src/routes/usuarioRoutes.js';
 import configurePageRoutes from './src/routes/pageRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +21,8 @@ app.use(morgan('dev'));
 app.use(express.static(publicDir));
 
 // Usando o padrão MVC
-app.use(questaoRoutes);                     // API (Vai para o Controller)
+app.use(questaoRoutes);    
+app.use(usuarioRoutes);                 // API (Vai para o Controller)
 app.use(configurePageRoutes(publicDir));    // Páginas HTML
 
 // Iniciar o Servidor

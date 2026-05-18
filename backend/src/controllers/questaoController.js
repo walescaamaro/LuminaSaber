@@ -86,6 +86,9 @@ export const QuestaoController = {
             const novoId = await QuestaoModel.criar(dados);
             return res.status(201).json({ mensagem: 'Questão criada com sucesso!', id: novoId });
         } catch (error) {
+            if (error.message === 'DUPLICADO') {
+                return res.status(409).json({ error: 'Esta questão já está cadastrada.' });
+            }
             console.error('Erro ao criar questão:', error);
             return res.status(500).json({ error: 'Erro interno ao criar questão.' });
         }

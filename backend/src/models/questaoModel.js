@@ -37,6 +37,17 @@ export const QuestaoModel = {
     // CREATE
     async criar(dados) {
         const conn = await db.connect();
+
+        // Verifica enunciado duplicado
+        const existe = await conn.get(
+            'SELECT cod_quest FROM questao WHERE enunciado = ?',
+            [dados.enunciado]
+        );
+        if (existe) {
+            await conn.close();
+            throw new Error('DUPLICADO');
+        }
+
         const sql = `
             INSERT INTO questao
                 (cod_disc, enunciado, alternativa_A, alternativa_B,
@@ -50,7 +61,7 @@ export const QuestaoModel = {
             dados.alternativa_B,
             dados.alternativa_C,
             dados.alternativa_D,
-            dados.alternativa_correta.toLowerCase(), // garante minúsculo no banco
+            dados.alternativa_correta.toLowerCase(),
             dados.dificuldade,
         ];
         const resultado = await conn.run(sql, params);

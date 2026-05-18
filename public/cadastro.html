@@ -125,19 +125,19 @@
 
     <div class="form-container">
         <h2 class="title">Cadastra-se aqui</h2>
-        <form>
+        <form id="formCadastro">
             <div class="field">
-                <input type="text" placeholder="Nome de usuário">
-            </div>        
-            <div class="field">
-                <input type="email" placeholder="Email">
+                <input type="text" id="nome" placeholder="Nome de usuário" required>
             </div>
             <div class="field">
-                <input type="password" placeholder="Senha">
+                <input type="email" id="email" placeholder="Email" required>
             </div>
             <div class="field">
-                <select>
-                    <option selected disabled>Grau escolar</option>
+                <input type="password" id="senha" placeholder="Senha" required>
+            </div>
+            <div class="field">
+                <select id="grau_escolar" required>
+                    <option value="" selected disabled>Grau escolar</option>
                     <option>Jardim I</option>
                     <option>Jardim II</option>
                     <option>1º ano</option>
@@ -151,21 +151,81 @@
                     <option>9º ano</option>
                 </select>
             </div>
-
             <div class="field">
-                <input type="password" placeholder="Confirme sua senha">
+                <input type="password" id="confirmarSenha" placeholder="Confirme sua senha" required>
             </div>
-
             <div class="field">
-                <input type="date">
+                <input type="date" id="data_nasc" required>
             </div>
-
             <div class="btn">
                 <button type="submit">Cadastrar-se</button>
             </div>
         </form>
+        <p id="mensagem" style="text-align:center; margin-top:16px; font-weight:600;"></p>
     </div>
 
-    
+    <script>
+        document.getElementById('formCadastro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nome      = document.getElementById('nome').value.trim();
+            const email     = document.getElementById('email').value.trim();
+            const senha     = document.getElementById('senha').value;
+            const confirmar = document.getElementById('confirmarSenha').value;
+            const grau      = document.getElementById('grau_escolar').value;
+            const data_nasc = document.getElementById('data_nasc').value;
+            const msg       = document.getElementById('mensagem');
+
+            // Validações na tela antes de chamar o banco
+            if (!nome || !email || !senha || !grau || !data_nasc) {
+                msg.style.color = 'red';
+                msg.textContent = 'Preencha todos os campos obrigatórios.';
+                return;
+            }
+
+            if (senha !== confirmar) {
+                msg.style.color = 'red';
+                msg.textContent = 'As senhas não coincidem.';
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                msg.style.color = 'red';
+                msg.textContent = 'Informe um e-mail válido.';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nome,
+                        email,
+                        senha,
+                        grau_escolar: grau,
+                        data_nasc,
+                        tipo: 'aluno'
+                    })
+                });
+
+                const dados = await res.json();
+
+                if (res.ok) {
+                    msg.style.color = 'green';
+                    msg.textContent = 'Cadastro realizado com sucesso!';
+                    document.getElementById('formCadastro').reset();
+                } else {
+                    msg.style.color = 'red';
+                    // Mensagem vinda do backend (e-mail duplicado, senha em uso, etc.)
+                    msg.textContent = dados.error;
+                }
+            } catch (err) {
+                msg.style.color = 'red';
+                msg.textContent = 'Não foi possível conectar ao servidor.';
+            }
+        });
+    </script>
+
 </body>
 </html>
