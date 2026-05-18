@@ -1,31 +1,37 @@
 # requests.http
-# Testes da API com REST Client (VSCode)
+# Testes da API — LuminaSaber
+# Extensão necessária: REST Client (VSCode)
+# Execute npm run migrate e npm run seed antes de rodar os testes.
 
-### GET - Listar todas as questões
+### ─── GET ──────────────────────────────────────────────────────────
+
+### Listar todas as questões → 200
 GET http://localhost:3000/api/questoes
 Accept: application/json
 
 ###
 
-### GET - Buscar por ID (existe)
+### Buscar questão por ID (existe) → 200
 GET http://localhost:3000/api/questoes/11154
 Accept: application/json
 
 ###
 
-### GET - Buscar por ID (não existe → 404)
+### Buscar questão por ID (não existe) → 404
 GET http://localhost:3000/api/questoes/99999
 Accept: application/json
 
 ###
 
-### GET - ID inválido (→ 400)
+### Buscar questão com ID inválido (não numérico) → 400
 GET http://localhost:3000/api/questoes/abc
 Accept: application/json
 
 ###
 
-### POST - Criar nova questão (→ 201)
+### ─── POST ─────────────────────────────────────────────────────────
+
+### Criar nova questão (todos os campos corretos) → 201
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -42,7 +48,7 @@ Content-Type: application/json
 
 ###
 
-### POST - Campos faltando (→ 400)
+### Criar questão com campos obrigatórios faltando → 400
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -52,7 +58,7 @@ Content-Type: application/json
 
 ###
 
-### POST - Letra inválida (→ 400)
+### Criar questão com alternativa_correta inválida → 400
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -69,7 +75,9 @@ Content-Type: application/json
 
 ###
 
-### PUT - Atualizar enunciado (→ 200)
+### ─── PUT ──────────────────────────────────────────────────────────
+
+### Atualizar só o enunciado de uma questão → 200
 PUT http://localhost:3000/api/questoes/11154
 Content-Type: application/json
 
@@ -79,7 +87,7 @@ Content-Type: application/json
 
 ###
 
-### PUT - Atualizar alternativa correta e dificuldade (→ 200)
+### Atualizar alternativa correta e dificuldade → 200
 PUT http://localhost:3000/api/questoes/22468
 Content-Type: application/json
 
@@ -90,7 +98,7 @@ Content-Type: application/json
 
 ###
 
-### PUT - Questão inexistente (→ 404)
+### Atualizar questão que não existe → 404
 PUT http://localhost:3000/api/questoes/99999
 Content-Type: application/json
 
@@ -100,7 +108,7 @@ Content-Type: application/json
 
 ###
 
-### PUT - Nenhum campo enviado (→ 400)
+### Atualizar sem enviar nenhum campo → 400
 PUT http://localhost:3000/api/questoes/11154
 Content-Type: application/json
 
@@ -108,18 +116,20 @@ Content-Type: application/json
 
 ###
 
-### DELETE - Deletar questão (→ 200)
+### ─── DELETE ────────────────────────────────────────────────────────
+
+### Deletar questão existente → 200
 DELETE http://localhost:3000/api/questoes/90003
 Accept: application/json
 
 ###
 
-### DELETE - Questão inexistente (→ 404)
+### Deletar questão que não existe → 404
 DELETE http://localhost:3000/api/questoes/99999
 Accept: application/json
 
 ###
 
-### DELETE - ID inválido (→ 400)
+### Deletar com ID inválido (não numérico) → 400
 DELETE http://localhost:3000/api/questoes/xyz
 Accept: application/json
