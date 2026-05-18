@@ -87,7 +87,7 @@ LuminaSaber/
  
 ### Pré-requisitos
  
-- [Node.js](https://nodejs.org/) instalado (versão 18 ou superior)
+- [Node.js](https://nodejs.org/) instalado (versão 22 ou superior)
 ### Passo a passo
  
 ```bash
