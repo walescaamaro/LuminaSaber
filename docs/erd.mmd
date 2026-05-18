@@ -1,0 +1,93 @@
+erDiagram
+    USUARIO {
+        INTEGER cod_usuario PK
+        VARCHAR nome
+        VARCHAR email
+        VARCHAR senha
+        VARCHAR grau_escolar
+        DATE data_nasc
+        TEXT tipo
+    }
+    disciplina {
+        INTEGER cod_disc PK
+        VARCHAR nome_disc
+    }
+    suporte {
+        INTEGER cod_suporte PK
+        VARCHAR email
+        VARCHAR tipo_problema
+        TEXT descricao
+    }
+    relatorio {
+        INTEGER cod_relatorio PK
+        INTEGER meta
+        INTEGER total_acertos
+        INTEGER percentual_acertos
+        VARCHAR pontos_fortes
+        VARCHAR areas_melhorias
+    }
+    PASTA {
+        INTEGER cod_pasta PK
+        INTEGER cod_usuario FK
+        DATE data_criacao
+        VARCHAR nome_pasta
+    }
+    questao {
+        INTEGER cod_quest PK
+        INTEGER cod_disc FK
+        VARCHAR enunciado
+        VARCHAR alternativa_A
+        VARCHAR alternativa_B
+        VARCHAR alternativa_C
+        VARCHAR alternativa_D
+        CHAR alternativa_correta
+        VARCHAR dificuldade
+    }
+    conteudo {
+        INTEGER cod_conteudo PK
+        INTEGER cod_disc FK
+        VARCHAR descricao
+    }
+    estuda {
+        INTEGER cod_usuario FK
+        INTEGER cod_disc FK
+        INTEGER meta
+        TEXT tempo
+    }
+    historico {
+        INTEGER cod_resposta PK
+        INTEGER cod_usuario FK
+        INTEGER cod_quest FK
+        DATE data_resposta
+        VARCHAR status
+    }
+    anotacao {
+        INTEGER cod_anota PK
+        INTEGER cod_pasta FK
+        INTEGER cod_usuario FK
+        VARCHAR titulo
+        TEXT texto_anota
+        DATE data_anota
+    }
+    contem {
+        INTEGER cod_pasta FK
+        INTEGER cod_resposta FK
+    }
+    possui {
+        INTEGER cod_quest FK
+        INTEGER cod_resposta FK
+    }
+
+    USUARIO ||--o{ PASTA : "possui"
+    USUARIO ||--o{ estuda : "estuda em"
+    USUARIO ||--o{ historico : "responde"
+    USUARIO ||--o{ anotacao : "cria"
+    disciplina ||--o{ questao : "contém"
+    disciplina ||--o{ conteudo : "tem"
+    disciplina ||--o{ estuda : "é estudada em"
+    questao ||--o{ historico : "é respondida em"
+    historico ||--o{ contem : "pertence a"
+    PASTA ||--o{ contem : "contém"
+    historico ||--o{ possui : "é referenciada em"
+    questao ||--o{ possui : "tem resposta em"
+    PASTA ||--o{ anotacao : "agrupa"
