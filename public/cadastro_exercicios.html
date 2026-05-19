@@ -81,6 +81,12 @@
             padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
         }
         .btn-excluir:hover { background: #96281b; }
+        .btn-editar {
+            background: #1f5fa6; color: #fff; border: none;
+            padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+            margin-right: 4px;
+        }
+        .btn-editar:hover { background: #174b85; }
     </style>
 </head>
 <body>
@@ -163,131 +169,181 @@
 
     <!-- Listagem das questões cadastradas -->
     <div class="tabela-container">
-        <h3>Questões cadastradas</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Matéria</th>
-                    <th>Enunciado</th>
-                    <th>Dificuldade</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody id="tabelaQuestoes">
-                <tr><td colspan="5">Carregando...</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <h3>Questões cadastradas</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Matéria</th>
+                <th>Enunciado</th>
+                <th>Dificuldade</th>
+                <th>Editar</th>
+                <th>Excluir</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaQuestoes">
+            <tr><td colspan="6">Carregando...</td></tr>
+        </tbody>
+    </table>
+</div>
 
-    <script>
-        const msg = document.getElementById('mensagem');
+<script>
+    const msg = document.getElementById('mensagem');
+    let editandoId = null; // guarda o ID quando estiver editando
 
-        // ── LISTAR ──────────────────────────────────────────────
-        async function carregarTabela() {
-            const tbody = document.getElementById('tabelaQuestoes');
-            try {
-                const res = await fetch('/api/questoes');
-                const questoes = await res.json();
+    // ── LISTAR ──────────────────────────────────────────────
+    async function carregarTabela() {
+        const tbody = document.getElementById('tabelaQuestoes');
+        try {
+            const res = await fetch('/api/questoes');
+            const questoes = await res.json();
 
-                if (questoes.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5">Nenhuma questão cadastrada ainda.</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = questoes.map(q => `
-                    <tr>
-                        <td>${q.id}</td>
-                        <td>${q.materia}</td>
-                        <td>${q.enunciado}</td>
-                        <td>${q.nivel}</td>
-                        <td><button class="btn-excluir" onclick="excluir(${q.id})">Excluir</button></td>
-                    </tr>
-                `).join('');
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="5">Erro ao carregar questões.</td></tr>';
-            }
-        }
-
-        // ── CADASTRAR ────────────────────────────────────────────
-        document.getElementById('formQuestao').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const enunciado           = document.getElementById('enunciado').value.trim();
-            const alternativa_A       = document.getElementById('alternativa_A').value.trim();
-            const alternativa_B       = document.getElementById('alternativa_B').value.trim();
-            const alternativa_C       = document.getElementById('alternativa_C').value.trim();
-            const alternativa_D       = document.getElementById('alternativa_D').value.trim();
-            const alternativa_correta = document.getElementById('alternativa_correta').value;
-            const cod_disc            = document.getElementById('cod_disc').value;
-            const dificuldade         = document.getElementById('dificuldade').value;
-
-            // Validação na tela (antes de chamar o banco)
-            if (!enunciado || !alternativa_A || !alternativa_B || !alternativa_C
-                || !alternativa_D || !alternativa_correta || !cod_disc || !dificuldade) {
-                msg.style.color = 'red';
-                msg.textContent = 'Preencha todos os campos obrigatórios.';
+            if (questoes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6">Nenhuma questão cadastrada ainda.</td></tr>';
                 return;
             }
 
-            try {
-                const res = await fetch('/api/questoes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        enunciado,
-                        alternativa_A,
-                        alternativa_B,
-                        alternativa_C,
-                        alternativa_D,
-                        alternativa_correta,
-                        cod_disc: Number(cod_disc),
-                        dificuldade
-                    })
-                });
+            tbody.innerHTML = questoes.map(q => `
+                <tr>
+                    <td>${q.id}</td>
+                    <td>${q.materia}</td>
+                    <td>${q.enunciado}</td>
+                    <td>${q.nivel}</td>
+                    <td><button class="btn-editar" onclick="editar(${q.id})">Editar</button></td>
+                    <td><button class="btn-excluir" onclick="excluir(${q.id})">Excluir</button></td>
+                </tr>
+            `).join('');
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="6">Erro ao carregar questões.</td></tr>';
+        }
+    }
 
-                const dados = await res.json();
+    // ── EDITAR: preenche o formulário com os dados da questão ──
+    async function editar(id) {
+        try {
+            const res = await fetch(`/api/questoes/${id}`);
+            const q = await res.json();
 
-                if (res.ok) {
-                    msg.style.color = 'green';
-                    msg.textContent = `✅ Questão cadastrada com sucesso! (ID: ${dados.id})`;
-                    document.getElementById('formQuestao').reset();
-                    carregarTabela(); // atualiza a lista na tela
-                } else {
-                    msg.style.color = 'red';
-                    msg.textContent = dados.error || 'Erro ao cadastrar questão.';
-                }
-            } catch (e) {
-                msg.style.color = 'red';
-                msg.textContent = 'Não foi possível conectar ao servidor.';
-            }
-        });
+            document.getElementById('enunciado').value        = q.enunciado;
+            document.getElementById('alternativa_A').value    = q.alternativas[0];
+            document.getElementById('alternativa_B').value    = q.alternativas[1];
+            document.getElementById('alternativa_C').value    = q.alternativas[2];
+            document.getElementById('alternativa_D').value    = q.alternativas[3];
+            document.getElementById('alternativa_correta').value = ['a','b','c','d'][q.correta];
+            document.getElementById('dificuldade').value      = q.nivel;
 
-        // ── EXCLUIR ──────────────────────────────────────────────
-        async function excluir(id) {
-            if (!confirm(`Excluir questão ID ${id}?`)) return;
+            // Mapeia nome da matéria para cod_disc
+            const mapaMateria = {
+                'Matemática': '82211', 'Português': '44457', 'História': '76326',
+                'Geografia': '98743', 'Artes': '34512', 'Inglês': '57713', 'Ciências': '90021'
+            };
+            document.getElementById('cod_disc').value = mapaMateria[q.materia] || '';
 
-            try {
-                const res = await fetch(`/api/questoes/${id}`, { method: 'DELETE' });
-                const dados = await res.json();
+            editandoId = id;
+            document.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
+            msg.style.color = 'blue';
+            msg.textContent = `Editando questão ID ${id}. Altere os campos e clique em Salvar.`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            msg.style.color = 'red';
+            msg.textContent = 'Erro ao carregar questão para edição.';
+        }
+    }
 
-                if (res.ok) {
-                    msg.style.color = 'green';
-                    msg.textContent = `✅ Questão ${id} excluída.`;
-                    carregarTabela();
-                } else {
-                    msg.style.color = 'red';
-                    msg.textContent = dados.error || 'Erro ao excluir.';
-                }
-            } catch (e) {
-                msg.style.color = 'red';
-                msg.textContent = 'Não foi possível conectar ao servidor.';
-            }
+    // ── CADASTRAR / SALVAR EDIÇÃO ────────────────────────────
+    document.getElementById('formQuestao').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const enunciado           = document.getElementById('enunciado').value.trim();
+        const alternativa_A       = document.getElementById('alternativa_A').value.trim();
+        const alternativa_B       = document.getElementById('alternativa_B').value.trim();
+        const alternativa_C       = document.getElementById('alternativa_C').value.trim();
+        const alternativa_D       = document.getElementById('alternativa_D').value.trim();
+        const alternativa_correta = document.getElementById('alternativa_correta').value;
+        const cod_disc            = document.getElementById('cod_disc').value;
+        const dificuldade         = document.getElementById('dificuldade').value;
+
+        if (!enunciado || !alternativa_A || !alternativa_B || !alternativa_C
+            || !alternativa_D || !alternativa_correta || !cod_disc || !dificuldade) {
+            msg.style.color = 'red';
+            msg.textContent = 'Preencha todos os campos obrigatórios.';
+            return;
         }
 
-        // Carrega a tabela ao abrir a página
-        carregarTabela();
-    </script>
+        const body = JSON.stringify({
+            enunciado, alternativa_A, alternativa_B, alternativa_C, alternativa_D,
+            alternativa_correta, cod_disc: Number(cod_disc), dificuldade
+        });
+
+        try {
+            let res;
+
+            if (editandoId) {
+                // PUT — atualizar questão existente
+                res = await fetch(`/api/questoes/${editandoId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body
+                });
+            } else {
+                // POST — nova questão
+                res = await fetch('/api/questoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body
+                });
+            }
+
+            const dados = await res.json();
+
+            if (res.ok) {
+                msg.style.color = 'green';
+                msg.textContent = editandoId
+                    ? `✅ Questão ${editandoId} atualizada com sucesso!`
+                    : `✅ Questão cadastrada com sucesso! (ID: ${dados.id})`;
+                editandoId = null;
+                document.querySelector('button[type="submit"]').textContent = 'Cadastrar Questão';
+                document.getElementById('formQuestao').reset();
+                carregarTabela();
+            } else {
+                msg.style.color = 'red';
+                msg.textContent = dados.error || 'Erro ao salvar questão.';
+            }
+        } catch (e) {
+            msg.style.color = 'red';
+            msg.textContent = 'Não foi possível conectar ao servidor.';
+        }
+    });
+
+    // ── EXCLUIR ──────────────────────────────────────────────
+    async function excluir(id) {
+        if (!confirm(`Excluir questão ID ${id}?`)) return;
+
+        try {
+            const res = await fetch(`/api/questoes/${id}`, { method: 'DELETE' });
+            const dados = await res.json();
+
+            if (res.ok) {
+                msg.style.color = 'green';
+                msg.textContent = `✅ Questão ${id} excluída.`;
+                if (editandoId === id) {
+                    editandoId = null;
+                    document.querySelector('button[type="submit"]').textContent = 'Cadastrar Questão';
+                    document.getElementById('formQuestao').reset();
+                }
+                carregarTabela();
+            } else {
+                msg.style.color = 'red';
+                msg.textContent = dados.error || 'Erro ao excluir.';
+            }
+        } catch (e) {
+            msg.style.color = 'red';
+            msg.textContent = 'Não foi possível conectar ao servidor.';
+        }
+    }
+
+    carregarTabela();
+</script>
 
 </body>
 </html>
