@@ -135,14 +135,14 @@ async function runMigration() {
     console.log('  ✓ Tabela anotacao');
 
     await conn.run(`
-        CREATE TABLE IF NOT EXISTS contem (
-            cod_pasta    INTEGER NOT NULL,
-            cod_resposta INTEGER NOT NULL,
-            PRIMARY KEY (cod_pasta, cod_resposta),
-            FOREIGN KEY (cod_pasta)    REFERENCES PASTA(cod_pasta),
-            FOREIGN KEY (cod_resposta) REFERENCES historico(cod_resposta)
-        )
-    `);
+    CREATE TABLE IF NOT EXISTS contem (
+        cod_pasta  INTEGER NOT NULL,
+        cod_anota  INTEGER NOT NULL,
+        PRIMARY KEY (cod_pasta, cod_anota),
+        FOREIGN KEY (cod_pasta) REFERENCES PASTA(cod_pasta),
+        FOREIGN KEY (cod_anota) REFERENCES anotacao(cod_anota)
+    )
+`);
     console.log('  ✓ Tabela contem');
 
     await conn.run(`
