@@ -3,14 +3,57 @@ erDiagram
         INTEGER cod_usuario PK
         VARCHAR nome
         VARCHAR email
-        VARCHAR senha
+        VARCHAR senha "UNIQUE"
         VARCHAR grau_escolar
         DATE data_nasc
-        TEXT tipo
+        TEXT tipo "CHECK: aluno|administrador"
     }
     disciplina {
         INTEGER cod_disc PK
         VARCHAR nome_disc
+    }
+    questao {
+        INTEGER cod_quest PK
+        INTEGER cod_disc FK
+        VARCHAR enunciado
+        VARCHAR alternativa_A
+        VARCHAR alternativa_B
+        VARCHAR alternativa_C
+        VARCHAR alternativa_D
+        CHAR alternativa_correta "CHECK: a|b|c|d"
+        VARCHAR dificuldade
+    }
+    historico {
+        INTEGER cod_resposta PK
+        INTEGER cod_usuario FK
+        INTEGER cod_quest FK
+        DATE data_resposta
+        VARCHAR status
+    }
+    PASTA {
+        INTEGER cod_pasta PK
+        INTEGER cod_usuario FK
+        DATE data_criacao
+        VARCHAR nome_pasta
+    }
+    anotacao {
+        INTEGER cod_anota PK
+        INTEGER cod_pasta FK
+        INTEGER cod_usuario FK
+        VARCHAR titulo
+        TEXT texto_anota
+        DATE data_anota
+    }
+    estuda {
+        INTEGER cod_usuario FK "PK composta"
+        INTEGER cod_disc FK "PK composta"
+        INTEGER meta
+        TEXT tempo
+    }
+    conteudo {
+        INTEGER cod_conteudo PK
+        INTEGER cod_disc FK
+        VARCHAR descricao
     }
     suporte {
         INTEGER cod_suporte PK
@@ -26,68 +69,25 @@ erDiagram
         VARCHAR pontos_fortes
         VARCHAR areas_melhorias
     }
-    PASTA {
-        INTEGER cod_pasta PK
-        INTEGER cod_usuario FK
-        DATE data_criacao
-        VARCHAR nome_pasta
-    }
-    questao {
-        INTEGER cod_quest PK
-        INTEGER cod_disc FK
-        VARCHAR enunciado
-        VARCHAR alternativa_A
-        VARCHAR alternativa_B
-        VARCHAR alternativa_C
-        VARCHAR alternativa_D
-        CHAR alternativa_correta
-        VARCHAR dificuldade
-    }
-    conteudo {
-        INTEGER cod_conteudo PK
-        INTEGER cod_disc FK
-        VARCHAR descricao
-    }
-    estuda {
-        INTEGER cod_usuario FK
-        INTEGER cod_disc FK
-        INTEGER meta
-        TEXT tempo
-    }
-    historico {
-        INTEGER cod_resposta PK
-        INTEGER cod_usuario FK
-        INTEGER cod_quest FK
-        DATE data_resposta
-        VARCHAR status
-    }
-    anotacao {
-        INTEGER cod_anota PK
-        INTEGER cod_pasta FK
-        INTEGER cod_usuario FK
-        VARCHAR titulo
-        TEXT texto_anota
-        DATE data_anota
-    }
     contem {
-        INTEGER cod_pasta FK
-        INTEGER cod_resposta FK
+        INTEGER cod_pasta FK "PK composta"
+        INTEGER cod_anota FK "PK composta"
     }
     possui {
-        INTEGER cod_quest FK
-        INTEGER cod_resposta FK
+        INTEGER cod_quest FK "PK composta"
+        INTEGER cod_resposta FK "PK composta"
     }
 
-    USUARIO ||--o{ PASTA : "possui"
-    USUARIO ||--o{ estuda : "estuda em"
-    USUARIO ||--o{ historico : "responde"
-    USUARIO ||--o{ anotacao : "cria"
-    disciplina ||--o{ questao : "contém"
-    disciplina ||--o{ conteudo : "tem"
-    disciplina ||--o{ estuda : "é estudada em"
-    questao ||--o{ historico : "é respondida em"
-    historico ||--o{ contem : "pertence a"
-    PASTA ||--o{ contem : "contém"
-    historico ||--o{ possui : "é referenciada em"
-    questao ||--o{ possui : "tem resposta em"
-    PASTA ||--o{ anotacao : "agrupa"
+    USUARIO ||--o{ PASTA : "possui (1:N)"
+    USUARIO ||--o{ estuda : "estuda em (N:N via estuda)"
+    USUARIO ||--o{ historico : "responde (1:N)"
+    USUARIO ||--o{ anotacao : "cria (1:N)"
+    disciplina ||--o{ questao : "contém (1:N)"
+    disciplina ||--o{ conteudo : "tem (1:N)"
+    disciplina ||--o{ estuda : "é estudada (N:N via estuda)"
+    questao ||--o{ historico : "é respondida em (1:N)"
+    PASTA ||--o{ anotacao : "agrupa (1:N)"
+    PASTA ||--o{ contem : "indexa (N:N via contem)"
+    anotacao ||--o{ contem : "pertence a (N:N via contem)"
+    questao ||--o{ possui : "tem resposta em (N:N via possui)"
+    historico ||--o{ possui : "é referenciada em (N:N via possui)"
