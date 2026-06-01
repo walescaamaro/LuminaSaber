@@ -1,17 +1,12 @@
-// migration.js
-// Responsável por criar a estrutura do banco de dados.
-// Execute com: npm run migrate
-// "IF NOT EXISTS" torna o script idempotente (seguro de rodar mais de uma vez).
-
 import db from './database.js';
 
 async function runMigration() {
-    console.log('▶ Iniciando migration...');
-    const conn = await db.connect();
+  console.log('▶ Iniciando migration...');
+  const conn = await db.connect();
 
-    await conn.run('PRAGMA foreign_keys = ON');
+  await conn.run('PRAGMA foreign_keys = ON');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS USUARIO (
             cod_usuario  INTEGER      PRIMARY KEY AUTOINCREMENT,
             nome         VARCHAR(40)  NOT NULL,
@@ -26,17 +21,17 @@ async function runMigration() {
             )
         )
     `);
-    console.log('  ✓ Tabela USUARIO');
+  console.log('  ✓ Tabela USUARIO');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS disciplina (
             cod_disc  INTEGER     PRIMARY KEY AUTOINCREMENT,
             nome_disc VARCHAR(50) NOT NULL
         )
     `);
-    console.log('  ✓ Tabela disciplina');
+  console.log('  ✓ Tabela disciplina');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS suporte (
             cod_suporte   INTEGER      PRIMARY KEY AUTOINCREMENT,
             email         VARCHAR(100) NOT NULL,
@@ -44,9 +39,9 @@ async function runMigration() {
             descricao     TEXT         NOT NULL
         )
     `);
-    console.log('  ✓ Tabela suporte');
+  console.log('  ✓ Tabela suporte');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS relatorio (
             cod_relatorio      INTEGER      PRIMARY KEY AUTOINCREMENT,
             meta               INTEGER      NOT NULL,
@@ -56,9 +51,9 @@ async function runMigration() {
             areas_melhorias    VARCHAR(100) NOT NULL
         )
     `);
-    console.log('  ✓ Tabela relatorio');
+  console.log('  ✓ Tabela relatorio');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS PASTA (
             cod_pasta    INTEGER      PRIMARY KEY AUTOINCREMENT,
             cod_usuario  INTEGER      REFERENCES USUARIO(cod_usuario),
@@ -66,9 +61,9 @@ async function runMigration() {
             nome_pasta   VARCHAR(100) NOT NULL
         )
     `);
-    console.log('  ✓ Tabela PASTA');
+  console.log('  ✓ Tabela PASTA');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS questao (
             cod_quest           INTEGER      PRIMARY KEY AUTOINCREMENT,
             cod_disc            INTEGER      NOT NULL,
@@ -82,9 +77,9 @@ async function runMigration() {
             FOREIGN KEY (cod_disc) REFERENCES disciplina(cod_disc)
         )
     `);
-    console.log('  ✓ Tabela questao');
+  console.log('  ✓ Tabela questao');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS conteudo (
             cod_conteudo INTEGER     PRIMARY KEY AUTOINCREMENT,
             cod_disc     INTEGER     NOT NULL,
@@ -92,9 +87,9 @@ async function runMigration() {
             FOREIGN KEY (cod_disc) REFERENCES disciplina(cod_disc)
         )
     `);
-    console.log('  ✓ Tabela conteudo');
+  console.log('  ✓ Tabela conteudo');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS estuda (
             cod_usuario INTEGER NOT NULL,
             cod_disc    INTEGER NOT NULL,
@@ -105,9 +100,9 @@ async function runMigration() {
             FOREIGN KEY (cod_disc)    REFERENCES disciplina(cod_disc)
         )
     `);
-    console.log('  ✓ Tabela estuda');
+  console.log('  ✓ Tabela estuda');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS historico (
             cod_resposta  INTEGER     PRIMARY KEY AUTOINCREMENT,
             cod_usuario   INTEGER     NOT NULL,
@@ -118,9 +113,9 @@ async function runMigration() {
             FOREIGN KEY (cod_quest)   REFERENCES questao(cod_quest)
         )
     `);
-    console.log('  ✓ Tabela historico');
+  console.log('  ✓ Tabela historico');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS anotacao (
             cod_anota   INTEGER      PRIMARY KEY AUTOINCREMENT,
             cod_pasta   INTEGER      NOT NULL,
@@ -132,20 +127,20 @@ async function runMigration() {
             FOREIGN KEY (cod_usuario) REFERENCES USUARIO(cod_usuario)
         )
     `);
-    console.log('  ✓ Tabela anotacao');
+  console.log('  ✓ Tabela anotacao');
 
-    await conn.run(`
-    CREATE TABLE IF NOT EXISTS contem (
-        cod_pasta  INTEGER NOT NULL,
-        cod_anota  INTEGER NOT NULL,
-        PRIMARY KEY (cod_pasta, cod_anota),
-        FOREIGN KEY (cod_pasta) REFERENCES PASTA(cod_pasta),
-        FOREIGN KEY (cod_anota) REFERENCES anotacao(cod_anota)
-    )
-`);
-    console.log('  ✓ Tabela contem');
+  await conn.run(`
+        CREATE TABLE IF NOT EXISTS contem (
+            cod_pasta  INTEGER NOT NULL,
+            cod_anota  INTEGER NOT NULL,
+            PRIMARY KEY (cod_pasta, cod_anota),
+            FOREIGN KEY (cod_pasta) REFERENCES PASTA(cod_pasta),
+            FOREIGN KEY (cod_anota) REFERENCES anotacao(cod_anota)
+        )
+    `);
+  console.log('  ✓ Tabela contem');
 
-    await conn.run(`
+  await conn.run(`
         CREATE TABLE IF NOT EXISTS possui (
             cod_quest    INTEGER NOT NULL,
             cod_resposta INTEGER NOT NULL,
@@ -154,13 +149,13 @@ async function runMigration() {
             FOREIGN KEY (cod_resposta) REFERENCES historico(cod_resposta)
         )
     `);
-    console.log('  ✓ Tabela possui');
+  console.log('  ✓ Tabela possui');
 
-    await conn.close();
-    console.log('✅ Migration concluída com sucesso!');
+  await conn.close();
+  console.log('✅ Migration concluída com sucesso!');
 }
 
 runMigration().catch((err) => {
-    console.error('❌ Erro na migration:', err);
-    process.exit(1);
+  console.error('❌ Erro na migration:', err);
+  process.exit(1);
 });
