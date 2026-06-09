@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Tipo {
+  administrador
+  aluno
+}
+
+model Usuario {
+  cod_usuario  Int       @id @default(autoincrement()) @map("cod_usuario")
+  nome         String    @map("nome")
+  email        String    @map("email")
+  senha        String    @unique @map("senha")
+  grau_escolar String?   @map("grau_escolar")
+  data_nasc    DateTime  @map("data_nasc")
+  tipo         Tipo      @map("tipo")
+
+  pastas       Pasta[]
+  historicos   Historico[]
+  anotacoes    Anotacao[]
+  estuda       Estuda[]
+
+  @@map("USUARIO")
+}
+
+model Disciplina {
+  cod_disc  Int       @id @default(autoincrement()) @map("cod_disc")
+  nome_disc String    @map("nome_disc")
+
+  conteudos Conteudo[]
+  questoes  Questao[]
+  estuda    Estuda[]
+
+  @@map("disciplina")
+}
+
+model Suporte {
+  cod_suporte   Int    @id @default(autoincrement()) @map("cod_suporte")
+  email         String @map("email")
+  tipo_problema String @map("tipo_problema")
+  descricao     String @map("descricao")
+
+  @@map("suporte")
+}
+
+model Relatorio {
+  cod_relatorio      Int    @id @default(autoincrement()) @map("cod_relatorio")
+  meta               Int    @map("meta")
+  total_acertos      Int    @map("total_acertos")
+  percentual_acertos Int    @map("percentual_acertos")
+  pontos_fortes      String @map("pontos_fortes")
+  areas_melhorias    String @map("areas_melhorias")
+
+  @@map("relatorio")
+}
+
+model Pasta {
+  cod_pasta    Int        @id @default(autoincrement()) @map("cod_pasta")
+  cod_usuario  Int?       @map("cod_usuario")
+  data_criacao DateTime   @map("data_criacao")
+  nome_pasta   String     @map("nome_pasta")
+
+  usuario      Usuario?   @relation(fields: [cod_usuario], references: [cod_usuario])
+  anotacoes    Anotacao[]
+  contem       Contem[]
+
+  @@map("PASTA")
+}
+
+model Questao {
+  cod_quest           Int       @id @default(autoincrement()) @map("cod_quest")
+  cod_disc            Int       @map("cod_disc")
+  enunciado           String    @map("enunciado")
+  alternativa_A       String    @map("alternativa_A")
+  alternativa_B       String    @map("alternativa_B")
+  alternativa_C       String    @map("alternativa_C")
+  alternativa_D       String    @map("alternativa_D")
+  alternativa_correta String    @map("alternativa_correta")
+  dificuldade         String    @map("dificuldade")
+
+  disciplina Disciplina @relation(fields: [cod_disc], references: [cod_disc])
+  historicos Historico[]
+  possui     Possui[]
+
+  @@map("questao")
+}
+
+model Conteudo {
+  cod_conteudo Int       @id @default(autoincrement()) @map("cod_conteudo")
+  cod_disc     Int       @map("cod_disc")
+  descricao    String    @map("descricao")
+
+  disciplina Disciplina @relation(fields: [cod_disc], references: [cod_disc])
+
+  @@map("conteudo")
+}
+
+model Estuda {
+  cod_usuario Int
+  cod_disc    Int
+  meta        Int
+  tempo       String
+
+  usuario    Usuario    @relation(fields: [cod_usuario], references: [cod_usuario])
+  disciplina Disciplina @relation(fields: [cod_disc], references: [cod_disc])
+
+  @@id([cod_usuario, cod_disc])
+  @@map("estuda")
+}
+
+model Historico {
+  cod_resposta  Int      @id @default(autoincrement()) @map("cod_resposta")
+  cod_usuario   Int      @map("cod_usuario")
+  cod_quest     Int      @map("cod_quest")
+  data_resposta DateTime @map("data_resposta")
+  status        String   @map("status")
+
+  usuario Usuario @relation(fields: [cod_usuario], references: [cod_usuario])
+  questao Questao @relation(fields: [cod_quest], references: [cod_quest])
+  possui  Possui[]
+
+  @@map("historico")
+}
+
+model Anotacao {
+  cod_anota   Int      @id @default(autoincrement()) @map("cod_anota")
+  cod_pasta   Int      @map("cod_pasta")
+  cod_usuario Int      @map("cod_usuario")
+  titulo      String   @map("titulo")
+  texto_anota String   @map("texto_anota")
+  data_anota  DateTime @map("data_anota")
+
+  pasta   Pasta   @relation(fields: [cod_pasta], references: [cod_pasta])
+  usuario Usuario @relation(fields: [cod_usuario], references: [cod_usuario])
+  contem  Contem[]
+
+  @@map("anotacao")
+}
+
+model Contem {
+  cod_pasta Int
+  cod_anota Int
+
+  pasta   Pasta    @relation(fields: [cod_pasta], references: [cod_pasta])
+  anotacao Anotacao @relation(fields: [cod_anota], references: [cod_anota])
+
+  @@id([cod_pasta, cod_anota])
+  @@map("contem")
+}
+
+model Possui {
+  cod_quest    Int
+  cod_resposta Int
+
+  questao  Questao   @relation(fields: [cod_quest], references: [cod_quest])
+  historico Historico @relation(fields: [cod_resposta], references: [cod_resposta])
+
+  @@id([cod_quest, cod_resposta])
+  @@map("possui")
+}
+
