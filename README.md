@@ -485,14 +485,3 @@ npm run migrate
 ## 📄 Licença
 
 Este projeto foi desenvolvido para fins educacionais no **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
-
----
-
-## 🤝 Contato
-
-Para dúvidas sobre o projeto:
-
-- **Walesca Amaro** (20241780019): walesca@gmail.com
-- **Rayssa Priscila** (20241780013): rayssa@gmail.com
-
-**Data de atualização:** 13 de junho de 2026
