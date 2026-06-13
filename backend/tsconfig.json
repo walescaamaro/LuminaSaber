@@ -11,8 +11,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "types": ["node", "express"],
-    "ignoreDeprecations": "6.0"
+    "types": ["node", "express"]
   },
   "include": ["server.ts", "src/**/*.ts"]
 }

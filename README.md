@@ -3,6 +3,7 @@
 # 🌟 LuminaSaber
 
 **Plataforma web gamificada e gratuita de apoio ao aprendizado da educação básica**
+
 </div>
 
 ---
@@ -17,6 +18,15 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 - 🗒️ Canto de anotações digitais
 - 🔍 Barra de pesquisa de conteúdos
 - 📁 Organização de anotações em pastas
+
+### ✨ Diferenciais
+
+- **Arquitetura MVC**: Separação clara entre Models, Controllers e Routes
+- **Prisma ORM**: Type-safe database operations com SQLite
+- **RESTful API**: Backend com Express.js e Node.js
+- **Database com Constraints**: Validações a nível de banco de dados
+- **Seed de Dados**: 35 questões prontas em 7 disciplinas
+- **Relatórios**: Análise de desempenho do aluno
 
 ---
 
@@ -45,10 +55,10 @@ A proposta é incentivar a autonomia nos estudos, com recursos como:
 
 ## 🚀 Tecnologias Utilizadas
 
-- **Back-end:** Node.js + Express + Morgan
+- **Back-end:** Node.js + Express + Morgan + Prisma Client
 - **Front-end:** HTML, CSS, JavaScript (ES Modules)
 - **Testes de API:** REST Client (VSCode)
-- **Banco de Dados:** SQLite (integrado via `node:sqlite`, nativo do Node.js v22+)
+- **Banco de Dados:** SQLite modelado com Prisma (`prisma/schema.prisma`)
 - **Versionamento:** Git
 
 ---
@@ -72,7 +82,7 @@ LuminaSaber/
 │   │       └── filtros.js
 │   └── (imagens: logo.png, onda.png, etc.)
 ├── backend/                         # Servidor Node.js
-│   ├── server.js                    # Entrada da aplicação
+│   ├── server.ts                    # Entrada da aplicação
 │   ├── package.json
 │   ├── data/
 │   │   └── questoes.json            # Dados de seed das questões
@@ -85,7 +95,10 @@ LuminaSaber/
 │       │   ├── migration.js         # Criação das tabelas
 │       │   └── seed.js              # Carga inicial de dados
 │       ├── models/
-│       │   └── questaoModel.js
+│       │   ├── questaoModel.ts      # CRUD de questões com Prisma Client
+│       │   └── usuarioModel.ts      # Operações de usuários com Prisma Client
+│       ├── lib/
+│       │   └── prisma.ts            # Configuração do Prisma Client
 │       └── routes/
 │           ├── questaoRoutes.js
 │           ├── usuarioRoutes.js
@@ -93,7 +106,10 @@ LuminaSaber/
 ├── docs/
 │   ├── erd.mmd                      # Diagrama ER (Mermaid)
 │   ├── erd.png
+│   ├── backend-prisma-mvc.md        # Explicação Prisma, ERD, MVC e CRUD
 │   └── diagrama_logico.png
+├── prisma/
+│   └── schema.prisma                # Models, PKs, FKs e relacionamentos
 └── README.md
 ```
 
@@ -117,19 +133,28 @@ cd backend
 # 3. Instale as dependências
 npm install
 
-# 4. Crie as tabelas no banco de dados
+# 4. Gere o Prisma Client
+npm run prisma:generate
+
+# 5. Crie as tabelas no banco de dados
 npm run migrate
 
-# 5. Popule o banco com dados iniciais
+# 6. Popule o banco com dados iniciais
 npm run seed
 
-# 6. Inicie o servidor
+# 7. Inicie o servidor
 npm start
 ```
 
 Acesse no navegador: **http://localhost:3000**
 
 ---
+
+## 🗄️ Prisma, ERD e MVC
+
+A modelagem do banco está em `prisma/schema.prisma`, com models como `Usuario`, `Disciplina`, `Questao`, `Historico`, `Pasta`, `Anotacao` e tabelas associativas. O diagrama ERD obrigatório está em `docs/erd.png`, com a versão editável em `docs/erd.mmd`.
+
+O backend segue MVC: as rotas ficam em `backend/src/routes`, os Controllers validam requisições e respostas em `backend/src/controllers`, e os Models em `backend/src/models` centralizam o acesso ao SQLite usando Prisma Client. A explicação completa dos models, chaves primárias, chaves estrangeiras, relacionamentos e CRUD está em `docs/backend-prisma-mvc.md`.
 
 ## 🗄️ Estado da Integração com o Banco de Dados
 
@@ -235,7 +260,7 @@ Requisição HTTP enviada ao back-end (fetch/API REST)
         ↓
 Validação no back-end (Controller verifica dados, duplicatas, tipos)
         ↓
-Gravação no banco SQLite (via database.js)
+Gravação no banco SQLite (via Prisma Client nos Models)
         ↓
 Resposta JSON retornada ao front-end (sucesso ou mensagem de erro)
         ↓
@@ -297,6 +322,177 @@ Os diagramas estão disponíveis na pasta `docs/`:
 
 ---
 
+## � Documentação Técnica Completa
+
+### 1. **Modelagem de Banco de Dados com Prisma e ERD** (20 pontos)
+
+📄 **Arquivo:** [`docs/modelagem-banco-dados-prisma-erd.md`](docs/modelagem-banco-dados-prisma-erd.md)
+
+Documentação completa sobre a modelagem do banco de dados, incluindo:
+
+- ✅ **Schema Prisma** com todos os models (`Usuario`, `Disciplina`, `Questao`, etc.)
+- ✅ **12 Entidades** com atributos definidos, tipos de dados e constraints
+- ✅ **Chaves Primárias (PK)** e **Chaves Estrangeiras (FK)** identificadas
+- ✅ **Relacionamentos** um-para-muitos (1:N) e muitos-para-muitos (N:N)
+  - Exemplo: Um usuário pode ter múltiplas anotações
+  - Exemplo: Uma questão pode estar em múltiplos conteúdos
+- ✅ **Diagrama ERD (Entity Relationship Diagram)** em Mermaid
+- ✅ **Operações de inicialização**: migration e seed
+
+**Modelos principais:**
+- `USUARIO` (alunos e administradores)
+- `DISCIPLINA` (Matemática, Português, etc.)
+- `QUESTAO` (exercícios com 4 alternativas)
+- `HISTORICO` (rastreamento de respostas)
+- `PASTA` e `ANOTACAO` (organização de anotações)
+- `ESTUDA` (metas por disciplina)
+- Tabelas associativas: `CONTEM`, `POSSUI`
+
+---
+
+### 2. **Arquitetura MVC, Integração com BD e Operações CRUD** (25 pontos)
+
+📄 **Arquivo:** [`docs/arquitetura-mvc-e-crud.md`](docs/arquitetura-mvc-e-crud.md)
+
+Documentação completa sobre a implementação da arquitetura MVC integrada ao back-end, incluindo:
+
+- ✅ **Separação de Responsabilidades** entre Models, Controllers e Routes
+- ✅ **Camada de Models** (`backend/src/models/`)
+  - Centraliza **todas as operações de banco de dados**
+  - Usa **Prisma Client** para consultas type-safe
+  - Retorna dados estruturados para Controllers
+  - Exemplo: `QuestaoModel.listarTodas()`, `QuestaoModel.criar()`, etc.
+
+- ✅ **Camada de Controllers** (`backend/src/controllers/`)
+  - Recebe requisições HTTP via Express.js
+  - **Valida parâmetros** e dados de entrada
+  - Implementa **regras de negócio** da aplicação
+  - Chama o Model para operações de BD
+  - **Mapeia respostas** para o formato esperado pelo frontend (DTO Pattern)
+  - Trata erros e retorna HTTP status codes apropriados (201, 400, 404, 409, 500)
+
+- ✅ **Camada de Routes** (`backend/src/routes/`)
+  - Define endpoints REST
+  - Mapeia URLs a handlers do Controller
+  - Exemplo: `GET /api/questoes`, `POST /api/questoes/:id`, etc.
+
+- ✅ **Operações CRUD** completas:
+  - **CREATE** (POST): Inserir nova questão com validações
+  - **READ** (GET): Listar todas ou buscar por ID
+  - **UPDATE** (PUT): Atualizar campos existentes
+  - **DELETE** (DELETE): Remover questões com verificação de existência
+
+- ✅ **Fluxo completo de requisição** do frontend até o banco de dados
+- ✅ **Tratamento de erros** centralizado em middleware
+- ✅ **Exemplos práticos** de cada operação CRUD
+
+**Tecnologias integradas:**
+- Express.js (HTTP server)
+- Prisma Client (database ORM)
+- SQLite (banco relacional)
+- TypeScript (tipagem estática)
+- Node.js (runtime)
+
+---
+
+## 📝 Dados de Exemplo (Seed)
+
+O banco é inicializado com dados reais para testes:
+
+| Tabela | Quantidade | Exemplos |
+|--------|-----------|----------|
+| **Usuários** | 10 | 2 admin (Walesca, Rayssa), 8 alunos |
+| **Disciplinas** | 7 | Matemática, Português, Ciências, Inglês, História, Geografia, Artes |
+| **Questões** | 35 | 5-6 questões por disciplina, níveis: fácil, médio, difícil |
+| **Conteúdos** | 12 | Tópicos como "Operações Básicas", "Interpretação de texto", etc. |
+| **Pastas** | 5 | Anotações organizadas por tema |
+| **Anotações** | 5 | Resumos de estudo com datas |
+| **Histórico** | 5 | Respostas de usuários com status (Acertou/Errou) |
+
+### Como carregar dados iniciais
+
+```bash
+cd backend
+npm run seed
+```
+
+---
+
+## 🧪 Testando a API
+
+### Via cURL (linha de comando)
+
+```bash
+# Listar todas as questões
+curl http://localhost:3000/api/questoes
+
+# Buscar questão por ID
+curl http://localhost:3000/api/questoes/11154
+
+# Criar nova questão (POST)
+curl -X POST http://localhost:3000/api/questoes \
+  -H "Content-Type: application/json" \
+  -d '{
+    "cod_disc": 82211,
+    "enunciado": "Qual é a capital do Brasil?",
+    "alternativa_A": "Rio de Janeiro",
+    "alternativa_B": "Brasília",
+    "alternativa_C": "Salvador",
+    "alternativa_D": "Belo Horizonte",
+    "alternativa_correta": "b",
+    "dificuldade": "fácil"
+  }'
+```
+
+### Via REST Client do VSCode
+
+Use o arquivo `backend/request.http` para testar endpoints com interface gráfica.
+
+### Via Postman ou Insomnia
+
+Importe o `backend/request.http` em seu cliente HTTP favorito.
+
+---
+
+## 🔧 Troubleshooting
+
+### Erro: "The module was compiled against a different Node.js version"
+
+**Solução:** Reconstruir módulos nativos
+
+```bash
+cd backend
+npm rebuild
+```
+
+### Erro: "Arquivo db.sqlite não encontrado"
+
+**Solução:** Executar migration para criar o banco
+
+```bash
+npm run migrate
+```
+
+### Erro: "Questões não aparecem na tela"
+
+**Solução:** 
+1. Verificar se servidor está rodando em http://localhost:3000
+2. Rodar `npm run seed` para popular o banco
+3. Abrir DevTools (F12) e verificar console para erros de rede
+
+---
+
 ## 📄 Licença
 
 Este projeto foi desenvolvido para fins educacionais no **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
+
+---
+
+## 🤝 Contato
+
+Para dúvidas sobre o projeto:
+
+- **Walesca Amaro** (20241780019): walesca@gmail.com
+- **Rayssa Priscila** (20241780013): rayssa@gmail.com
+
+**Data de atualização:** 13 de junho de 2026

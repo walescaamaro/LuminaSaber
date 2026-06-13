@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuminaSaber – Meta de Questões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:      #00e1e1;
+    --header-bg: rgba(255,255,255,0.45);
+    --border-sel:#8b00c0;
+    --btn-dark:  #22609b;
+    --btn-hover: #daa700;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--teal);
+    font-family: 'DM Sans', sans-serif;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    gap: 0;
+  }
+
+  .wave { position: fixed; pointer-events: none; z-index: 0; }
+  .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
+  .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
+
+  .page-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1; text-align: center;
+    padding: 20px 0 18px;
+    background: var(--header-bg);
+    backdrop-filter: blur(2px);
+  }
+  .page-header h1 { font-size: clamp(22px, 3.2vw, 36px); font-weight: 700; }
+
+  .center-wrap {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    margin-top: 20px;
+  }
+
+  .subtitle {
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-style: italic;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  /* ── Input grande ── */
+  .input-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .input-meta {
+    width: 180px;
+    height: 100px;
+    font-size: 56px;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+    background: white;
+    border: 3px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
+    outline: none;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    color: #111;
+    transition: border-color .2s;
+    /* esconder setas nativas */
+    -moz-appearance: textfield;
+  }
+  .input-meta::-webkit-outer-spin-button,
+  .input-meta::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .input-meta:focus { border-color: var(--border-sel); }
+
+  .input-label {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: .06em; opacity: .6;
+  }
+
+  .max-hint {
+    font-size: 13px; opacity: .65;
+    font-style: italic;
+  }
+
+  /* ── Erro ── */
+  .error-msg {
+    font-weight: 700; font-size: 14px; color: #7a0000;
+    background: rgba(255,255,255,.7);
+    border-radius: 8px; padding: 6px 18px;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  /* ── Botão ── */
+  .btn-pronto {
+    padding: 16px 64px;
+    background-color: var(--btn-dark); color: #fff;
+    font-size: clamp(15px, 1.7vw, 18px); font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    border: none; border-radius: 14px; cursor: pointer;
+    letter-spacing: .04em; text-decoration: underline;
+    transition: background-color .25s, transform .15s;
+  }
+  .btn-pronto:hover { background-color: var(--btn-hover); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<svg class="wave wave-tl" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-10 280 C40 230,0 180,60 130 C120 80,180 100,240 60 C300 20,310 -20,310 -20 L-10 -20 Z" fill="white" opacity="0.55"/>
+</svg>
+<svg class="wave wave-br" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260 0 C220 30,270 80,200 120 C130 160,80 140,40 190 C0 240,-10 260,-10 260 L260 260 Z" fill="white" opacity="0.55"/>
+</svg>
+
+<header class="page-header">
+  <h1>Defina sua meta 🎯</h1>
+</header>
+
+<div class="center-wrap">
+  <p class="subtitle">Quantas questões você quer responder hoje?</p>
+
+  <div class="input-wrap">
+    <input
+      class="input-meta"
+      id="inputMeta"
+      type="number"
+      min="1"
+      max="30"
+      placeholder="1"
+      autofocus
+    >
+    <span class="input-label">QUESTÕES</span>
+    <span class="max-hint">máximo: 30</span>
+  </div>
+
+  <p class="error-msg" id="errorMsg">Digite um número entre 1 e 30.</p>
+
+  <button class="btn-pronto" onclick="confirmar()">PRONTO</button>
+</div>
+
+<script>
+  const input = document.getElementById('inputMeta');
+
+  // Corrigir valor ao sair do campo
+  input.addEventListener('blur', () => corrigir());
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') confirmar(); });
+
+  function corrigir() {
+    let v = parseInt(input.value);
+    if (isNaN(v) || v < 1) { input.value = 1; return; }
+    if (v > 30) { input.value = 30; mostrarErro('O máximo é 30 questões!'); return; }
+    esconderErro();
+  }
+
+  function mostrarErro(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function esconderErro() {
+    document.getElementById('errorMsg').classList.remove('visible');
+  }
+
+  function confirmar() {
+    const v = parseInt(input.value);
+    if (!v || v < 1 || v > 30) {
+      mostrarErro('Digite um número entre 1 e 30.');
+      input.focus();
+      return;
+    }
+    localStorage.setItem('metaQuestoes', v);
+    window.location.href = '/exercicios';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuminaSaber – Relatório de Desempenho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:      #00e1e1;
+    --header-bg: rgba(255,255,255,0.45);
+    --card-grad1: linear-gradient(135deg, #a78bfa, #6d28d9);
+    --card-grad2: linear-gradient(135deg, #818cf8, #4338ca);
+    --btn-dark:  #22609b;
+    --btn-hover: #daa700;
+    --green:     #16a34a;
+    --red:       #dc2626;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--teal);
+    font-family: 'DM Sans', sans-serif;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    padding-bottom: 50px;
+  }
+
+  .wave { position: fixed; pointer-events: none; z-index: 0; }
+  .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
+  .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
+
+  /* ── Cabeçalho ── */
+  .page-header {
+    position: relative; z-index: 1; width: 100%;
+    padding: 18px 24px;
+    background: var(--header-bg);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .page-header h1 { font-size: clamp(18px, 2.8vw, 32px); font-weight: 700; }
+
+  .btn-sair {
+    background: var(--btn-dark); color: white;
+    border: none; border-radius: 20px;
+    padding: 8px 22px; font-size: 15px; font-weight: 700;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background .2s;
+    text-decoration: underline;
+  }
+  .btn-sair:hover { background: var(--btn-hover); }
+
+  /* ── Corpo ── */
+  .body-wrap {
+    z-index: 1; width: min(96%, 820px);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 24px;
+    margin-top: 28px;
+  }
+
+  /* ── Cards principais (acertos + percentual) ── */
+  .cards-row {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+    width: 100%;
+  }
+  .card-stat {
+    flex: 1; min-width: 200px; max-width: 280px;
+    border-radius: 18px; padding: 28px 20px;
+    color: white; text-align: center;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  }
+  .card-stat.acertos  { background: var(--card-grad1); }
+  .card-stat.percent  { background: var(--card-grad2); }
+  .card-stat h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  .card-stat .valor { font-size: 42px; font-weight: 700; }
+
+  /* ── Barra meta ── */
+  .meta-wrap {
+    width: 100%;
+    background: rgba(255,255,255,0.5);
+    border-radius: 16px;
+    padding: 18px 24px;
+  }
+  .meta-wrap h3 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+  .meta-bar-bg {
+    width: 100%; height: 22px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px; overflow: hidden;
+  }
+  .meta-bar-fill {
+    height: 100%; border-radius: 20px;
+    background: linear-gradient(90deg, #22609b, #a78bfa);
+    transition: width 1s ease;
+  }
+  .meta-texto { margin-top: 8px; font-size: 14px; font-weight: 600; }
+
+  /* ── Seções pontos fortes / fracos ── */
+  .secao {
+    width: 100%;
+  }
+  .secao-titulo {
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 10px; padding-left: 4px;
+  }
+  .secao-titulo.forte { color: #065f46; }
+  .secao-titulo.fraco { color: #7f1d1d; }
+
+  .secao-box {
+    background: rgba(255,255,255,0.85);
+    border-radius: 14px;
+    padding: 18px 22px;
+    font-size: 15px; font-weight: 600;
+    line-height: 1.7;
+  }
+  .secao-box.forte { border-left: 5px solid #16a34a; }
+  .secao-box.fraco { border-left: 5px solid #dc2626; }
+
+  /* matéria badge dentro das seções */
+  .mat-row { display: flex; flex-direction: column; gap: 10px; }
+  .mat-item { display: flex; align-items: center; gap: 12px; }
+  .mat-nome { font-weight: 700; min-width: 110px; }
+  .mat-mini-bar-bg {
+    flex: 1; height: 12px; background: #ddd;
+    border-radius: 10px; overflow: hidden;
+  }
+  .mat-mini-bar { height: 100%; border-radius: 10px; }
+  .mat-mini-bar.forte { background: #16a34a; }
+  .mat-mini-bar.fraco { background: #dc2626; }
+  .mat-pct { font-size: 13px; font-weight: 700; min-width: 38px; text-align: right; }
+
+  /* ── dica ── */
+  .dica-box {
+    width: 100%;
+    background: rgba(255,255,255,0.75);
+    border-radius: 14px;
+    padding: 18px 22px;
+    border-left: 5px solid #d97706;
+  }
+  .dica-titulo { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: #92400e; }
+  .dica-texto { font-size: 14px; line-height: 1.7; }
+
+  /* ── botão voltar ── */
+  .btn-voltar {
+    margin-top: 10px;
+    padding: 14px 48px;
+    background: var(--btn-dark); color: white;
+    border: none; border-radius: 14px;
+    font-size: 16px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; letter-spacing: .03em;
+    transition: background .2s, transform .15s;
+    text-decoration: underline;
+  }
+  .btn-voltar:hover { background: var(--btn-hover); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<svg class="wave wave-tl" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-10 280 C40 230,0 180,60 130 C120 80,180 100,240 60 C300 20,310 -20,310 -20 L-10 -20 Z" fill="white" opacity="0.55"/>
+</svg>
+<svg class="wave wave-br" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260 0 C220 30,270 80,200 120 C130 160,80 140,40 190 C0 240,-10 260,-10 260 L260 260 Z" fill="white" opacity="0.55"/>
+</svg>
+
+<header class="page-header">
+  <h1>🎉 Você conseguiu! Estudo concluído.</h1>
+  <button class="btn-sair" onclick="window.location.href='/'">SAIR</button>
+</header>
+
+<div class="body-wrap">
+
+  <!-- Cards acertos + percentual -->
+  <div class="cards-row">
+    <div class="card-stat acertos">
+      <h2>Acertos:</h2>
+      <div class="valor" id="valAcertos">–/–</div>
+    </div>
+    <div class="card-stat percent">
+      <h2>Percentual de acertos:</h2>
+      <div class="valor" id="valPercent">–%</div>
+    </div>
+  </div>
+
+  <!-- Barra de meta -->
+  <div class="meta-wrap">
+    <h3>📊 Meta de questões</h3>
+    <div class="meta-bar-bg">
+      <div class="meta-bar-fill" id="metaBarFill" style="width:0%"></div>
+    </div>
+    <p class="meta-texto" id="metaTexto">–</p>
+  </div>
+
+  <!-- Pontos fortes por matéria -->
+  <div class="secao">
+    <p class="secao-titulo forte">💪 Pontos fortes:</p>
+    <div class="secao-box forte">
+      <div class="mat-row" id="fortesRow">
+        <p style="opacity:.5">Calculando...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Áreas de melhoria -->
+  <div class="secao">
+    <p class="secao-titulo fraco">📌 Áreas de melhoria:</p>
+    <div class="secao-box fraco">
+      <div class="mat-row" id="fracosRow">
+        <p style="opacity:.5">Calculando...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dica personalizada -->
+  <div class="dica-box" id="dicaBox" style="display:none">
+    <p class="dica-titulo">💡 Dica para melhorar:</p>
+    <p class="dica-texto" id="dicaTexto"></p>
+  </div>
+
+  <button class="btn-voltar" onclick="window.location.href='/selecao'">Estudar novamente</button>
+</div>
+
+<script>
+  // ── Ler dados salvos pelos exercícios ──
+  const resultados  = JSON.parse(localStorage.getItem('resultadosQuestoes') || '[]');
+  // [{materia, acertou: true/false}, ...]
+  const meta        = parseInt(localStorage.getItem('metaQuestoes') || '0');
+  const materias    = JSON.parse(localStorage.getItem('materias') || '[]');
+
+  const totalResp   = resultados.length;
+  const totalAcert  = resultados.filter(r => r.acertou).length;
+  const totalErrou  = totalResp - totalAcert;
+  const pct         = totalResp > 0 ? Math.round((totalAcert / totalResp) * 100) : 0;
+
+  // ── Cards ──
+  document.getElementById('valAcertos').textContent = `${totalAcert}/${totalResp}`;
+  document.getElementById('valPercent').textContent = `${pct}%`;
+
+  // ── Barra de meta ──
+  const progMeta = meta > 0 ? Math.min(100, Math.round((totalResp / meta) * 100)) : 0;
+  setTimeout(() => {
+    document.getElementById('metaBarFill').style.width = progMeta + '%';
+  }, 200);
+
+  const metaMsg = meta > 0
+    ? `Você respondeu ${totalResp} de ${meta} questões (${progMeta}% da meta)`
+    : `Você respondeu ${totalResp} questões`;
+  document.getElementById('metaTexto').textContent = metaMsg;
+
+  // ── Por matéria ──
+  const stats = {}; // { materia: { acertos, total } }
+  resultados.forEach(r => {
+    if (!stats[r.materia]) stats[r.materia] = { acertos: 0, total: 0 };
+    stats[r.materia].total++;
+    if (r.acertou) stats[r.materia].acertos++;
+  });
+
+  const fortes = [];
+  const fracos = [];
+
+  Object.entries(stats).forEach(([mat, s]) => {
+    const p = s.total > 0 ? Math.round((s.acertos / s.total) * 100) : 0;
+    if (p >= 60) fortes.push({ mat, p, acertos: s.acertos, total: s.total });
+    else         fracos.push({ mat, p, acertos: s.acertos, total: s.total });
+  });
+
+  function renderMats(arr, tipo, containerId) {
+    const el = document.getElementById(containerId);
+    if (arr.length === 0) {
+      el.innerHTML = tipo === 'forte'
+        ? '<p>Continue praticando para identificar seus pontos fortes! 💪</p>'
+        : '<p>Ótimo! Sem áreas críticas identificadas. 🎉</p>';
+      return;
+    }
+    el.innerHTML = arr.map(({ mat, p, acertos, total }) => `
+      <div class="mat-item">
+        <span class="mat-nome">${mat}</span>
+        <div class="mat-mini-bar-bg">
+          <div class="mat-mini-bar ${tipo}" style="width:${p}%"></div>
+        </div>
+        <span class="mat-pct">${p}%</span>
+      </div>
+      <div style="font-size:12px; opacity:.6; padding-left:122px; margin-top:-6px;">
+        ${acertos} acerto${acertos !== 1 ? 's' : ''} de ${total} questão${total !== 1 ? 'ões' : ''}
+      </div>
+    `).join('');
+  }
+
+  renderMats(fortes, 'forte', 'fortesRow');
+  renderMats(fracos, 'fraco', 'fracosRow');
+
+  // ── Dica personalizada ──
+  if (fracos.length > 0) {
+    const piorMat = fracos.reduce((a, b) => a.p < b.p ? a : b);
+    const dicas = {
+      'Matemática':  'Revise os conceitos básicos de operações e pratique exercícios progressivos. Tente resolver 5 problemas por dia para ganhar ritmo.',
+      'Português':   'Leia textos variados e preste atenção à pontuação e ortografia. Escrever um pequeno diário pode ajudar muito!',
+      'Ciências':    'Assista a vídeos curtos sobre os temas que errou e tente explicar o conceito com suas próprias palavras.',
+      'História':    'Crie uma linha do tempo com os eventos principais. Associar fatos a datas e lugares facilita a memorização.',
+      'Geografia':   'Use mapas e imagens de satélite para visualizar os temas estudados. Relacione a geografia com notícias do dia a dia.',
+      'Inglês':      'Ouça músicas ou assista a vídeos em inglês com legenda. Aprenda 5 palavras novas por dia e use-as em frases.',
+      'Artes':       'Explore obras relacionadas ao conteúdo e tente criar algo inspirado nelas. Aprender fazendo é muito eficaz em Artes!',
+    };
+    const dica = dicas[piorMat.mat] || `Dedique um tempo extra revisando os conteúdos de ${piorMat.mat} e refaça exercícios desta matéria.`;
+    document.getElementById('dicaTexto').textContent =
+      `Você teve mais dificuldade em ${piorMat.mat} (${piorMat.p}% de acertos). ${dica}`;
+    document.getElementById('dicaBox').style.display = 'block';
+  } else if (pct === 100) {
+    document.getElementById('dicaTexto').textContent =
+      'Parabéns! Você acertou tudo! Continue mantendo esse ritmo incrível. Tente aumentar sua meta na próxima sessão. 🏆';
+    document.getElementById('dicaBox').style.display = 'block';
+  }
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/HttpError.js';
-import db from '../database/database.js';
+import { UsuarioModel } from '../models/usuarioModel.js';
 import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -27,27 +27,19 @@ export const UsuarioController = {
     }
 
     try {
-      const conn = await db.connect();
-      const emailExiste = await conn.get<{ cod_usuario: number }>('SELECT cod_usuario FROM USUARIO WHERE email = ?', [email]);
+      const emailExiste = await UsuarioModel.buscarPorEmail(email);
       if (emailExiste) {
-        await conn.close();
         return next(new HttpError(409, 'Este e-mail já está cadastrado. Use outro e-mail.'));
       }
 
-      const senhaExiste = await conn.get<{ cod_usuario: number }>('SELECT cod_usuario FROM USUARIO WHERE senha = ?', [senha]);
+      const senhaExiste = await UsuarioModel.buscarPorSenha(senha);
       if (senhaExiste) {
-        await conn.close();
         return next(new HttpError(409, 'Esta senha já está em uso. Por favor, escolha uma senha diferente.'));
       }
 
-      const resultado = await conn.run(
-        `INSERT INTO USUARIO (nome, email, senha, grau_escolar, data_nasc, tipo)
-                 VALUES (?, ?, ?, ?, ?, ?)`,
-        [nome, email, senha, grau_escolar || null, data_nasc, tipoUsuario]
-      );
-      await conn.close();
+      const id = await UsuarioModel.criar({ nome, email, senha, grau_escolar, data_nasc, tipo: tipoUsuario });
 
-      return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!', id: resultado.lastID });
+      return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!', id });
     } catch (error) {
       return next(error);
     }
@@ -55,9 +47,7 @@ export const UsuarioController = {
 
   async listar(req: Request, res: Response, next: NextFunction) {
     try {
-      const conn = await db.connect();
-      const usuarios = await conn.all<UsuarioListItem>('SELECT cod_usuario, nome, email, grau_escolar, data_nasc, tipo FROM USUARIO');
-      await conn.close();
+      const usuarios: UsuarioListItem[] = await UsuarioModel.listar();
       return res.status(200).json(usuarios);
     } catch (error) {
       return next(error);

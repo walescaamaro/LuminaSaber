@@ -1,99 +1,102 @@
-import db from '../database/database.js';
+import { prisma } from '../lib/prisma.js';
 import type { QuestaoBanco, QuestaoPayload } from '../types/questao.js';
+
+type QuestaoComDisciplina = Awaited<ReturnType<typeof prisma.questao.findFirst>> & {
+  disciplina?: { nome_disc: string };
+};
+
+function mapearQuestao(questao: NonNullable<QuestaoComDisciplina>): QuestaoBanco {
+  return {
+    cod_quest: questao.cod_quest,
+    cod_disc: questao.cod_disc,
+    enunciado: questao.enunciado,
+    alternativa_A: questao.alternativa_A,
+    alternativa_B: questao.alternativa_B,
+    alternativa_C: questao.alternativa_C,
+    alternativa_D: questao.alternativa_D,
+    alternativa_correta: questao.alternativa_correta as QuestaoBanco['alternativa_correta'],
+    dificuldade: questao.dificuldade,
+    materia: questao.disciplina?.nome_disc ?? '',
+  };
+}
 
 export const QuestaoModel = {
   async listarTodas(): Promise<QuestaoBanco[]> {
-    const conn = await db.connect();
-    const sql = `
-            SELECT q.*, d.nome_disc AS materia
-            FROM questao q
-            JOIN disciplina d ON q.cod_disc = d.cod_disc
-            ORDER BY d.nome_disc, q.cod_quest
-        `;
-    const resultados = await conn.all<QuestaoBanco>(sql);
-    await conn.close();
-    return resultados;
+    const questoes = await prisma.questao.findMany({
+      include: { disciplina: true },
+      orderBy: [{ disciplina: { nome_disc: 'asc' } }, { cod_quest: 'asc' }],
+    });
+    return questoes.map(mapearQuestao);
   },
 
   async buscarPorId(id: number): Promise<QuestaoBanco | undefined> {
-    const conn = await db.connect();
-    const sql = `
-            SELECT q.*, d.nome_disc AS materia
-            FROM questao q
-            JOIN disciplina d ON q.cod_disc = d.cod_disc
-            WHERE q.cod_quest = ?
-        `;
-    const resultado = await conn.get<QuestaoBanco>(sql, [id]);
-    await conn.close();
-    return resultado;
+    const questao = await prisma.questao.findUnique({
+      where: { cod_quest: id },
+      include: { disciplina: true },
+    });
+    return questao ? mapearQuestao(questao) : undefined;
   },
 
   async criar(dados: QuestaoPayload): Promise<number> {
-    const conn = await db.connect();
-
-    const existe = await conn.get<{ cod_quest: number }>(
-      'SELECT cod_quest FROM questao WHERE enunciado = ?',
-      [dados.enunciado]
-    );
+    const existe = await prisma.questao.findFirst({
+      where: { enunciado: dados.enunciado },
+      select: { cod_quest: true },
+    });
     if (existe) {
-      await conn.close();
       throw new Error('DUPLICADO');
     }
 
-    const sql = `
-            INSERT INTO questao
-                (cod_disc, enunciado, alternativa_A, alternativa_B,
-                 alternativa_C, alternativa_D, alternativa_correta, dificuldade)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `;
-    const params = [
-      dados.cod_disc,
-      dados.enunciado,
-      dados.alternativa_A,
-      dados.alternativa_B,
-      dados.alternativa_C,
-      dados.alternativa_D,
-      dados.alternativa_correta.toLowerCase(),
-      dados.dificuldade,
-    ];
-    const resultado = await conn.run(sql, params);
-    await conn.close();
-    return resultado.lastID;
+    const questao = await prisma.questao.create({
+      data: {
+        cod_disc: dados.cod_disc,
+        enunciado: dados.enunciado,
+        alternativa_A: dados.alternativa_A,
+        alternativa_B: dados.alternativa_B,
+        alternativa_C: dados.alternativa_C,
+        alternativa_D: dados.alternativa_D,
+        alternativa_correta: dados.alternativa_correta.toLowerCase(),
+        dificuldade: dados.dificuldade,
+      },
+      select: { cod_quest: true },
+    });
+
+    return questao.cod_quest;
   },
 
   async atualizar(id: number, dados: Partial<QuestaoPayload>): Promise<number> {
-    const campos: string[] = [];
-    const valores: unknown[] = [];
+    const questaoExiste = await prisma.questao.findUnique({
+      where: { cod_quest: id },
+      select: { cod_quest: true },
+    });
+    if (!questaoExiste) return 0;
 
-    if (dados.cod_disc !== undefined) { campos.push('cod_disc = ?'); valores.push(dados.cod_disc); }
-    if (dados.enunciado !== undefined) { campos.push('enunciado = ?'); valores.push(dados.enunciado); }
-    if (dados.alternativa_A !== undefined) { campos.push('alternativa_A = ?'); valores.push(dados.alternativa_A); }
-    if (dados.alternativa_B !== undefined) { campos.push('alternativa_B = ?'); valores.push(dados.alternativa_B); }
-    if (dados.alternativa_C !== undefined) { campos.push('alternativa_C = ?'); valores.push(dados.alternativa_C); }
-    if (dados.alternativa_D !== undefined) { campos.push('alternativa_D = ?'); valores.push(dados.alternativa_D); }
-    if (dados.alternativa_correta !== undefined) {
-      campos.push('alternativa_correta = ?');
-      valores.push(dados.alternativa_correta.toLowerCase());
-    }
-    if (dados.dificuldade !== undefined) { campos.push('dificuldade = ?'); valores.push(dados.dificuldade); }
+    await prisma.questao.update({
+      where: { cod_quest: id },
+      data: {
+        ...(dados.cod_disc !== undefined && { cod_disc: dados.cod_disc }),
+        ...(dados.enunciado !== undefined && { enunciado: dados.enunciado }),
+        ...(dados.alternativa_A !== undefined && { alternativa_A: dados.alternativa_A }),
+        ...(dados.alternativa_B !== undefined && { alternativa_B: dados.alternativa_B }),
+        ...(dados.alternativa_C !== undefined && { alternativa_C: dados.alternativa_C }),
+        ...(dados.alternativa_D !== undefined && { alternativa_D: dados.alternativa_D }),
+        ...(dados.alternativa_correta !== undefined && {
+          alternativa_correta: dados.alternativa_correta.toLowerCase(),
+        }),
+        ...(dados.dificuldade !== undefined && { dificuldade: dados.dificuldade }),
+      },
+    });
 
-    if (campos.length === 0) {
-      return 0;
-    }
-
-    valores.push(id);
-    const sql = `UPDATE questao SET ${campos.join(', ')} WHERE cod_quest = ?`;
-
-    const conn = await db.connect();
-    const resultado = await conn.run(sql, valores);
-    await conn.close();
-    return resultado.changes;
+    return 1;
   },
 
   async deletar(id: number): Promise<number> {
-    const conn = await db.connect();
-    const resultado = await conn.run('DELETE FROM questao WHERE cod_quest = ?', [id]);
-    await conn.close();
-    return resultado.changes;
+    const questaoExiste = await prisma.questao.findUnique({
+      where: { cod_quest: id },
+      select: { cod_quest: true },
+    });
+    if (!questaoExiste) return 0;
+
+    await prisma.questao.delete({ where: { cod_quest: id } });
+    return 1;
   },
 };

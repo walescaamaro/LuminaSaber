@@ -169,4 +169,3 @@ model Possui {
   @@id([cod_quest, cod_resposta])
   @@map("possui")
 }
-

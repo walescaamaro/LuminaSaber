@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LuminaSaber – Defina seu Tempo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal:      #00e1e1;
+    --header-bg: rgba(255,255,255,0.45);
+    --pill-bg:   rgba(255,255,255,0.88);
+    --pill-sel:  #ffffff;
+    --border-sel:#8b00c0;
+    --btn-dark:  #22609b;
+    --btn-hover: #daa700;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--teal);
+    font-family: 'DM Sans', sans-serif;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ondas */
+  .wave { position: fixed; pointer-events: none; z-index: 0; }
+  .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
+  .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
+
+  /* cabeçalho */
+  .page-header {
+    position: relative; z-index: 1;
+    width: 100%; text-align: center;
+    padding: 20px 0 18px;
+    background: var(--header-bg);
+    backdrop-filter: blur(2px);
+  }
+  .page-header h1 {
+    font-size: clamp(22px, 3.2vw, 36px);
+    font-weight: 700;
+  }
+
+  /* subtítulo */
+  .subtitle {
+    margin-top: 20px;
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-style: italic;
+    opacity: 0.8;
+    z-index: 1;
+  }
+
+  /* grade de opções */
+  .tempo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 28px;
+    z-index: 1;
+    width: clamp(280px, 52%, 500px);
+  }
+
+  .tempo-btn {
+    background: var(--pill-bg);
+    border: 2px solid transparent;
+    border-radius: 50px;
+    padding: 18px 10px;
+    font-size: clamp(15px, 1.7vw, 19px);
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: border-color .2s, transform .15s, box-shadow .2s;
+    text-align: center;
+    color: #111;
+    user-select: none;
+  }
+  .tempo-btn:hover { border-color: var(--border-sel); transform: translateY(-2px); }
+  .tempo-btn.selected {
+    border-color: var(--border-sel);
+    background: var(--pill-sel);
+    box-shadow: 0 0 0 3px rgba(139,0,192,.15);
+  }
+  .tempo-btn.personalizar {
+    grid-column: span 2;
+    justify-self: center;
+    width: 54%;
+  }
+
+  /* ── PICKER PERSONALIZADO ── */
+  .picker-wrap {
+    grid-column: span 2;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.55);
+    border-radius: 18px;
+    animation: fadeIn .25s ease;
+  }
+  .picker-wrap.visible { display: flex; }
+
+  .picker-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .picker-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .picker-col label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+  }
+
+  /* Spinner: botão ▲ / número / botão ▼ */
+  .spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .spin-btn {
+    width: 64px; height: 32px;
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s;
+    line-height: 1;
+    user-select: none;
+  }
+  .spin-btn:hover { background: rgba(255,255,255,1); }
+  .spin-btn.up { border-radius: 8px 8px 0 0; border-bottom: none; }
+  .spin-btn.down { border-radius: 0 0 8px 8px; border-top: none; }
+
+  .spin-value {
+    width: 64px; height: 46px;
+    background: white;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-top: none; border-bottom: none;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    /* esconder setas nativas */
+    -moz-appearance: textfield;
+  }
+  .spin-value::-webkit-outer-spin-button,
+  .spin-value::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+  .picker-divider {
+    font-size: 28px;
+    font-weight: 700;
+    padding-bottom: 8px;
+    opacity: 0.5;
+  }
+
+  .picker-preview {
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.7;
+    min-height: 20px;
+  }
+
+  /* botão pronto */
+  .btn-pronto {
+    margin-top: 36px; z-index: 1;
+    padding: 16px 64px;
+    background-color: var(--btn-dark);
+    color: #fff;
+    font-size: clamp(15px, 1.7vw, 18px);
+    font-weight: 700; font-family: 'DM Sans', sans-serif;
+    border: none; border-radius: 14px;
+    cursor: pointer; letter-spacing: .04em;
+    text-decoration: underline;
+    transition: background-color .25s, transform .15s;
+    margin-bottom: 40px;
+  }
+  .btn-pronto:hover { background-color: var(--btn-hover); transform: translateY(-2px); }
+
+  /* erro */
+  .error-msg {
+    margin-top: 10px; z-index: 1;
+    font-weight: 700; font-size: 14px;
+    color: #7a0000;
+    background: rgba(255,255,255,.7);
+    border-radius: 8px;
+    padding: 6px 18px;
+    display: none;
+  }
+  .error-msg.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<svg class="wave wave-tl" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-10 280 C40 230,0 180,60 130 C120 80,180 100,240 60 C300 20,310 -20,310 -20 L-10 -20 Z" fill="white" opacity="0.55"/>
+</svg>
+<svg class="wave wave-br" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M260 0 C220 30,270 80,200 120 C130 160,80 140,40 190 C0 240,-10 260,-10 260 L260 260 Z" fill="white" opacity="0.55"/>
+</svg>
+
+<header class="page-header">
+  <h1>Defina seu tempo ⏰</h1>
+</header>
+
+<p class="subtitle">Defina o tempo que deseja estudar</p>
+
+<div class="tempo-grid" id="tempoGrid">
+
+  <button class="tempo-btn" data-s="900"  onclick="selecionarTempo(this)">15 minutos</button>
+  <button class="tempo-btn" data-s="2700" onclick="selecionarTempo(this)">45 minutos</button>
+  <button class="tempo-btn" data-s="1800" onclick="selecionarTempo(this)">30 minutos</button>
+  <button class="tempo-btn" data-s="3600" onclick="selecionarTempo(this)">1 hora</button>
+
+  <button class="tempo-btn personalizar" id="btnPersonalizar" onclick="togglePersonalizar()">
+    Personalizar...
+  </button>
+
+  <!-- PICKER PERSONALIZADO -->
+  <div class="picker-wrap" id="pickerWrap">
+
+    <div class="picker-row">
+
+      <!-- Horas -->
+      <div class="picker-col">
+        <label>HORAS</label>
+        <div class="spinner">
+          <button class="spin-btn up" onclick="spin('h', 1)">▲</button>
+          <input class="spin-value" id="val-h" type="number" min="0" max="99" value="0" oninput="clamp(this,0,99);atualizarPreview()">
+          <button class="spin-btn down" onclick="spin('h', -1)">▼</button>
+        </div>
+      </div>
+
+      <span class="picker-divider">:</span>
+
+      <!-- Minutos -->
+      <div class="picker-col">
+        <label>MINUTOS</label>
+        <div class="spinner">
+          <button class="spin-btn up" onclick="spin('m', 1)">▲</button>
+          <input class="spin-value" id="val-m" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
+          <button class="spin-btn down" onclick="spin('m', -1)">▼</button>
+        </div>
+      </div>
+
+      <span class="picker-divider">:</span>
+
+      <!-- Segundos -->
+      <div class="picker-col">
+        <label>SEGUNDOS</label>
+        <div class="spinner">
+          <button class="spin-btn up" onclick="spin('s', 1)">▲</button>
+          <input class="spin-value" id="val-s" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
+          <button class="spin-btn down" onclick="spin('s', -1)">▼</button>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="picker-preview" id="pickerPreview">Defina um tempo acima</p>
+  </div>
+  <!-- fim picker -->
+
+</div>
+
+<p class="error-msg" id="errorMsg">Selecione um tempo antes de continuar!</p>
+
+<button class="btn-pronto" onclick="confirmarTempo()">PRONTO</button>
+
+<script>
+  let tempoSegundos = null;   // tempo total em segundos escolhido
+  let pickerAberto  = false;
+
+  /* ── Opções pré-definidas ── */
+  function selecionarTempo(btn) {
+    if (pickerAberto) fecharPicker();
+    document.querySelectorAll('.tempo-btn:not(.personalizar)')
+            .forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    tempoSegundos = parseInt(btn.dataset.s);
+    esconderErro();
+  }
+
+  /* ── Toggle personalizar ── */
+  function togglePersonalizar() {
+    pickerAberto ? fecharPicker() : abrirPicker();
+  }
+
+  function abrirPicker() {
+    pickerAberto = true;
+    document.querySelectorAll('.tempo-btn:not(.personalizar)')
+            .forEach(b => b.classList.remove('selected'));
+    tempoSegundos = null;
+    document.getElementById('btnPersonalizar').classList.add('selected');
+    document.getElementById('pickerWrap').classList.add('visible');
+    // resetar valores
+    ['h','m','s'].forEach(id => {
+      document.getElementById('val-'+id).value = 0;
+    });
+    atualizarPreview();
+  }
+
+  function fecharPicker() {
+    pickerAberto = false;
+    document.getElementById('btnPersonalizar').classList.remove('selected');
+    document.getElementById('pickerWrap').classList.remove('visible');
+    if (!document.querySelector('.tempo-btn:not(.personalizar).selected')) {
+      tempoSegundos = null;
+    }
+  }
+
+  /* ── Spinner ── */
+  function spin(campo, delta) {
+    const el = document.getElementById('val-' + campo);
+    const max = campo === 'h' ? 99 : 59;
+    let val = parseInt(el.value) || 0;
+    val += delta;
+    if (val < 0) val = max;
+    if (val > max) val = 0;
+    el.value = val;
+    atualizarPreview();
+  }
+
+  function clamp(el, min, max) {
+    let v = parseInt(el.value);
+    if (isNaN(v)) v = min;
+    if (v < min) v = min;
+    if (v > max) v = max;
+    el.value = v;
+  }
+
+  /* ── Preview do tempo customizado ── */
+  function atualizarPreview() {
+    const h = parseInt(document.getElementById('val-h').value) || 0;
+    const m = parseInt(document.getElementById('val-m').value) || 0;
+    const s = parseInt(document.getElementById('val-s').value) || 0;
+    const total = h*3600 + m*60 + s;
+
+    const prev = document.getElementById('pickerPreview');
+    if (total === 0) {
+      prev.textContent = 'Defina um tempo acima';
+      tempoSegundos = null;
+    } else {
+      const partes = [];
+      if (h) partes.push(h + (h === 1 ? ' hora' : ' horas'));
+      if (m) partes.push(m + ' min');
+      if (s) partes.push(s + ' seg');
+      prev.textContent = '⏱ ' + partes.join(' e ');
+      tempoSegundos = total;
+    }
+    esconderErro();
+  }
+
+  /* ── Confirmar ── */
+  function confirmarTempo() {
+    if (!tempoSegundos || tempoSegundos <= 0) {
+      document.getElementById('errorMsg').textContent = 'Selecione ou defina um tempo antes de continuar!';
+      document.getElementById('errorMsg').classList.add('visible');
+      return;
+    }
+    localStorage.setItem('tempoEstudoSegundos', tempoSegundos);
+    window.location.href = '/meta';
+  }
+
+  function esconderErro() {
+    document.getElementById('errorMsg').classList.remove('visible');
+  }
+</script>
+</body>
+</html>

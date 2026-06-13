@@ -26,8 +26,9 @@
             background: #fff;
             width: 900px;
             max-width: 100%;
-            padding: 30px 40px;
+            padding: clamp(22px, 4vw, 36px);
             border-radius: 8px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
         }
         .title { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
         .icon {
@@ -44,18 +45,22 @@
         .field { display: flex; flex-direction: column; }
         label { font-size: 14.5px; margin-bottom: 5px; font-weight: bold; }
         input, select {
-            padding: 8px 10px;
-            border: 1px solid #999;
-            border-radius: 5px;
+            padding: 10px 12px;
+            border: 1px solid #b8c0c8;
+            border-radius: 8px;
             font-size: 15px;
             font-family: 'DM Sans', sans-serif;
+        }
+        input:focus, select:focus {
+            border-color: #1f5fa6;
+            outline: 2px solid rgba(31, 95, 166, 0.16);
         }
         input::placeholder { color: #aaa; }
         .full { grid-column: span 2; }
         .btn { grid-column: span 2; display: flex; justify-content: center; margin-top: 15px; }
         button {
             background: #1f5fa6; color: white; border: none;
-            padding: 10px 20px; border-radius: 6px; cursor: pointer;
+            padding: 11px 22px; border-radius: 8px; cursor: pointer;
             font-weight: bold; font-family: 'DM Sans', sans-serif; font-size: 15px;
         }
         button:hover { background: #174b85; }
@@ -70,9 +75,9 @@
         .voltar:hover { text-decoration: underline; }
 
         /* Tabela de listagem */
-        .tabela-container { width: 900px; max-width: 100%; margin-top: 32px; }
+        .tabela-container { width: 900px; max-width: 100%; margin-top: 32px; overflow-x: auto; }
         .tabela-container h3 { font-size: 18px; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+        table { width: 100%; min-width: 720px; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08); }
         th { background: #1f5fa6; color: #fff; padding: 10px; font-size: 13px; text-align: left; }
         td { padding: 9px 10px; font-size: 13px; border-bottom: 1px solid #eee; }
         tr:last-child td { border-bottom: none; }
@@ -87,6 +92,31 @@
             margin-right: 4px;
         }
         .btn-editar:hover { background: #174b85; }
+
+        @media (max-width: 720px) {
+            body {
+                justify-content: flex-start;
+                padding: 24px 14px;
+            }
+
+            form {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .full,
+            .btn {
+                grid-column: auto;
+            }
+
+            .title h2 {
+                font-size: 22px;
+            }
+
+            button[type="submit"] {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
