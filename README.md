@@ -128,38 +128,41 @@ LuminaSaber/
 # 1. Clone o repositório
 git clone https://github.com/walescaamaro/LuminaSaber.git
 
-# 2. Entre na pasta do backend
+# 2. Entre na pasta do projeto
+cd LuminaSaber
+
+# 3. Entre na pasta do backend
 cd backend
 
-# 3. Crie o arquivo de configuração (.env)
+# 4. Crie o arquivo de configuração (.env)
 cp .env.example .env
 
-# 4. Instale as dependências na pasta raiz
+# 5. Instale as dependências na pasta raiz
 npm install dotenv typescript @types/node
 
-# 5. Instalar as dependências do servidor (backend)
+# 6. Instalar as dependências do servidor (backend)
 cd backend
 
 npm install
 
 cd ..
 
-# 6. Gerar o Prisma Client
+# 7. Gerar o Prisma Client
 npx prisma generate
 
-# 7. Criar as tabelas no banco de dados
+# 8. Criar as tabelas no banco de dados
 npx prisma migrate dev
 
 # (O terminal vai pedir um nome. Digite 'init' e aperte Enter)
 
-# 8. Popular o banco com dados iniciais (Seed alternativo direto pelo backend)
+# 9. Popular o banco com dados iniciais (Seed alternativo direto pelo backend)
 cd backend
 
 npm run seed
 
 cd ..
 
-# 9. Iniciar o servidor em definitivo
+# 10. Iniciar o servidor em definitivo
 cd backend
 
 npm start
