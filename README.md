@@ -120,6 +120,7 @@ LuminaSaber/
 ### Pré-requisitos
 
 - [Node.js](https://nodejs.org/) instalado — **versão 22 ou superior** (obrigatório para o módulo nativo `node:sqlite`)
+- [Git / Git Bash](https://git-scm.com/) instalado — **Obrigatório o uso do terminal Git Bash** para evitar erros de compatibilidade e segurança no Windows.
 
 ### Passo a passo
 
@@ -130,19 +131,37 @@ git clone https://github.com/walescaamaro/LuminaSaber.git
 # 2. Entre na pasta do backend
 cd backend
 
-# 3. Instale as dependências
+# 3. Crie o arquivo de configuração (.env)
+cp .env.example .env
+
+# 4. Instale as dependências na pasta raiz
+npm install dotenv typescript @types/node
+
+# 5. Instalar as dependências do servidor (backend)
+cd backend
+
 npm install
 
-# 4. Gere o Prisma Client
-npm run prisma:generate
+cd ..
 
-# 5. Crie as tabelas no banco de dados
-npm run migrate
+# 6. Gerar o Prisma Client
+npx prisma generate
 
-# 6. Popule o banco com dados iniciais
+# 7. Criar as tabelas no banco de dados
+npx prisma migrate dev
+
+# (O terminal vai pedir um nome. Digite 'init' e aperte Enter)
+
+# 8. Popular o banco com dados iniciais (Seed alternativo direto pelo backend)
+cd backend
+
 npm run seed
 
-# 7. Inicie o servidor
+cd ..
+
+# 9. Iniciar o servidor em definitivo
+cd backend
+
 npm start
 ```
 
