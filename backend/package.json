@@ -7,7 +7,7 @@
   "scripts": {
     "start": "tsx server.ts",
     "dev": "tsx watch server.ts",
-    "prisma:generate": "cd .. && ./backend/node_modules/.bin/prisma generate",
+    "prisma:generate": "prisma generate",
     "migrate": "tsx src/database/migration.ts",
     "seed": "tsx src/database/seed.ts",
     "check": "tsc --noEmit"
