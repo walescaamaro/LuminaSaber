@@ -4,13 +4,6 @@
 
 ### Plataforma web gamificada e gratuita de apoio ao aprendizado na educação básica
 
-![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
-![Express](https://img.shields.io/badge/Express.js-4.x-000000?logo=express&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-database-07405E?logo=sqlite&logoColor=white)
-![License](https://img.shields.io/badge/Licença-Educacional-blue)
-
 </div>
 
 ---
