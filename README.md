@@ -365,7 +365,6 @@ Funcionalidades previstas para próximas versões:
 
 - [ ] Autenticação de usuários (login com perfis de aluno e administrador)
 - [ ] CRUD completo de usuários pelo front-end (editar/remover)
-- [ ] Relatório de desempenho gerado automaticamente ao final de cada sessão
 - [ ] Módulo de anotações (criação de pastas, edição, exclusão e exportação em PDF)
 - [ ] Módulo de histórico com opção de refazer questões anteriores
 - [ ] Painel administrativo para gerenciamento de usuários
