@@ -126,7 +126,7 @@ LuminaSaber/
 
 ```bash
 # 1. Clone o repositório
-git clone [https://github.com/walescaamaro/LuminaSaber.git](https://github.com/walescaamaro/LuminaSaber.git)
+git clone https://github.com/walescaamaro/LuminaSaber.git
 
 # 2. Entre na pasta raiz do projeto
 cd LuminaSaber
