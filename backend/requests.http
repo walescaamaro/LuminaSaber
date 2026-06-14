@@ -1,16 +1,12 @@
-# request.http
-# Testes da API — LuminaSaber
-# Extensão necessária: REST Client (VSCode)
-# Antes de rodar, inicie o servidor em http://localhost:3000
-# Execute npm run migrate e npm run seed se precisar resetar o banco.
-
-### ─── GET (CONSULTAS) ───────────────────────────────────────────────
+# Testes da API LuminaSaber
+# Extensão: REST Client
+# Antes de rodar, iniciar o servidor em http://localhost:3000
 
 ### Listar todas as questões → 200
 GET http://localhost:3000/api/questoes
 Accept: application/json
 
-### Buscar questão existente por ID → 200
+### Buscar questão existente → 200
 GET http://localhost:3000/api/questoes/11154
 Accept: application/json
 
@@ -18,14 +14,11 @@ Accept: application/json
 GET http://localhost:3000/api/questoes/99999
 Accept: application/json
 
-### Buscar questão com ID inválido (não numérico) → 400
+### Buscar questão com ID inválido → 400
 GET http://localhost:3000/api/questoes/abc
 Accept: application/json
 
-
-### ─── POST (CRIAÇÃO) ────────────────────────────────────────────────
-
-### Criar nova questão válida → 201
+### Criar questão válida → 201
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -40,7 +33,7 @@ Content-Type: application/json
   "dificuldade": "fácil"
 }
 
-### Criar questão com campos obrigatórios faltando → 400
+### Criar questão com campo faltando → 400
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -50,7 +43,7 @@ Content-Type: application/json
   "alternativa_A": "10"
 }
 
-### Criar questão com alternativa_correta inválida → 400
+### Criar questão com alternativa incorreta → 400
 POST http://localhost:3000/api/questoes
 Content-Type: application/json
 
@@ -65,10 +58,7 @@ Content-Type: application/json
   "dificuldade": "fácil"
 }
 
-
-### ─── PUT (ATUALIZAÇÃO) ─────────────────────────────────────────────
-
-### Atualizar enunciado e dificuldade de uma questão → 200
+### Atualizar questão existente → 200
 PUT http://localhost:3000/api/questoes/11154
 Content-Type: application/json
 
@@ -77,16 +67,7 @@ Content-Type: application/json
   "dificuldade": "médio"
 }
 
-### Atualizar alternativa correta e dificuldade de outra questão → 200
-PUT http://localhost:3000/api/questoes/22468
-Content-Type: application/json
-
-{
-  "alternativa_correta": "b",
-  "dificuldade": "médio"
-}
-
-### Atualizar questão que não existe → 404
+### Atualizar questão inexistente → 404
 PUT http://localhost:3000/api/questoes/99999
 Content-Type: application/json
 
@@ -94,23 +75,20 @@ Content-Type: application/json
   "enunciado": "Questão que não existe"
 }
 
-### Atualizar sem enviar nenhum campo (vazio) → 400
+### Atualizar questão sem campos → 400
 PUT http://localhost:3000/api/questoes/11154
 Content-Type: application/json
 
 {}
 
-
-### ─── DELETE (REMOÇÃO) ──────────────────────────────────────────────
-
 ### Deletar questão existente → 200
 DELETE http://localhost:3000/api/questoes/90003
 Accept: application/json
 
-### Deletar questão que não existe → 404
+### Deletar questão inexistente → 404
 DELETE http://localhost:3000/api/questoes/99999
 Accept: application/json
 
-### Deletar com ID inválido (não numérico) → 400
+### Deletar questão com ID inválido → 400
 DELETE http://localhost:3000/api/questoes/xyz
 Accept: application/json

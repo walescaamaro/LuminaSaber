@@ -1,3 +1,11 @@
+/*
+  Prisma Seed
+
+  Este arquivo insere dados iniciais usados para teste e desenvolvimento.
+  O seed complementa as migrations: as migrations criam a estrutura do banco,
+  e o seed popula a base com registros reais para validar rotas e o front-end.
+*/
+
 import db from './database.js';
 
 async function runSeed() {
