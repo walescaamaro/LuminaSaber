@@ -15,24 +15,6 @@
 
 ---
 
-## 📑 Sumário
-
-- [Sobre o projeto](#-sobre-o-projeto)
-- [Funcionalidades](#-funcionalidades)
-- [Tecnologias](#-tecnologias)
-- [Arquitetura (MVC)](#-arquitetura-mvc)
-- [Modelagem do banco de dados](#-modelagem-do-banco-de-dados)
-- [Estrutura de pastas](#-estrutura-de-pastas)
-- [Como executar o projeto](#-como-executar-o-projeto)
-- [Rotas da API](#-rotas-da-api)
-- [Testando a API](#-testando-a-api)
-- [Dados iniciais (seed)](#-dados-iniciais-seed)
-- [Roadmap](#-roadmap)
-- [Equipe](#-equipe)
-- [Licença](#-licença)
-
----
-
 ## 📖 Sobre o projeto
 
 O **LuminaSaber** é uma plataforma web voltada para estudantes da educação básica, oferecendo **exercícios de múltipla escolha organizados por disciplina**, com acompanhamento de metas de estudo e relatórios de desempenho.
@@ -168,7 +150,7 @@ A modelagem está em `backend/prisma/schema.prisma`, com **11 models** que repre
 
 - **1:N** — Uma `Disciplina` possui várias `Questao` (`Questao.cod_disc → Disciplina.cod_disc`).
 - **1:N** — Um `Usuario` pode criar várias `Pasta` e `Anotacao`.
-- **N:N** — Um `Usuario` "estuda" várias `Disciplina` (e vice-versa), modelado pela tabela associativa `Estuda`, que também guarda a meta e o tempo de estudo.
+- **N:N** — Um `Usuario` "estuda" várias `Disciplina` (e vice-versa), modelado pela tabela `Estuda`, que também guarda a meta e o tempo de estudo.
 - **N:N** — Uma `Pasta` pode conter várias `Anotacao` (e uma anotação pode pertencer a mais de uma pasta), via `Contem`.
 
 ---
