@@ -1,7 +1,5 @@
 <div align="center">
-
-<img src="public/logo.png" alt="LuminaSaber" width="220" />
-
+      
 # 🌟 LuminaSaber
 
 ### Plataforma web gamificada e gratuita de apoio ao aprendizado na educação básica
