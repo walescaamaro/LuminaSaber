@@ -1,6 +1,9 @@
 /**
  * Carrega as questões da API e exibe na tela com filtro por disciplina e busca.
  * Integra com localStorage para persistência de respostas e acompanhamento de meta.
+ *
+ * MODIFICADO: agora salva dados completos de cada questão (enunciado, nível,
+ * resposta escolhida, resposta correta) para permitir análise de IA no relatório.
  */
 export async function carregarQuestoes() {
     try {
@@ -111,7 +114,18 @@ export async function carregarQuestoes() {
                     btn.disabled = true;
                     btn.style.opacity = '0.6';
                     questRespondidas++;
-                    resultados.push({ materia: q.materia, acertou });
+
+                    // ── MODIFICADO: salva dados completos da questão ──
+                    resultados.push({
+                        materia:          q.materia,
+                        nivel:            q.nivel,
+                        enunciado:        q.enunciado,
+                        alternativas:     q.alternativas,
+                        respostaEscolhida: q.alternativas[escolhido],
+                        respostaCorreta:  q.alternativas[q.correta],
+                        acertou
+                    });
+
                     salvarEVerificarMeta();
                 });
             });

@@ -37,7 +37,6 @@
   .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
   .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
 
-  /* ── Cabeçalho ── */
   .page-header {
     position: relative; z-index: 1; width: 100%;
     padding: 18px 24px;
@@ -59,7 +58,6 @@
   }
   .btn-sair:hover { background: var(--btn-hover); }
 
-  /* ── Corpo ── */
   .body-wrap {
     z-index: 1; width: min(96%, 820px);
     display: flex; flex-direction: column;
@@ -67,7 +65,6 @@
     margin-top: 28px;
   }
 
-  /* ── Cards principais (acertos + percentual) ── */
   .cards-row {
     display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
     width: 100%;
@@ -83,7 +80,6 @@
   .card-stat h2 { font-size: 18px; font-weight: 700; margin-bottom: 14px; }
   .card-stat .valor { font-size: 42px; font-weight: 700; }
 
-  /* ── Barra meta ── */
   .meta-wrap {
     width: 100%;
     background: rgba(255,255,255,0.5);
@@ -103,10 +99,7 @@
   }
   .meta-texto { margin-top: 8px; font-size: 14px; font-weight: 600; }
 
-  /* ── Seções pontos fortes / fracos ── */
-  .secao {
-    width: 100%;
-  }
+  .secao { width: 100%; }
   .secao-titulo {
     font-size: 18px; font-weight: 700;
     margin-bottom: 10px; padding-left: 4px;
@@ -124,7 +117,6 @@
   .secao-box.forte { border-left: 5px solid #16a34a; }
   .secao-box.fraco { border-left: 5px solid #dc2626; }
 
-  /* matéria badge dentro das seções */
   .mat-row { display: flex; flex-direction: column; gap: 10px; }
   .mat-item { display: flex; align-items: center; gap: 12px; }
   .mat-nome { font-weight: 700; min-width: 110px; }
@@ -137,18 +129,43 @@
   .mat-mini-bar.fraco { background: #dc2626; }
   .mat-pct { font-size: 13px; font-weight: 700; min-width: 38px; text-align: right; }
 
-  /* ── dica ── */
-  .dica-box {
+  .ia-box {
     width: 100%;
-    background: rgba(255,255,255,0.75);
-    border-radius: 14px;
-    padding: 18px 22px;
-    border-left: 5px solid #d97706;
+    background: rgba(255,255,255,0.9);
+    border-radius: 16px;
+    padding: 22px 26px;
+    border-left: 5px solid #6d28d9;
   }
-  .dica-titulo { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: #92400e; }
-  .dica-texto { font-size: 14px; line-height: 1.7; }
+  .ia-titulo {
+    font-size: 17px; font-weight: 700;
+    margin-bottom: 14px; color: #4c1d95;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ia-conteudo {
+    font-size: 15px; line-height: 1.8;
+    color: #1a1a2e;
+    font-weight: 500;
+    white-space: pre-wrap;
+  }
 
-  /* ── botão voltar ── */
+  .ia-loading { display: flex; flex-direction: column; gap: 10px; }
+  .skeleton {
+    height: 14px; border-radius: 8px;
+    background: linear-gradient(90deg, #e0d7f7 25%, #c4b5fd 50%, #e0d7f7 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+  }
+  .skeleton.s80  { width: 80%; }
+  .skeleton.s95  { width: 95%; }
+  .skeleton.s70  { width: 70%; }
+  .skeleton.s60  { width: 60%; }
+  @keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .ia-erro { color: #b91c1c; font-size: 14px; font-weight: 600; }
+
   .btn-voltar {
     margin-top: 10px;
     padding: 14px 48px;
@@ -179,7 +196,6 @@
 
 <div class="body-wrap">
 
-  <!-- Cards acertos + percentual -->
   <div class="cards-row">
     <div class="card-stat acertos">
       <h2>Acertos:</h2>
@@ -191,7 +207,6 @@
     </div>
   </div>
 
-  <!-- Barra de meta -->
   <div class="meta-wrap">
     <h3>📊 Meta de questões</h3>
     <div class="meta-bar-bg">
@@ -200,7 +215,6 @@
     <p class="meta-texto" id="metaTexto">–</p>
   </div>
 
-  <!-- Pontos fortes por matéria -->
   <div class="secao">
     <p class="secao-titulo forte">💪 Pontos fortes:</p>
     <div class="secao-box forte">
@@ -210,7 +224,6 @@
     </div>
   </div>
 
-  <!-- Áreas de melhoria -->
   <div class="secao">
     <p class="secao-titulo fraco">📌 Áreas de melhoria:</p>
     <div class="secao-box fraco">
@@ -220,32 +233,35 @@
     </div>
   </div>
 
-  <!-- Dica personalizada -->
-  <div class="dica-box" id="dicaBox" style="display:none">
-    <p class="dica-titulo">💡 Dica para melhorar:</p>
-    <p class="dica-texto" id="dicaTexto"></p>
+  <div class="ia-box" id="iaBox">
+    <p class="ia-titulo">🤖 Análise personalizada</p>
+    <div class="ia-conteudo" id="iaConteudo">
+      <div class="ia-loading">
+        <div class="skeleton s95"></div>
+        <div class="skeleton s80"></div>
+        <div class="skeleton s95"></div>
+        <div class="skeleton s70"></div>
+        <div class="skeleton s95"></div>
+        <div class="skeleton s60"></div>
+      </div>
+    </div>
   </div>
 
   <button class="btn-voltar" onclick="window.location.href='/selecao'">Estudar novamente</button>
 </div>
 
 <script>
-  // ── Ler dados salvos pelos exercícios ──
-  const resultados  = JSON.parse(localStorage.getItem('resultadosQuestoes') || '[]');
-  // [{materia, acertou: true/false}, ...]
-  const meta        = parseInt(localStorage.getItem('metaQuestoes') || '0');
-  const materias    = JSON.parse(localStorage.getItem('materias') || '[]');
+  const resultados = JSON.parse(localStorage.getItem('resultadosQuestoes') || '[]');
+  const meta       = parseInt(localStorage.getItem('metaQuestoes') || '0');
+  const materias   = JSON.parse(localStorage.getItem('materias') || '[]');
 
-  const totalResp   = resultados.length;
-  const totalAcert  = resultados.filter(r => r.acertou).length;
-  const totalErrou  = totalResp - totalAcert;
-  const pct         = totalResp > 0 ? Math.round((totalAcert / totalResp) * 100) : 0;
+  const totalResp  = resultados.length;
+  const totalAcert = resultados.filter(r => r.acertou).length;
+  const pct        = totalResp > 0 ? Math.round((totalAcert / totalResp) * 100) : 0;
 
-  // ── Cards ──
   document.getElementById('valAcertos').textContent = `${totalAcert}/${totalResp}`;
   document.getElementById('valPercent').textContent = `${pct}%`;
 
-  // ── Barra de meta ──
   const progMeta = meta > 0 ? Math.min(100, Math.round((totalResp / meta) * 100)) : 0;
   setTimeout(() => {
     document.getElementById('metaBarFill').style.width = progMeta + '%';
@@ -256,8 +272,7 @@
     : `Você respondeu ${totalResp} questões`;
   document.getElementById('metaTexto').textContent = metaMsg;
 
-  // ── Por matéria ──
-  const stats = {}; // { materia: { acertos, total } }
+  const stats = {};
   resultados.forEach(r => {
     if (!stats[r.materia]) stats[r.materia] = { acertos: 0, total: 0 };
     stats[r.materia].total++;
@@ -265,7 +280,7 @@
   });
 
   const fortes = [];
-  const fracos = [];
+  const fracos  = [];
 
   Object.entries(stats).forEach(([mat, s]) => {
     const p = s.total > 0 ? Math.round((s.acertos / s.total) * 100) : 0;
@@ -296,29 +311,91 @@
   }
 
   renderMats(fortes, 'forte', 'fortesRow');
-  renderMats(fracos, 'fraco', 'fracosRow');
+  renderMats(fracos,  'fraco', 'fracosRow');
 
-  // ── Dica personalizada ──
-  if (fracos.length > 0) {
-    const piorMat = fracos.reduce((a, b) => a.p < b.p ? a : b);
-    const dicas = {
-      'Matemática':  'Revise os conceitos básicos de operações e pratique exercícios progressivos. Tente resolver 5 problemas por dia para ganhar ritmo.',
-      'Português':   'Leia textos variados e preste atenção à pontuação e ortografia. Escrever um pequeno diário pode ajudar muito!',
-      'Ciências':    'Assista a vídeos curtos sobre os temas que errou e tente explicar o conceito com suas próprias palavras.',
-      'História':    'Crie uma linha do tempo com os eventos principais. Associar fatos a datas e lugares facilita a memorização.',
-      'Geografia':   'Revise novamente o conteúdo das questões que errou. Relacione a geografia com notícias do dia a dia.',
-      'Inglês':      'Ouça músicas ou assista a vídeos em inglês com legenda. Aprenda 5 palavras novas por dia e use-as em frases.',
-      'Artes':       'Explore obras relacionadas ao conteúdo e tente criar algo inspirado nelas. Aprender fazendo é muito eficaz em Artes!',
-    };
-    const dica = dicas[piorMat.mat] || `Dedique um tempo extra revisando os conteúdos de ${piorMat.mat} e refaça exercícios desta matéria.`;
-    document.getElementById('dicaTexto').textContent =
-      `Você teve mais dificuldade em ${piorMat.mat} (${piorMat.p}% de acertos). ${dica}`;
-    document.getElementById('dicaBox').style.display = 'block';
-  } else if (pct === 100) {
-    document.getElementById('dicaTexto').textContent =
-      'Parabéns! Você acertou tudo! Continue mantendo esse ritmo incrível. Tente aumentar sua meta na próxima sessão. 🏆';
-    document.getElementById('dicaBox').style.display = 'block';
+  async function gerarAnaliseIA() {
+    const iaConteudo = document.getElementById('iaConteudo');
+
+    if (totalResp === 0) {
+      iaConteudo.textContent = 'Nenhuma questão foi respondida nesta sessão.';
+      return;
+    }
+
+    const apiKey = window.GEMINI_KEY;
+
+    if (!apiKey) {
+      iaConteudo.innerHTML = '<span class="ia-erro">⚠️ Chave do Gemini não configurada. Adicione GEMINI_API_KEY no .env do servidor.</span>';
+      return;
+    }
+
+    const acertadas = resultados.filter(r => r.acertou);
+    const erradas   = resultados.filter(r => !r.acertou);
+
+    const listaAcertadas = acertadas.map(r =>
+      `- [${r.materia} / ${r.nivel || 'N/A'}] ${r.enunciado}`
+    ).join('\n');
+
+    const listaErradas = erradas.map(r =>
+      `- [${r.materia} / ${r.nivel || 'N/A'}] ${r.enunciado}\n  Escolheu: "${r.respostaEscolhida}" | Correta: "${r.respostaCorreta}"`
+    ).join('\n');
+
+    const prompt = `Você é um tutor pedagógico analisando o desempenho de um estudante em uma sessão de exercícios.
+
+RESUMO DA SESSÃO:
+- Total de questões respondidas: ${totalResp}
+- Total de acertos: ${totalAcert} (${pct}%)
+- Matérias estudadas: ${materias.length > 0 ? materias.join(', ') : 'Geral'}
+
+QUESTÕES QUE O ALUNO ACERTOU:
+${listaAcertadas || '(nenhuma)'}
+
+QUESTÕES QUE O ALUNO ERROU:
+${listaErradas || '(nenhuma)'}
+
+Com base nesses dados reais (não use frases genéricas), escreva uma análise pedagógica personalizada em português do Brasil com:
+
+1. O que o aluno demonstrou dominar — cite os temas específicos das questões acertadas
+2. Onde estão as lacunas reais — analise o padrão dos erros, cite os temas exatos das questões erradas e, quando possível, explique por que o aluno pode ter errado
+3. Prioridade de estudo — diga explicitamente quais tópicos estudar primeiro e por quê
+4. Uma dica prática — algo concreto que o aluno pode fazer agora para melhorar
+
+Seja direto, específico e humano. Não use listas com bullets — escreva em parágrafos corridos. Não mencione que é uma IA. Trate o aluno na segunda pessoa (você).`;
+
+    try {
+     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error?.message || `Erro ${response.status}`);
+      }
+
+      const data = await response.json();
+      const texto = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Não foi possível gerar a análise.';
+
+      // Remove marcações markdown como **negrito** e # títulos
+      const textoLimpo = texto
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/^#{1,6}\s+/gm, '')
+        .replace(/\*(.*?)\*/g, '$1')
+        .trim();
+
+      iaConteudo.textContent = textoLimpo;
+
+    } catch (erro) {
+      console.error('Erro ao chamar API Gemini:', erro);
+      iaConteudo.innerHTML = `<span class="ia-erro">⚠️ Não foi possível gerar a análise personalizada. Verifique sua conexão e tente novamente.<br><small style="opacity:.6">${erro.message}</small></span>`;
+    }
   }
+
+  gerarAnaliseIA();
 </script>
 </body>
 </html>
