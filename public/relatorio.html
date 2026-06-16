@@ -129,29 +129,21 @@
   .mat-mini-bar.fraco { background: #dc2626; }
   .mat-pct { font-size: 13px; font-weight: 700; min-width: 38px; text-align: right; }
 
-  .ia-box {
-    width: 100%;
-    background: rgba(255,255,255,0.9);
-    border-radius: 16px;
-    padding: 22px 26px;
-    border-left: 5px solid #6d28d9;
-  }
-  .ia-titulo {
-    font-size: 17px; font-weight: 700;
-    margin-bottom: 14px; color: #4c1d95;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .ia-conteudo {
-    font-size: 15px; line-height: 1.8;
-    color: #1a1a2e;
+  /* Texto da análise de IA, inserido dentro das caixas forte/fraco, abaixo das barras */
+  .ia-analise {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    font-size: 14px;
     font-weight: 500;
-    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #2a2a2a;
   }
 
-  .ia-loading { display: flex; flex-direction: column; gap: 10px; }
+  .ia-loading { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08); }
   .skeleton {
-    height: 14px; border-radius: 8px;
-    background: linear-gradient(90deg, #e0d7f7 25%, #c4b5fd 50%, #e0d7f7 75%);
+    height: 12px; border-radius: 8px;
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
     background-size: 200% 100%;
     animation: shimmer 1.4s infinite;
   }
@@ -164,7 +156,15 @@
     100% { background-position: -200% 0; }
   }
 
-  .ia-erro { color: #b91c1c; font-size: 14px; font-weight: 600; }
+  .ia-erro {
+    color: #b91c1c; font-size: 13px; font-weight: 600;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .btn-tentar-novo {
+    margin-top: 10px; padding: 6px 16px; border-radius: 10px; border: none;
+    background: #6d28d9; color: white; font-weight: 700; font-size: 13px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
 
   .btn-voltar {
     margin-top: 10px;
@@ -221,6 +221,11 @@
       <div class="mat-row" id="fortesRow">
         <p style="opacity:.5">Calculando...</p>
       </div>
+      <div class="ia-loading" id="loadingForte">
+        <div class="skeleton s95"></div>
+        <div class="skeleton s70"></div>
+      </div>
+      <div class="ia-analise" id="analiseForte" style="display:none;"></div>
     </div>
   </div>
 
@@ -230,20 +235,11 @@
       <div class="mat-row" id="fracosRow">
         <p style="opacity:.5">Calculando...</p>
       </div>
-    </div>
-  </div>
-
-  <div class="ia-box" id="iaBox">
-    <p class="ia-titulo">🤖 Análise personalizada</p>
-    <div class="ia-conteudo" id="iaConteudo">
-      <div class="ia-loading">
-        <div class="skeleton s95"></div>
-        <div class="skeleton s80"></div>
+      <div class="ia-loading" id="loadingFraco">
         <div class="skeleton s95"></div>
         <div class="skeleton s70"></div>
-        <div class="skeleton s95"></div>
-        <div class="skeleton s60"></div>
       </div>
+      <div class="ia-analise" id="analiseFraco" style="display:none;"></div>
     </div>
   </div>
 
@@ -314,17 +310,40 @@
   renderMats(fracos,  'fraco', 'fracosRow');
 
   async function gerarAnaliseIA() {
-    const iaConteudo = document.getElementById('iaConteudo');
+    const elLoadingForte = document.getElementById('loadingForte');
+    const elLoadingFraco = document.getElementById('loadingFraco');
+    const elAnaliseForte = document.getElementById('analiseForte');
+    const elAnaliseFraco = document.getElementById('analiseFraco');
+
+    function mostrarErro(msg, detalhe) {
+      [elLoadingForte, elLoadingFraco].forEach(el => el.style.display = 'none');
+      const erroHtml = `
+        <div class="ia-erro">
+          ⚠️ ${msg}
+          <br><small style="opacity:.6">${detalhe || ''}</small>
+          <br><button class="btn-tentar-novo" id="btnTentarNovo">Tentar novamente</button>
+        </div>`;
+      elAnaliseForte.style.display = 'block';
+      elAnaliseForte.innerHTML = erroHtml;
+      elAnaliseFraco.style.display = 'none';
+      const btn = document.getElementById('btnTentarNovo');
+      if (btn) btn.addEventListener('click', () => {
+        elAnaliseForte.style.display = 'none';
+        elLoadingForte.style.display = 'flex';
+        elLoadingFraco.style.display = 'flex';
+        gerarAnaliseIA();
+      });
+    }
 
     if (totalResp === 0) {
-      iaConteudo.textContent = 'Nenhuma questão foi respondida nesta sessão.';
+      mostrarErro('Nenhuma questão foi respondida nesta sessão.', '');
       return;
     }
 
     const apiKey = window.GEMINI_KEY;
 
     if (!apiKey) {
-      iaConteudo.innerHTML = '<span class="ia-erro">⚠️ Chave do Gemini não configurada. Adicione GEMINI_API_KEY no .env do servidor.</span>';
+      mostrarErro('IA não configurada.', 'Adicione GEMINI_API_KEY no .env do servidor.');
       return;
     }
 
@@ -339,31 +358,27 @@
       `- [${r.materia} / ${r.nivel || 'N/A'}] ${r.enunciado}\n  Escolheu: "${r.respostaEscolhida}" | Correta: "${r.respostaCorreta}"`
     ).join('\n');
 
-    const prompt = `Você é um tutor pedagógico analisando o desempenho de um estudante em uma sessão de exercícios.
+    const prompt = `Você é um professor analisando o desempenho de um aluno. Fale como gente, tom de conversa, sem economês, sem "observa-se que".
 
-RESUMO DA SESSÃO:
-- Total de questões respondidas: ${totalResp}
-- Total de acertos: ${totalAcert} (${pct}%)
-- Matérias estudadas: ${materias.length > 0 ? materias.join(', ') : 'Geral'}
+RESUMO: ${totalResp} questões, ${totalAcert} acertos (${pct}%). Matérias: ${materias.length > 0 ? materias.join(', ') : 'Geral'}
 
-QUESTÕES QUE O ALUNO ACERTOU:
+ACERTOU:
 ${listaAcertadas || '(nenhuma)'}
 
-QUESTÕES QUE O ALUNO ERROU:
+ERROU:
 ${listaErradas || '(nenhuma)'}
 
-Com base nesses dados reais (não use frases genéricas), escreva uma análise pedagógica personalizada em português do Brasil com:
+Responda APENAS com JSON puro, sem markdown, neste formato:
+{"forte": "texto", "fraco": "texto"}
 
-1. O que o aluno demonstrou dominar — cite os temas específicos das questões acertadas
-2. Onde estão as lacunas reais — analise o padrão dos erros, cite os temas exatos das questões erradas e, quando possível, explique por que o aluno pode ter errado
-3. Prioridade de estudo — diga explicitamente quais tópicos estudar primeiro e por quê
-4. Uma dica prática — algo concreto que o aluno pode fazer agora para melhorar
+forte: 2-3 frases citando o tema exato acertado e por que mostra entendimento. Se nada acertou, diga leve e incentive.
+fraco: 2-3 frases citando o tema exato errado, hipótese rápida do motivo, e o que estudar primeiro. Se nada errou, parabenize.
 
-Seja direto, específico e humano. Não use listas com bullets — escreva em parágrafos corridos. Não mencione que é uma IA. Trate o aluno na segunda pessoa (você).`;
+Sem bullets, títulos ou aspas internas. Segunda pessoa (você). Português do Brasil, tom natural.`;
 
-    // Modelos em ordem de preferência: se um estiver sobrecarregado, tenta o próximo
-    const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash-lite'];
-    const maxTentativasPorModelo = 2;
+    // flash-lite primeiro: é o mais rápido da família Gemini, ótimo pra texto curto como esse
+    const modelos = ['gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash'];
+    const maxTentativasPorModelo = 1; // só repete o modelo se realmente necessário — já temos 3 modelos de fallback
 
     async function chamarGemini() {
       for (const modelo of modelos) {
@@ -375,7 +390,12 @@ Seja direto, específico e humano. Não use listas com bullets — escreva em pa
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                  temperature: 0.7,
+                  maxOutputTokens: 350,      // resposta curta = gerada mais rápido
+                  thinkingConfig: { thinkingBudget: 0 } // desliga "pensamento" interno, que é a maior fonte de lentidão
+                }
               })
             });
 
@@ -383,15 +403,11 @@ Seja direto, específico e humano. Não use listas com bullets — escreva em pa
               return await response.json();
             }
 
-            // 503 = modelo sobrecarregado (problema temporário do Google, não do nosso código)
-            // 429 = limite de requisições atingido
             if (response.status === 503 || response.status === 429) {
-              console.warn(`${modelo} sobrecarregado (tentativa ${tentativa}), aguardando...`);
-              await new Promise(r => setTimeout(r, 1500 * tentativa));
-              continue; // tenta de novo o mesmo modelo, depois passa pro próximo
+              console.warn(`${modelo} sobrecarregado (tentativa ${tentativa})`);
+              continue; // passa direto pro próximo modelo, sem esperar
             }
 
-            // Outros erros (chave inválida, etc) não vale a pena tentar de novo
             const err = await response.json();
             throw new Error(err.error?.message || `Erro ${response.status}`);
 
@@ -400,36 +416,30 @@ Seja direto, específico e humano. Não use listas com bullets — escreva em pa
           }
         }
       }
-      throw new Error('Todos os modelos estão sobrecarregados no momento. Tente novamente em alguns segundos.');
+      throw new Error('Servidores do Gemini sobrecarregados no momento.');
     }
 
     try {
       const data = await chamarGemini();
-      const texto = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Não foi possível gerar a análise.';
+      let texto = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
 
-      // Remove marcações markdown como **negrito** e # títulos
-      const textoLimpo = texto
-        .replace(/\*\*(.*?)\*\*/g, '$1')
-        .replace(/^#{1,6}\s+/gm, '')
-        .replace(/\*(.*?)\*/g, '$1')
-        .trim();
+      // Remove possíveis blocos de markdown ```json ... ```
+      texto = texto.replace(/```json|```/g, '').trim();
 
-      iaConteudo.textContent = textoLimpo;
+      const json = JSON.parse(texto);
+
+      elLoadingForte.style.display = 'none';
+      elLoadingFraco.style.display = 'none';
+
+      elAnaliseForte.style.display = 'block';
+      elAnaliseForte.textContent = json.forte || 'Continue praticando para identificarmos seus pontos fortes!';
+
+      elAnaliseFraco.style.display = 'block';
+      elAnaliseFraco.textContent = json.fraco || 'Sem áreas críticas identificadas no momento.';
 
     } catch (erro) {
       console.error('Erro ao chamar API Gemini:', erro);
-      iaConteudo.innerHTML = `
-        <span class="ia-erro">
-          ⚠️ Os servidores do Gemini estão sobrecarregados agora. Isso é temporário e não é um erro do seu projeto.
-          <br><small style="opacity:.6">${erro.message}</small>
-        </span>
-        <button id="btnTentarNovo" style="margin-top:12px; padding:8px 18px; border-radius:10px; border:none; background:#6d28d9; color:white; font-weight:700; cursor:pointer;">Tentar novamente</button>
-      `;
-      const btn = document.getElementById('btnTentarNovo');
-      if (btn) btn.addEventListener('click', () => {
-        iaConteudo.innerHTML = '<div class="ia-loading"><div class="skeleton s95"></div><div class="skeleton s80"></div><div class="skeleton s95"></div></div>';
-        gerarAnaliseIA();
-      });
+      mostrarErro('Os servidores do Gemini estão sobrecarregados agora. Isso é temporário.', erro.message);
     }
   }
 

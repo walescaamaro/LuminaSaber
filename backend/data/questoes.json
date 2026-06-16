@@ -1,37 +1,2537 @@
 [
-  { "id": 1, "materia": "Matemática", "nivel": "Fácil", "enunciado": "Quanto é 8 + 7?", "alternativas": ["13", "14", "15", "16"], "correta": 2 },
-  { "id": 2, "materia": "Matemática", "nivel": "Fácil", "enunciado": "Qual o resultado de 12 × 3?", "alternativas": ["36", "30", "24", "32"], "correta": 0 },
-  { "id": 3, "materia": "Matemática", "nivel": "Médio", "enunciado": "Se x + 5 = 17, quanto vale x?", "alternativas": ["12", "11", "13", "10"], "correta": 0 },
-  { "id": 4, "materia": "Matemática", "nivel": "Médio", "enunciado": "Qual é a fração equivalente a 0,75?", "alternativas": ["3/4", "7/10", "1/2", "2/3"], "correta": 0 },
-  { "id": 5, "materia": "Matemática", "nivel": "Difícil", "enunciado": "Qual é a área de um triângulo com base 10 cm e altura 8 cm?", "alternativas": ["40 cm²", "80 cm²", "20 cm²", "50 cm²"], "correta": 0 },
-  { "id": 6, "materia": "Matemática", "nivel": "Difícil", "enunciado": "Qual é o valor de 5² + 3³?", "alternativas": ["52", "34", "45", "35"], "correta": 0 },
-  { "id": 7, "materia": "Português", "nivel": "Fácil", "enunciado": "Qual palavra está escrita corretamente?", "alternativas": ["Excessão", "Exceção", "Excesssão", "Exeção"], "correta": 1 },
-  { "id": 8, "materia": "Português", "nivel": "Fácil", "enunciado": "Qual é o plural de 'cidadão'?", "alternativas": ["Cidadãos", "Cidadaos", "Cidadães", "Cidadãoss"], "correta": 0 },
-  { "id": 9, "materia": "Português", "nivel": "Médio", "enunciado": "Qual classe gramatical é a palavra 'rápido'?", "alternativas": ["Adjetivo", "Substantivo", "Verbo", "Advérbio"], "correta": 0 },
-  { "id": 10, "materia": "Português", "nivel": "Médio", "enunciado": "Qual é o sujeito da frase 'O menino jogou bola'?", "alternativas": ["O menino", "jogou bola", "bola", "O"], "correta": 0 },
-  { "id": 11, "materia": "Português", "nivel": "Difícil", "enunciado": "Marque a opção com a forma verbal correta: 'Ele ___ estudar'.", "alternativas": ["vai", "vou", "vão", "vamos"], "correta": 0 },
-  { "id": 12, "materia": "Português", "nivel": "Difícil", "enunciado": "Assinale o período composto por subordinação:", "alternativas": ["Fui ao parque porque estava sol", "Fiz o dever e joguei", "Ele estuda, ele dorme", "Choveu muito e ventou forte"], "correta": 0 },
-  { "id": 13, "materia": "Geografia", "nivel": "Fácil", "enunciado": "Qual é o maior país da América do Sul?", "alternativas": ["Argentina", "Chile", "Brasil", "Peru"], "correta": 2 },
-  { "id": 14, "materia": "Geografia", "nivel": "Fácil", "enunciado": "Qual é o nome do continente que abriga o Brasil?", "alternativas": ["América do Sul", "África", "Ásia", "Europa"], "correta": 0 },
-  { "id": 15, "materia": "Geografia", "nivel": "Médio", "enunciado": "Qual dos seguintes rios está no Brasil?", "alternativas": ["Amazonas", "Nilo", "Mississippi", "Danúbio"], "correta": 0 },
-  { "id": 16, "materia": "Geografia", "nivel": "Médio", "enunciado": "Qual tipo climático prevalece no sertão nordestino?", "alternativas": ["Semiárido", "Tropical", "Equatorial", "Temperado"], "correta": 0 },
-  { "id": 17, "materia": "Geografia", "nivel": "Difícil", "enunciado": "A Linha do Equador divide a Terra em quais hemisférios?", "alternativas": ["Norte e Sul", "Leste e Oeste", "Norte e Leste", "Sul e Oeste"], "correta": 0 },
-  { "id": 18, "materia": "História", "nivel": "Fácil", "enunciado": "Quem foi o primeiro presidente do Brasil?", "alternativas": ["Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek", "Dom Pedro II"], "correta": 1 },
-  { "id": 19, "materia": "História", "nivel": "Fácil", "enunciado": "Quem descobriu o Brasil em 1500?", "alternativas": ["Pedro Álvares Cabral", "Cristóvão Colombo", "Vasco da Gama", "Fernão de Magalhães"], "correta": 0 },
-  { "id": 20, "materia": "História", "nivel": "Médio", "enunciado": "Qual era a principal atividade econômica do Brasil colonial?", "alternativas": ["Cana-de-açúcar", "Ouro", "Café", "Soja"], "correta": 0 },
-  { "id": 21, "materia": "História", "nivel": "Médio", "enunciado": "Quem foi Tiradentes?", "alternativas": ["Líder da Inconfidência Mineira", "Imperador do Brasil", "Rei de Portugal", "Governador de São Paulo"], "correta": 0 },
-  { "id": 22, "materia": "História", "nivel": "Difícil", "enunciado": "Em que ano a Independência do Brasil foi declarada?", "alternativas": ["1822", "1808", "1889", "1815"], "correta": 0 },
-  { "id": 23, "materia": "Ciências", "nivel": "Fácil", "enunciado": "Qual órgão bombeia sangue no corpo humano?", "alternativas": ["Pulmão", "Fígado", "Coração", "Rim"], "correta": 2 },
-  { "id": 24, "materia": "Ciências", "nivel": "Fácil", "enunciado": "Qual é a principal fonte de energia para as plantas?", "alternativas": ["Luz solar", "Água", "Terra", "Ar"], "correta": 0 },
-  { "id": 25, "materia": "Ciências", "nivel": "Médio", "enunciado": "Qual osso protege o cérebro?", "alternativas": ["Crânio", "Fêmur", "Úmero", "Vértebra"], "correta": 0 },
-  { "id": 26, "materia": "Ciências", "nivel": "Difícil", "enunciado": "Em qual sistema o coração está inserido?", "alternativas": ["Circulatório", "Digestivo", "Respiratório", "Excretor"], "correta": 0 },
-  { "id": 27, "materia": "Ciências", "nivel": "Difícil", "enunciado": "Qual é o processo de transformação da lagarta em borboleta?", "alternativas": ["Metamorfose", "Fotossíntese", "Erosão", "Digestão"], "correta": 0 },
-  { "id": 28, "materia": "Artes", "nivel": "Fácil", "enunciado": "Qual instrumento você utiliza para misturar tintas?", "alternativas": ["Pincel", "Furadeira", "Serra", "Ralador"], "correta": 0 },
-  { "id": 29, "materia": "Artes", "nivel": "Médio", "enunciado": "A Mona Lisa foi pintada por qual artista?", "alternativas": ["Leonardo da Vinci", "Pablo Picasso", "Vincent van Gogh", "Michelangelo"], "correta": 0 },
-  { "id": 30, "materia": "Artes", "nivel": "Difícil", "enunciado": "O que é perspectiva em desenho?", "alternativas": ["Técnica para criar profundidade", "Tipo de tinta", "A forma de cortar papel", "Nome de pintura"], "correta": 0 },
-  { "id": 31, "materia": "Inglês", "nivel": "Fácil", "enunciado": "Como se diz 'olá' em inglês?", "alternativas": ["Hello", "Hola", "Bonjour", "Ciao"], "correta": 0 },
-  { "id": 32, "materia": "Inglês", "nivel": "Médio", "enunciado": "O que significa 'book' em português?", "alternativas": ["Livro", "Mesa", "Casa", "Carro"], "correta": 0 },
-  { "id": 33, "materia": "Inglês", "nivel": "Difícil", "enunciado": "Complete: I ___ football every weekend.", "alternativas": ["play", "plays", "played", "playing"], "correta": 0 },
-  { "id": 34, "materia": "Inglês", "nivel": "Médio", "enunciado": "Qual expressão significa 'bom dia'?", "alternativas": ["Good morning", "Good evening", "Good night", "Bye bye"], "correta": 0 },
-  { "id": 35, "materia": "Inglês", "nivel": "Difícil", "enunciado": "Como se pergunta 'Onde você mora?' em inglês?", "alternativas": ["Where do you live?", "How are you?", "What is your name?", "When do you study?"], "correta": 0 }
+  {
+    "id": 1,
+    "materia": "Matemática",
+    "nivel": "Fácil",
+    "enunciado": "Quanto é 8 + 7?",
+    "alternativas": [
+      "13",
+      "14",
+      "15",
+      "16"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 2,
+    "materia": "Matemática",
+    "nivel": "Fácil",
+    "enunciado": "Qual o resultado de 12 × 3?",
+    "alternativas": [
+      "36",
+      "30",
+      "24",
+      "32"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 3,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Se x + 5 = 17, quanto vale x?",
+    "alternativas": [
+      "12",
+      "11",
+      "13",
+      "10"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 4,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Qual é a fração equivalente a 0,75?",
+    "alternativas": [
+      "3/4",
+      "7/10",
+      "1/2",
+      "2/3"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 5,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Qual é a área de um triângulo com base 10 cm e altura 8 cm?",
+    "alternativas": [
+      "40 cm²",
+      "80 cm²",
+      "20 cm²",
+      "50 cm²"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 6,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Qual é o valor de 5² + 3³?",
+    "alternativas": [
+      "52",
+      "34",
+      "45",
+      "35"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 7,
+    "materia": "Português",
+    "nivel": "Fácil",
+    "enunciado": "Qual palavra está escrita corretamente?",
+    "alternativas": [
+      "Excessão",
+      "Exceção",
+      "Excesssão",
+      "Exeção"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 8,
+    "materia": "Português",
+    "nivel": "Fácil",
+    "enunciado": "Qual é o plural de 'cidadão'?",
+    "alternativas": [
+      "Cidadãos",
+      "Cidadaos",
+      "Cidadães",
+      "Cidadãoss"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 9,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual classe gramatical é a palavra 'rápido'?",
+    "alternativas": [
+      "Adjetivo",
+      "Substantivo",
+      "Verbo",
+      "Advérbio"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 10,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual é o sujeito da frase 'O menino jogou bola'?",
+    "alternativas": [
+      "O menino",
+      "jogou bola",
+      "bola",
+      "O"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 11,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Marque a opção com a forma verbal correta: 'Ele ___ estudar'.",
+    "alternativas": [
+      "vai",
+      "vou",
+      "vão",
+      "vamos"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 12,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Assinale o período composto por subordinação:",
+    "alternativas": [
+      "Fui ao parque porque estava sol",
+      "Fiz o dever e joguei",
+      "Ele estuda, ele dorme",
+      "Choveu muito e ventou forte"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 13,
+    "materia": "Geografia",
+    "nivel": "Fácil",
+    "enunciado": "Qual é o maior país da América do Sul?",
+    "alternativas": [
+      "Argentina",
+      "Chile",
+      "Brasil",
+      "Peru"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 14,
+    "materia": "Geografia",
+    "nivel": "Fácil",
+    "enunciado": "Qual é o nome do continente que abriga o Brasil?",
+    "alternativas": [
+      "América do Sul",
+      "África",
+      "Ásia",
+      "Europa"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 15,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual dos seguintes rios está no Brasil?",
+    "alternativas": [
+      "Amazonas",
+      "Nilo",
+      "Mississippi",
+      "Danúbio"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 16,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual tipo climático prevalece no sertão nordestino?",
+    "alternativas": [
+      "Semiárido",
+      "Tropical",
+      "Equatorial",
+      "Temperado"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 17,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "A Linha do Equador divide a Terra em quais hemisférios?",
+    "alternativas": [
+      "Norte e Sul",
+      "Leste e Oeste",
+      "Norte e Leste",
+      "Sul e Oeste"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 18,
+    "materia": "História",
+    "nivel": "Fácil",
+    "enunciado": "Quem foi o primeiro presidente do Brasil?",
+    "alternativas": [
+      "Getúlio Vargas",
+      "Deodoro da Fonseca",
+      "Juscelino Kubitschek",
+      "Dom Pedro II"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 19,
+    "materia": "História",
+    "nivel": "Fácil",
+    "enunciado": "Quem descobriu o Brasil em 1500?",
+    "alternativas": [
+      "Pedro Álvares Cabral",
+      "Cristóvão Colombo",
+      "Vasco da Gama",
+      "Fernão de Magalhães"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 20,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Qual era a principal atividade econômica do Brasil colonial?",
+    "alternativas": [
+      "Cana-de-açúcar",
+      "Ouro",
+      "Café",
+      "Soja"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 21,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Quem foi Tiradentes?",
+    "alternativas": [
+      "Líder da Inconfidência Mineira",
+      "Imperador do Brasil",
+      "Rei de Portugal",
+      "Governador de São Paulo"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 22,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "Em que ano a Independência do Brasil foi declarada?",
+    "alternativas": [
+      "1822",
+      "1808",
+      "1889",
+      "1815"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 23,
+    "materia": "Ciências",
+    "nivel": "Fácil",
+    "enunciado": "Qual órgão bombeia sangue no corpo humano?",
+    "alternativas": [
+      "Pulmão",
+      "Fígado",
+      "Coração",
+      "Rim"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 24,
+    "materia": "Ciências",
+    "nivel": "Fácil",
+    "enunciado": "Qual é a principal fonte de energia para as plantas?",
+    "alternativas": [
+      "Luz solar",
+      "Água",
+      "Terra",
+      "Ar"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 25,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual osso protege o cérebro?",
+    "alternativas": [
+      "Crânio",
+      "Fêmur",
+      "Úmero",
+      "Vértebra"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 26,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Em qual sistema o coração está inserido?",
+    "alternativas": [
+      "Circulatório",
+      "Digestivo",
+      "Respiratório",
+      "Excretor"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 27,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Qual é o processo de transformação da lagarta em borboleta?",
+    "alternativas": [
+      "Metamorfose",
+      "Fotossíntese",
+      "Erosão",
+      "Digestão"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 28,
+    "materia": "Artes",
+    "nivel": "Fácil",
+    "enunciado": "Qual instrumento você utiliza para misturar tintas?",
+    "alternativas": [
+      "Pincel",
+      "Furadeira",
+      "Serra",
+      "Ralador"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 29,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "A Mona Lisa foi pintada por qual artista?",
+    "alternativas": [
+      "Leonardo da Vinci",
+      "Pablo Picasso",
+      "Vincent van Gogh",
+      "Michelangelo"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 30,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "O que é perspectiva em desenho?",
+    "alternativas": [
+      "Técnica para criar profundidade",
+      "Tipo de tinta",
+      "A forma de cortar papel",
+      "Nome de pintura"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 31,
+    "materia": "Inglês",
+    "nivel": "Fácil",
+    "enunciado": "Como se diz 'olá' em inglês?",
+    "alternativas": [
+      "Hello",
+      "Hola",
+      "Bonjour",
+      "Ciao"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 32,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "O que significa 'book' em português?",
+    "alternativas": [
+      "Livro",
+      "Mesa",
+      "Casa",
+      "Carro"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 33,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Complete: I ___ football every weekend.",
+    "alternativas": [
+      "play",
+      "plays",
+      "played",
+      "playing"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 34,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Qual expressão significa 'bom dia'?",
+    "alternativas": [
+      "Good morning",
+      "Good evening",
+      "Good night",
+      "Bye bye"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 35,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Como se pergunta 'Onde você mora?' em inglês?",
+    "alternativas": [
+      "Where do you live?",
+      "How are you?",
+      "What is your name?",
+      "When do you study?"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 36,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Uma escola arrecadou R$ 2.400,00 para uma feira. Gastou 25% desse valor com decoração. Quanto foi gasto?",
+    "alternativas": [
+      "R$ 500,00",
+      "R$ 600,00",
+      "R$ 750,00",
+      "R$ 800,00"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 37,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual frase apresenta linguagem figurada?",
+    "alternativas": [
+      "O gato está no telhado.",
+      "João comprou um caderno novo.",
+      "A cidade acordou sorrindo.",
+      "Choveu durante toda a manhã."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 38,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual órgão do corpo humano é responsável por bombear sangue para todo o organismo?",
+    "alternativas": [
+      "Pulmão",
+      "Estômago",
+      "Coração",
+      "Fígado"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 39,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Qual foi uma das principais consequências das Grandes Navegações?",
+    "alternativas": [
+      "Fim da agricultura europeia.",
+      "Expansão do comércio entre continentes.",
+      "Extinção das monarquias.",
+      "Criação da internet."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 40,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "O movimento de rotação da Terra é responsável por:",
+    "alternativas": [
+      "Estações do ano.",
+      "Formação dos oceanos.",
+      "Alternância entre dia e noite.",
+      "Movimento das placas tectônicas."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 41,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Choose the correct alternative: \"My sister _____ to school every day.\"",
+    "alternativas": [
+      "go",
+      "goes",
+      "going",
+      "gone"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 42,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Qual elemento visual está relacionado à sensação de profundidade em uma obra?",
+    "alternativas": [
+      "Ritmo",
+      "Perspectiva",
+      "Timbre",
+      "Intensidade"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 43,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Uma loja oferece 15% de desconto em um produto de R$ 320,00. Qual será o preço final?",
+    "alternativas": [
+      "R$ 272,00",
+      "R$ 280,00",
+      "R$ 288,00",
+      "R$ 300,00"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 44,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Em qual alternativa o verbo está no pretérito perfeito?",
+    "alternativas": [
+      "Eu estudarei amanhã.",
+      "Eu estudava todos os dias.",
+      "Eu estudei ontem.",
+      "Eu estudo agora."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 45,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "A fotossíntese ocorre principalmente em qual estrutura celular?",
+    "alternativas": [
+      "Mitocôndria",
+      "Ribossomo",
+      "Cloroplasto",
+      "Núcleo"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 46,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Uma população de bactérias dobra a cada hora. Se inicialmente havia 80 bactérias, quantas existirão após 5 horas?",
+    "alternativas": [
+      "1.280",
+      "2.560",
+      "3.200",
+      "4.000"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 47,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "A Revolução Industrial provocou:",
+    "alternativas": [
+      "Redução da produção manufatureira.",
+      "Retorno ao feudalismo.",
+      "Intensificação da urbanização.",
+      "Extinção das fábricas."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 48,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "A globalização é caracterizada principalmente por:",
+    "alternativas": [
+      "Isolamento econômico dos países.",
+      "Integração econômica, cultural e tecnológica.",
+      "Fim dos meios de transporte.",
+      "Redução da comunicação mundial."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 49,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Choose the correct sentence:",
+    "alternativas": [
+      "If I will study, I pass the exam.",
+      "If I study, I will pass the exam.",
+      "If I studied, I will pass the exam.",
+      "If I study, I passed the exam."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 50,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Qual processo é responsável pela formação de novas combinações genéticas durante a reprodução sexuada?",
+    "alternativas": [
+      "Fotossíntese",
+      "Respiração celular",
+      "Meiose",
+      "Digestão"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 51,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Na frase \"Embora estivesse cansado, continuou trabalhando\", a oração destacada expressa ideia de:",
+    "alternativas": [
+      "Causa",
+      "Consequência",
+      "Concessão",
+      "Finalidade"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 52,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "O movimento artístico conhecido por representar cenas do cotidiano com fidelidade é:",
+    "alternativas": [
+      "Surrealismo",
+      "Cubismo",
+      "Realismo",
+      "Expressionismo"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 53,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Uma pesquisa entrevistou 200 alunos. 35% preferem futebol. Quantos alunos preferem futebol?",
+    "alternativas": [
+      "60",
+      "65",
+      "70",
+      "75"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 54,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "A Independência do Brasil ocorreu em:",
+    "alternativas": [
+      "1500",
+      "1822",
+      "1889",
+      "1930"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 55,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "Qual bioma brasileiro possui a maior biodiversidade do planeta?",
+    "alternativas": [
+      "Caatinga",
+      "Pampa",
+      "Amazônia",
+      "Pantanal"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 56,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Qual é o resultado da expressão 15 + 3 × 4 - 8?",
+    "alternativas": [
+      "64",
+      "19",
+      "27",
+      "11"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 57,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Uma pizza foi dividida em 8 pedaços iguais. João comeu 3 pedaços e Maria comeu 2. Qual fração da pizza sobrou?",
+    "alternativas": [
+      "5/8",
+      "3/8",
+      "1/8",
+      "4/8"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 58,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Se um produto custa R$ 200,00 e recebe um desconto de 15%, qual será o seu novo valor?",
+    "alternativas": [
+      "R$ 185,00",
+      "R$ 170,00",
+      "R$ 150,00",
+      "R$ 180,00"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 59,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Qual é o perímetro de um campo de futebol retangular que possui 90 metros de comprimento e 45 metros de largura?",
+    "alternativas": [
+      "135 m",
+      "270 m",
+      "4050 m",
+      "315 m"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 60,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "O Mínimo Múltiplo Comum (MMC) entre os números 12 e 15 é:",
+    "alternativas": [
+      "30",
+      "45",
+      "60",
+      "180"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 61,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Resolva a equação do 1º grau: 3x - 5 = 10. O valor de x é:",
+    "alternativas": [
+      "5",
+      "15",
+      "3",
+      "4"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 62,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Em uma sala de aula com 40 alunos, 60% são meninas. Quantos meninos há na sala?",
+    "alternativas": [
+      "24",
+      "16",
+      "20",
+      "14"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 63,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Se 4 cadernos custam R$ 32,00, quanto custarão 7 cadernos iguais a esses?",
+    "alternativas": [
+      "R$ 56,00",
+      "R$ 48,00",
+      "R$ 64,00",
+      "R$ 42,00"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 64,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Qual é a área de um quadrado cujo lado mede 8 cm?",
+    "alternativas": [
+      "16 cm²",
+      "32 cm²",
+      "64 cm²",
+      "80 cm²"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 65,
+    "materia": "Matemática",
+    "nivel": "Médio",
+    "enunciado": "Ao lançar um dado comum (de 1 a 6), qual é a probabilidade de cair um número par?",
+    "alternativas": [
+      "1/6",
+      "1/3",
+      "1/4",
+      "1/2"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 66,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Resolva a equação do 2º grau: x² - 5x + 6 = 0. As raízes são:",
+    "alternativas": [
+      "-2 e -3",
+      "2 e 3",
+      "-1 e 6",
+      "1 e 5"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 67,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Em um estacionamento há carros e motos, totalizando 30 veículos e 82 rodas. Quantos carros e motos há, respectivamente?",
+    "alternativas": [
+      "11 carros e 19 motos",
+      "20 carros e 10 motos",
+      "15 carros e 15 motos",
+      "19 carros e 11 motos"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 68,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Um capital de R$ 2.000,00 é aplicado a juros simples com taxa de 3% ao mês. Qual será o montante após 5 meses?",
+    "alternativas": [
+      "R$ 2.150,00",
+      "R$ 2.300,00",
+      "R$ 2.600,00",
+      "R$ 3.000,00"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 69,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Uma máquina produz 100 peças em 2 horas. Quantas máquinas iguais a essa são necessárias para produzir 300 peças em 1 hora?",
+    "alternativas": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 70,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Qual é a área de um círculo cujo raio mede 5 cm? (Considere π = 3,14)",
+    "alternativas": [
+      "31,4 cm²",
+      "78,5 cm²",
+      "15,7 cm²",
+      "100 cm²"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 71,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Em um triângulo retângulo, os catetos medem 6 cm e 8 cm. Qual é a medida da hipotenusa?",
+    "alternativas": [
+      "10 cm",
+      "12 cm",
+      "14 cm",
+      "100 cm"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 72,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Uma loja aumenta o preço de uma TV em 20%. No mês seguinte, faz uma promoção dando 20% de desconto sobre o novo preço. Em relação ao preço original, a TV ficou:",
+    "alternativas": [
+      "Com o mesmo preço",
+      "4% mais barata",
+      "4% mais cara",
+      "2% mais barata"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 73,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "O valor da expressão [√(81) + (2³) - (5²)] é:",
+    "alternativas": [
+      "-8",
+      "2",
+      "-6",
+      "8"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 74,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "Lançando-se duas moedas simultaneamente, qual a probabilidade de saírem duas caras?",
+    "alternativas": [
+      "50%",
+      "25%",
+      "75%",
+      "33,3%"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 75,
+    "materia": "Matemática",
+    "nivel": "Difícil",
+    "enunciado": "A média das idades de um grupo de 4 pessoas é 25 anos. Se uma pessoa de 35 anos entrar no grupo, a nova média passará a ser:",
+    "alternativas": [
+      "26",
+      "27",
+      "28",
+      "30"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 76,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Choose the correct form of the verb to be: \"She _____ my best friend.\"",
+    "alternativas": [
+      "am",
+      "is",
+      "are",
+      "be"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 77,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "What is the plural of the word \"child\"?",
+    "alternativas": [
+      "childs",
+      "children",
+      "childrens",
+      "childes"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 78,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Complete the sentence: \"I usually get up _____ 7 o'clock.\"",
+    "alternativas": [
+      "in",
+      "on",
+      "at",
+      "to"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 79,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Choose the correct negative form: \"He plays soccer.\"",
+    "alternativas": [
+      "He not plays soccer.",
+      "He don't plays soccer.",
+      "He doesn't play soccer.",
+      "He doesn't plays soccer."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 80,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Which word indicates a color?",
+    "alternativas": [
+      "Table",
+      "Yellow",
+      "Window",
+      "Apple"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 81,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "What is the correct translation for \"cachorro\" and \"gato\"?",
+    "alternativas": [
+      "Dog / Cat",
+      "Bird / Fish",
+      "Mouse / Horse",
+      "Cat / Dog"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 82,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "\"_____ is your name?\" - \"My name is John.\"",
+    "alternativas": [
+      "How",
+      "Where",
+      "Who",
+      "What"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 83,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Complete with the Present Continuous: \"They _____ a book right now.\"",
+    "alternativas": [
+      "is reading",
+      "read",
+      "are reading",
+      "reading"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 84,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "Choose the correct possessive adjective: \"We have a car. _____ car is blue.\"",
+    "alternativas": [
+      "His",
+      "Their",
+      "Our",
+      "My"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 85,
+    "materia": "Inglês",
+    "nivel": "Médio",
+    "enunciado": "What is the past simple of the regular verb \"work\"?",
+    "alternativas": [
+      "works",
+      "working",
+      "work",
+      "worked"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 86,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "What is the past simple of the irregular verb \"go\"?",
+    "alternativas": [
+      "goed",
+      "gone",
+      "went",
+      "going"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 87,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Complete with the Present Perfect: \"She _____ to Paris many times.\"",
+    "alternativas": [
+      "has been",
+      "have been",
+      "goes",
+      "went"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 88,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Choose the correct option for the First Conditional: \"If it rains tomorrow, we _____ at home.\"",
+    "alternativas": [
+      "stayed",
+      "will stay",
+      "would stay",
+      "stays"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 89,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Identify the Passive Voice sentence:",
+    "alternativas": [
+      "The dog bit the boy.",
+      "The boy is eating an apple.",
+      "The cake was made by Mary.",
+      "Mary makes beautiful cakes."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 90,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Complete with the relative pronoun: \"The man _____ lives next door is a doctor.\"",
+    "alternativas": [
+      "which",
+      "who",
+      "whom",
+      "whose"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 91,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "What does the phrasal verb \"give up\" mean?",
+    "alternativas": [
+      "Continue",
+      "Start",
+      "Quit / Stop trying",
+      "Go up"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 92,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "The word \"pretend\" is a false cognate. What does it actually mean in Portuguese?",
+    "alternativas": [
+      "Pretender",
+      "Fingir",
+      "Entender",
+      "Participar"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 93,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "What is the superlative form of the adjective \"good\"?",
+    "alternativas": [
+      "gooder",
+      "the goodest",
+      "better",
+      "the best"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 94,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Complete the Tag Question: \"You are a student, _____?\"",
+    "alternativas": [
+      "are you",
+      "aren't you",
+      "don't you",
+      "isn't it"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 95,
+    "materia": "Inglês",
+    "nivel": "Difícil",
+    "enunciado": "Which modal verb is used to express strong obligation?",
+    "alternativas": [
+      "might",
+      "could",
+      "must",
+      "may"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 96,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Quais são as cores primárias?",
+    "alternativas": [
+      "Verde, Laranja e Roxo",
+      "Azul, Amarelo e Vermelho",
+      "Branco, Preto e Cinza",
+      "Rosa, Marrom e Azul"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 97,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Misturando a cor amarela com a cor vermelha, obtemos qual cor secundária?",
+    "alternativas": [
+      "Verde",
+      "Roxo",
+      "Laranja",
+      "Marrom"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 98,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Qual famosa artista brasileira pintou o quadro \"Abaporu\"?",
+    "alternativas": [
+      "Anita Malfatti",
+      "Tarsila do Amaral",
+      "Frida Kahlo",
+      "Lygia Clark"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 99,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "O ritmo, a melodia e a harmonia são os três elementos fundamentais de qual manifestação artística?",
+    "alternativas": [
+      "Teatro",
+      "Escultura",
+      "Fotografia",
+      "Música"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 100,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Como é chamada a arte feita pelos homens pré-históricos nas paredes das cavernas?",
+    "alternativas": [
+      "Arte Moderna",
+      "Arte Gótica",
+      "Arte Rupestre",
+      "Arte Clássica"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 101,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Na Grécia Antiga, o teatro foi dividido inicialmente em dois gêneros principais. Quais eram?",
+    "alternativas": [
+      "Drama e Terror",
+      "Comédia e Tragédia",
+      "Romance e Ação",
+      "Musical e Monólogo"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 102,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "O Bumba meu boi, o Frevo e o Maracatu fazem parte de qual universo cultural?",
+    "alternativas": [
+      "Arte Contemporânea",
+      "Folclore e Cultura Popular Brasileira",
+      "Arte Renascentista",
+      "Cultura Europeia"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 103,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Romero Britto é um artista brasileiro muito conhecido. Qual característica marca o seu trabalho?",
+    "alternativas": [
+      "Pinturas hiper-realistas e em preto e branco.",
+      "Uso de cores vibrantes e padrões geométricos.",
+      "Esculturas feitas apenas com sucata.",
+      "Uso de tintas a óleo escuras para retratar o sofrimento."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 104,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "O origami é uma arte tradicional de qual país?",
+    "alternativas": [
+      "China",
+      "Índia",
+      "Japão",
+      "Egito"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 105,
+    "materia": "Artes",
+    "nivel": "Médio",
+    "enunciado": "Qual instrumento musical abaixo pertence à família das cordas?",
+    "alternativas": [
+      "Bateria",
+      "Flauta",
+      "Violino",
+      "Trompete"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 106,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Qual artista do Renascimento pintou a obra \"Monalisa\" e \"A Última Ceia\"?",
+    "alternativas": [
+      "Michelangelo",
+      "Donatello",
+      "Rafael Sanzio",
+      "Leonardo da Vinci"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 107,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "O Impressionismo foi um movimento artístico que focava muito em capturar:",
+    "alternativas": [
+      "A precisão anatômica dos corpos.",
+      "Os efeitos da luz solar sobre os objetos em diferentes horas do dia.",
+      "A geometria e a quebra da perspectiva tradicional.",
+      "Cenas de guerras históricas."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 108,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Pablo Picasso e Georges Braque foram os fundadores de qual movimento de vanguarda europeia?",
+    "alternativas": [
+      "Cubismo",
+      "Surrealismo",
+      "Expressionismo",
+      "Fauvismo"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 109,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Qual evento ocorrido no Theatro Municipal de São Paulo marcou o início do Modernismo no Brasil?",
+    "alternativas": [
+      "Exposição Nacional de Belas Artes de 1908",
+      "Semana de Arte Moderna de 1922",
+      "Bienal de São Paulo de 1951",
+      "Tropicália de 1967"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 110,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Antônio Francisco Lisboa, o Aleijadinho, foi o maior expoente de qual estilo artístico no Brasil colônia?",
+    "alternativas": [
+      "Barroco Mineiro",
+      "Neoclassicismo",
+      "Romantismo",
+      "Rococó Francês"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 111,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Andy Warhol e Roy Lichtenstein utilizaram símbolos da cultura de massa (embalagens, histórias em quadrinhos) em qual movimento?",
+    "alternativas": [
+      "Dadaísmo",
+      "Minimalismo",
+      "Pop Art",
+      "Arte Conceitual"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 112,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "A obra \"A Persistência da Memória\", conhecida pelos \"relógios derretidos\", pertence a qual artista surrealista?",
+    "alternativas": [
+      "René Magritte",
+      "Salvador Dalí",
+      "Joan Miró",
+      "Vincent van Gogh"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 113,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "O \"Auto da Barca do Inferno\" é uma obra teatral de Gil Vicente que se insere no contexto de transição entre:",
+    "alternativas": [
+      "Idade Antiga e Idade Média",
+      "Classicismo e Romantismo",
+      "Idade Média e Renascimento (Humanismo)",
+      "Barroco e Arcadismo"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 114,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "Qual compositor é o maior representante da fase final da música Barroca?",
+    "alternativas": [
+      "Wolfgang Amadeus Mozart",
+      "Johann Sebastian Bach",
+      "Ludwig van Beethoven",
+      "Frédéric Chopin"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 115,
+    "materia": "Artes",
+    "nivel": "Difícil",
+    "enunciado": "O Expressionismo procurava retratar os sentimentos e angústias humanas. Qual obra abaixo é um ícone desse movimento?",
+    "alternativas": [
+      "A Criação de Adão, de Michelangelo",
+      "O Grito, de Edvard Munch",
+      "Guernica, de Picasso",
+      "Os Girassóis, de Van Gogh"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 116,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Em que ano os portugueses, liderados por Pedro Álvares Cabral, chegaram ao Brasil?",
+    "alternativas": [
+      "1492",
+      "1500",
+      "1532",
+      "1822"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 117,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Para iniciar a colonização, o rei de Portugal dividiu o Brasil em grandes faixas de terra. Como elas eram chamadas?",
+    "alternativas": [
+      "Províncias Imperiais",
+      "Estados Federativos",
+      "Capitanias Hereditárias",
+      "Sesmarias Livres"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 118,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Qual data marca a Independência do Brasil?",
+    "alternativas": [
+      "7 de setembro",
+      "15 de novembro",
+      "21 de abril",
+      "1º de maio"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 119,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Zumbi foi um importante líder histórico no Brasil. Ele liderou o maior refúgio de escravizados, chamado:",
+    "alternativas": [
+      "Quilombo de Canudos",
+      "Quilombo dos Palmares",
+      "Revolta dos Malês",
+      "Cabanagem"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 120,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Os faraós e as pirâmides são símbolos históricos de qual civilização da Antiguidade?",
+    "alternativas": [
+      "Fenícios",
+      "Mesopotâmia",
+      "Grécia Antiga",
+      "Egito Antigo"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 121,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "A cidade de Atenas, na Grécia Antiga, é considerada o berço da:",
+    "alternativas": [
+      "Democracia",
+      "República",
+      "Ditadura",
+      "Monarquia Absolutista"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 122,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Qual sistema político e econômico predominou na Europa durante a Idade Média, baseado na relação entre senhores e servos?",
+    "alternativas": [
+      "Capitalismo",
+      "Socialismo",
+      "Feudalismo",
+      "Mercantilismo"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 123,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Joaquim José da Silva Xavier, o Tiradentes, foi o principal mártir de qual movimento revoltoso no Brasil?",
+    "alternativas": [
+      "Revolução Farroupilha",
+      "Inconfidência Mineira",
+      "Conjuração Baiana",
+      "Guerra de Canudos"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 124,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Quem foi o primeiro imperador do Brasil?",
+    "alternativas": [
+      "D. João VI",
+      "Princesa Isabel",
+      "D. Pedro II",
+      "D. Pedro I"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 125,
+    "materia": "História",
+    "nivel": "Médio",
+    "enunciado": "Em 15 de novembro de 1889, Marechal Deodoro da Fonseca liderou um golpe que resultou na:",
+    "alternativas": [
+      "Abolição da Escravatura",
+      "Independência do Brasil",
+      "Proclamação da República",
+      "Descoberta do Ouro"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 126,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "A \"Queda da Bastilha\" em 1789 é o marco inicial de qual grande revolução?",
+    "alternativas": [
+      "Revolução Inglesa",
+      "Revolução Francesa",
+      "Revolução Americana",
+      "Revolução Industrial"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 127,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "O assassinato do Arquiduque Francisco Ferdinando foi o estopim para o início de qual conflito?",
+    "alternativas": [
+      "Guerra Fria",
+      "Guerra dos Cem Anos",
+      "Segunda Guerra Mundial",
+      "Primeira Guerra Mundial"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 128,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "Na Segunda Guerra Mundial, o \"Eixo\" era formado por quais países?",
+    "alternativas": [
+      "Estados Unidos, União Soviética e Inglaterra",
+      "Alemanha, Itália e Japão",
+      "França, Polônia e Bélgica",
+      "China, Coreia e Vietnã"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 129,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "O período de tensão política, militar e ideológica que dividiu o mundo entre o Capitalismo (EUA) e o Socialismo (URSS) chamou-se:",
+    "alternativas": [
+      "Era Napoleônica",
+      "Imperialismo",
+      "Guerra Fria",
+      "Globalização"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 130,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "O \"Estado Novo\" (1937-1945) foi um período ditatorial no Brasil liderado por:",
+    "alternativas": [
+      "Juscelino Kubitschek",
+      "Castelo Branco",
+      "Getúlio Vargas",
+      "João Goulart"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 131,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "Durante a Ditadura Militar Brasileira, o decreto mais duro, que fechou o Congresso e cassou direitos políticos, foi o:",
+    "alternativas": [
+      "AI-1",
+      "AI-2",
+      "AI-5",
+      "Constituição de 1967"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 132,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "A Revolução Industrial, que substituiu a manufatura pela maquinofatura, teve início no século XVIII em qual país?",
+    "alternativas": [
+      "França",
+      "Alemanha",
+      "Estados Unidos",
+      "Inglaterra"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 133,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "O Iluminismo foi um movimento intelectual do século XVIII que defendia:",
+    "alternativas": [
+      "O absolutismo dos reis e o poder da Igreja.",
+      "A razão, a liberdade e o fim dos privilégios da nobreza.",
+      "O retorno às crenças da Idade Média.",
+      "A exploração das colônias sem questionamentos."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 134,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "Em 1917, uma revolução derrubou o regime dos Czares e implantou o primeiro estado socialista da história na:",
+    "alternativas": [
+      "China",
+      "Cuba",
+      "Rússia",
+      "Alemanha"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 135,
+    "materia": "História",
+    "nivel": "Difícil",
+    "enunciado": "No Brasil Colonial, o Ciclo do Ouro no século XVIII teve como principal consequência:",
+    "alternativas": [
+      "O esvaziamento das regiões Centro-Sul do país.",
+      "A independência imediata de Portugal.",
+      "O deslocamento do eixo econômico e populacional do Nordeste para o Sudeste (Minas Gerais).",
+      "A abolição do trabalho escravo nas minas."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 136,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "O movimento que a Terra faz girando em torno de si mesma e que dura aproximadamente 24 horas é a:",
+    "alternativas": [
+      "Translação",
+      "Rotação",
+      "Precessão",
+      "Nutação"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 137,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Quais são os quatro pontos cardeais?",
+    "alternativas": [
+      "Nordeste, Noroeste, Sudeste e Sudoeste",
+      "Norte, Sul, Leste e Oeste",
+      "Alto, Baixo, Esquerda e Direita",
+      "Trópico, Equador, Meridiano e Polo"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 138,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual é o maior bioma do Brasil, conhecido pela sua imensa biodiversidade e floresta densa?",
+    "alternativas": [
+      "Cerrado",
+      "Caatinga",
+      "Pantanal",
+      "Amazônia"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 139,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "O clima predominante no semiárido nordestino e o bioma que o acompanha é a:",
+    "alternativas": [
+      "Mata Atlântica",
+      "Caatinga",
+      "Pampas",
+      "Floresta de Araucárias"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 140,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "O Brasil está localizado em qual continente?",
+    "alternativas": [
+      "Europa",
+      "África",
+      "América",
+      "Ásia"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 141,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual é a atual capital do Brasil, inaugurada em 1960?",
+    "alternativas": [
+      "Rio de Janeiro",
+      "Salvador",
+      "São Paulo",
+      "Brasília"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 142,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "O Trópico de Capricórnio corta quais estados do Brasil?",
+    "alternativas": [
+      "Amazonas, Pará e Amapá",
+      "São Paulo, Paraná e Mato Grosso do Sul",
+      "Bahia, Sergipe e Alagoas",
+      "Rio Grande do Sul e Santa Catarina"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 143,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual é a maior bacia hidrográfica do mundo em volume de água, localizada em parte no Brasil?",
+    "alternativas": [
+      "Bacia do Paraná",
+      "Bacia do São Francisco",
+      "Bacia do Tocantins-Araguaia",
+      "Bacia Amazônica"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 144,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Segundo o IBGE, o Brasil é dividido em quantas grandes regiões?",
+    "alternativas": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 145,
+    "materia": "Geografia",
+    "nivel": "Médio",
+    "enunciado": "Qual o nome do instituto brasileiro responsável pela contagem da população (Censo) e estatísticas do país?",
+    "alternativas": [
+      "FUNAI",
+      "IBAMA",
+      "INPE",
+      "IBGE"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 146,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "As linhas imaginárias horizontais e verticais que cruzam o globo e ajudam a localizar qualquer ponto na Terra são, respectivamente:",
+    "alternativas": [
+      "Meridianos e Paralelos",
+      "Equador e Trópicos",
+      "Paralelos e Meridianos",
+      "Fusos e Zonas"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 147,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O Meridiano de Greenwich divide a Terra em dois hemisférios:",
+    "alternativas": [
+      "Norte e Sul",
+      "Ocidental (Oeste) e Oriental (Leste)",
+      "Continental e Marítimo",
+      "Tropical e Polar"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 148,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O processo de integração econômica, cultural e política mundial, acelerado pela tecnologia da informação e transportes, chama-se:",
+    "alternativas": [
+      "Urbanização",
+      "Globalização",
+      "Favelização",
+      "Segregação Espacial"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 149,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O Mercosul é um bloco econômico formado originalmente por quais países?",
+    "alternativas": [
+      "Brasil, EUA, México e Canadá",
+      "Brasil, Argentina, Paraguai e Uruguai",
+      "Brasil, Chile, Bolívia e Peru",
+      "Brasil, Colômbia, Equador e Venezuela"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 150,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O movimento migratório de saída de pessoas do campo (área rural) para viver nas cidades (área urbana) é denominado:",
+    "alternativas": [
+      "Transumância",
+      "Movimento Pendular",
+      "Êxodo Rural",
+      "Diáspora"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 151,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "A estrutura geológica do Brasil é antiga e não possui dobramentos modernos. Ela é formada basicamente por:",
+    "alternativas": [
+      "Vulcões ativos e falhas tectônicas.",
+      "Escudos Cristalinos e Bacias Sedimentares.",
+      "Cordilheiras e Geleiras.",
+      "Fossas abissais e dorsais."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 152,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O fenômeno climático urbano em que a temperatura dos centros das cidades é maior do que a das áreas periféricas devido ao asfalto e concreto é chamado de:",
+    "alternativas": [
+      "Efeito Estufa",
+      "Inversão Térmica",
+      "Chuva Ácida",
+      "Ilha de Calor"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 153,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "O fenômeno da \"Transição Demográfica\" no Brasil atual indica que:",
+    "alternativas": [
+      "A taxa de natalidade e a expectativa de vida estão caindo.",
+      "A população está ficando mais jovem.",
+      "A taxa de fecundidade está caindo e a população está envelhecendo.",
+      "As taxas de mortalidade infantil estão aumentando."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 154,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "Qual bloco econômico adotou uma moeda única (o Euro) para a maioria de seus países membros?",
+    "alternativas": [
+      "NAFTA (USMCA)",
+      "BRICS",
+      "União Europeia",
+      "APEC"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 155,
+    "materia": "Geografia",
+    "nivel": "Difícil",
+    "enunciado": "Se um mapa apresenta escala de 1:1.000.000, significa que 1 cm no mapa equivale, na realidade, a:",
+    "alternativas": [
+      "1 quilômetro",
+      "10 quilômetros",
+      "100 quilômetros",
+      "1000 quilômetros"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 156,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "A mudança do estado líquido para o gasoso recebe o nome de:",
+    "alternativas": [
+      "Fusão",
+      "Solidificação",
+      "Condensação",
+      "Vaporização"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 157,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "O processo pelo qual as plantas utilizam a luz solar, água e gás carbônico para produzir seu alimento é a:",
+    "alternativas": [
+      "Respiração Celular",
+      "Fotossíntese",
+      "Fermentação",
+      "Digestão"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 158,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual é o maior planeta do nosso Sistema Solar?",
+    "alternativas": [
+      "Terra",
+      "Marte",
+      "Saturno",
+      "Júpiter"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 159,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Quais são os vasos sanguíneos responsáveis por levar o sangue do coração para o restante do corpo?",
+    "alternativas": [
+      "Veias",
+      "Capilares",
+      "Artérias",
+      "Brônquios"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 160,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual gás é indispensável para a respiração da maioria dos seres vivos e é absorvido pelos pulmões?",
+    "alternativas": [
+      "Gás Carbônico",
+      "Gás Oxigênio",
+      "Gás Nitrogênio",
+      "Gás Hélio"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 161,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Os animais que possuem coluna vertebral são classificados como:",
+    "alternativas": [
+      "Invertebrados",
+      "Pluricelulares",
+      "Vertebrados",
+      "Unicelulares"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 162,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Os seres vivos que produzem o próprio alimento em uma cadeia alimentar (como as plantas) são chamados de:",
+    "alternativas": [
+      "Consumidores Primários",
+      "Decompositores",
+      "Produtores",
+      "Consumidores Secundários"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 163,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual é o órgão do corpo humano responsável pelo bombeamento de sangue?",
+    "alternativas": [
+      "Pulmão",
+      "Estômago",
+      "Cérebro",
+      "Coração"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 164,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Animais como o cão, o gato e o ser humano, que mamam quando filhotes e possuem pelos, são:",
+    "alternativas": [
+      "Répteis",
+      "Anfíbios",
+      "Mamíferos",
+      "Aves"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 165,
+    "materia": "Ciências",
+    "nivel": "Médio",
+    "enunciado": "Qual dos sentidos está diretamente relacionado ao órgão do olfato?",
+    "alternativas": [
+      "Visão",
+      "Audição",
+      "Cheiro/Olfato (Nariz)",
+      "Paladar (Língua)"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 166,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "As células que não possuem núcleo organizado (o material genético fica disperso no citoplasma), como as bactérias, são chamadas de:",
+    "alternativas": [
+      "Eucariontes",
+      "Procariontes",
+      "Somáticas",
+      "Gaméticas"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 167,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Quem é considerado o \"Pai da Genética\" pelos seus estudos com ervilhas, descobrindo as leis da hereditariedade?",
+    "alternativas": [
+      "Charles Darwin",
+      "Gregor Mendel",
+      "Louis Pasteur",
+      "Albert Einstein"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 168,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "O naturalista Charles Darwin formulou a base da Teoria da Evolução, baseada no conceito de:",
+    "alternativas": [
+      "Lei do Uso e Desuso",
+      "Seleção Natural",
+      "Geração Espontânea",
+      "Criacionismo"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 169,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Em uma relação ecológica onde duas espécies se associam com benefício mútuo e dependência obrigatória para a sobrevivência (ex: líquens), temos um caso de:",
+    "alternativas": [
+      "Parasitismo",
+      "Comensalismo",
+      "Predatismo",
+      "Mutualismo"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 170,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "O átomo é formado por partículas subatômicas. As partículas com carga elétrica positiva são os:",
+    "alternativas": [
+      "Elétrons",
+      "Nêutrons",
+      "Prótons",
+      "Fótons"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 171,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "A 1ª Lei de Newton afirma que um corpo em repouso ou em movimento retilíneo uniforme tende a manter seu estado a menos que uma força atue sobre ele. Esta é a lei da:",
+    "alternativas": [
+      "Ação e Reação",
+      "Gravitação Universal",
+      "Inércia",
+      "Dinâmica"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 172,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Na Tabela Periódica, a grande maioria dos elementos químicos é classificada como:",
+    "alternativas": [
+      "Gases Nobres",
+      "Ametais",
+      "Halogênios",
+      "Metais"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 173,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "As vacinas agem no corpo humano promovendo:",
+    "alternativas": [
+      "A cura imediata de sintomas virais.",
+      "A destruição de bactérias como um antibiótico.",
+      "A produção preventiva de anticorpos e memória imunológica.",
+      "O fornecimento de anticorpos já prontos contra venenos."
+    ],
+    "correta": 2
+  },
+  {
+    "id": 174,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "Qual das doenças abaixo é causada por um VÍRUS?",
+    "alternativas": [
+      "Tuberculose",
+      "Tétano",
+      "Cólera",
+      "Dengue"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 175,
+    "materia": "Ciências",
+    "nivel": "Difícil",
+    "enunciado": "A energia associada ao movimento de um corpo (como um carro em velocidade) é chamada de:",
+    "alternativas": [
+      "Energia Potencial Gravitacional",
+      "Energia Cinética",
+      "Energia Térmica",
+      "Energia Nuclear"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 176,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "A palavra \"café\" tem a última sílaba tônica, portanto é classificada como:",
+    "alternativas": [
+      "Paroxítona",
+      "Proparoxítona",
+      "Oxítona",
+      "Monossílaba átona"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 177,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual é o substantivo coletivo de \"peixes\"?",
+    "alternativas": [
+      "Enxame",
+      "Cardume",
+      "Bando",
+      "Rebanho"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 178,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Na frase \"O menino esperto terminou a lição\", a palavra \"esperto\" é:",
+    "alternativas": [
+      "Substantivo",
+      "Verbo",
+      "Adjetivo",
+      "Pronome"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 179,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual par de palavras abaixo representa sinônimos?",
+    "alternativas": [
+      "Bom / Mau",
+      "Alegre / Feliz",
+      "Alto / Baixo",
+      "Rico / Pobre"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 180,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "A frase \"Nós estudaremos amanhã\" está em qual tempo verbal?",
+    "alternativas": [
+      "Presente",
+      "Pretérito Perfeito",
+      "Pretérito Imperfeito",
+      "Futuro do Presente"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 181,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "As palavras \"chuva\", \"pássaro\" e \"carro\" contêm, respectivamente, os dígrafos:",
+    "alternativas": [
+      "ch, ss, rr",
+      "v, p, c",
+      "hu, as, ar",
+      "Não contêm dígrafos"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 182,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "A regra geral de acentuação diz que \"todas as palavras _________ são acentuadas\". Complete:",
+    "alternativas": [
+      "Oxítonas",
+      "Paroxítonas",
+      "Proparoxítonas",
+      "Polissílabas"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 183,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Qual sinal de pontuação é usado para indicar uma pergunta?",
+    "alternativas": [
+      "Ponto de exclamação",
+      "Vírgula",
+      "Ponto e vírgula",
+      "Ponto de interrogação"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 184,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "O pronome \"Eu\" pertence à classe dos:",
+    "alternativas": [
+      "Pronomes Possessivos",
+      "Pronomes Pessoais do Caso Reto",
+      "Pronomes Demonstrativos",
+      "Pronomes Indefinidos"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 185,
+    "materia": "Português",
+    "nivel": "Médio",
+    "enunciado": "Na palavra \"Saguão\", a união das três vogais \"u-ã-o\" na mesma sílaba forma um:",
+    "alternativas": [
+      "Hiato",
+      "Ditongo",
+      "Tritongo",
+      "Dígrafo"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 186,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Na frase \"Meu coração é um balde esvaziado\", a figura de linguagem utilizada é a:",
+    "alternativas": [
+      "Metáfora",
+      "Símile / Comparação",
+      "Eufemismo",
+      "Hipérbole"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 187,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Qual alternativa indica o uso correto da crase?",
+    "alternativas": [
+      "Vou a pé para casa.",
+      "Entreguei o livro à aluna.",
+      "Começou a chover forte.",
+      "Estamos frente a frente."
+    ],
+    "correta": 1
+  },
+  {
+    "id": 188,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Na oração \"Choveu muito ontem à noite\", qual é a classificação do sujeito?",
+    "alternativas": [
+      "Sujeito Oculto",
+      "Sujeito Indeterminado",
+      "Sujeito Simples",
+      "Sujeito Inexistente (Oração sem sujeito)"
+    ],
+    "correta": 3
+  },
+  {
+    "id": 189,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Qual frase apresenta um erro de concordância verbal?",
+    "alternativas": [
+      "Fazem dez anos que não o vejo.",
+      "Faz dez anos que não o vejo.",
+      "Haviam chegado os convidados.",
+      "Existiam muitas pessoas no local."
+    ],
+    "correta": 0
+  },
+  {
+    "id": 190,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Complete a frase corretamente: \"Não entendi o ________ de tanta confusão. Você pode me explicar ________ estava tão nervosa?\"",
+    "alternativas": [
+      "porque / porquê",
+      "porquê / por que",
+      "por que / porque",
+      "por quê / por que"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 191,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "A função da linguagem cujo foco é o emissor (quem fala), expressando seus próprios sentimentos e emoções, é a:",
+    "alternativas": [
+      "Função Referencial",
+      "Função Fática",
+      "Função Emotiva ou Expressiva",
+      "Função Metalinguística"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 192,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Na frase \"Precisa-se de funcionários\", o sujeito é:",
+    "alternativas": [
+      "Simples",
+      "Oculto",
+      "Indeterminado",
+      "Composto"
+    ],
+    "correta": 2
+  },
+  {
+    "id": 193,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "O vício de linguagem que consiste na repetição de uma ideia de forma desnecessária (ex: \"entrar para dentro\") é o:",
+    "alternativas": [
+      "Pleonasmo",
+      "Ambiguidade",
+      "Eco",
+      "Neologismo"
+    ],
+    "correta": 0
+  },
+  {
+    "id": 194,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "Qual é a figura de linguagem presente em \"Chorei rios de lágrimas\"?",
+    "alternativas": [
+      "Eufemismo",
+      "Hipérbole",
+      "Antítese",
+      "Ironia"
+    ],
+    "correta": 1
+  },
+  {
+    "id": 195,
+    "materia": "Português",
+    "nivel": "Difícil",
+    "enunciado": "A oração \"É necessário que você estude\" é classificada como:",
+    "alternativas": [
+      "Oração subordinada substantiva subjetiva",
+      "Oração subordinada adjetiva restritiva",
+      "Oração subordinada adverbial causal",
+      "Oração coordenada sindética aditiva"
+    ],
+    "correta": 0
+  }
 ]
