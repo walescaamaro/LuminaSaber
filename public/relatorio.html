@@ -361,23 +361,50 @@ Com base nesses dados reais (não use frases genéricas), escreva uma análise p
 
 Seja direto, específico e humano. Não use listas com bullets — escreva em parágrafos corridos. Não mencione que é uma IA. Trate o aluno na segunda pessoa (você).`;
 
-    try {
-     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+    // Modelos em ordem de preferência: se um estiver sobrecarregado, tenta o próximo
+    const modelos = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.5-flash-lite'];
+    const maxTentativasPorModelo = 2;
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
-        })
-      });
+    async function chamarGemini() {
+      for (const modelo of modelos) {
+        for (let tentativa = 1; tentativa <= maxTentativasPorModelo; tentativa++) {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
 
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error?.message || `Erro ${response.status}`);
+          try {
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }]
+              })
+            });
+
+            if (response.ok) {
+              return await response.json();
+            }
+
+            // 503 = modelo sobrecarregado (problema temporário do Google, não do nosso código)
+            // 429 = limite de requisições atingido
+            if (response.status === 503 || response.status === 429) {
+              console.warn(`${modelo} sobrecarregado (tentativa ${tentativa}), aguardando...`);
+              await new Promise(r => setTimeout(r, 1500 * tentativa));
+              continue; // tenta de novo o mesmo modelo, depois passa pro próximo
+            }
+
+            // Outros erros (chave inválida, etc) não vale a pena tentar de novo
+            const err = await response.json();
+            throw new Error(err.error?.message || `Erro ${response.status}`);
+
+          } catch (e) {
+            if (e.message && !e.message.includes('fetch')) throw e;
+          }
+        }
       }
+      throw new Error('Todos os modelos estão sobrecarregados no momento. Tente novamente em alguns segundos.');
+    }
 
-      const data = await response.json();
+    try {
+      const data = await chamarGemini();
       const texto = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Não foi possível gerar a análise.';
 
       // Remove marcações markdown como **negrito** e # títulos
@@ -391,7 +418,18 @@ Seja direto, específico e humano. Não use listas com bullets — escreva em pa
 
     } catch (erro) {
       console.error('Erro ao chamar API Gemini:', erro);
-      iaConteudo.innerHTML = `<span class="ia-erro">⚠️ Não foi possível gerar a análise personalizada. Verifique sua conexão e tente novamente.<br><small style="opacity:.6">${erro.message}</small></span>`;
+      iaConteudo.innerHTML = `
+        <span class="ia-erro">
+          ⚠️ Os servidores do Gemini estão sobrecarregados agora. Isso é temporário e não é um erro do seu projeto.
+          <br><small style="opacity:.6">${erro.message}</small>
+        </span>
+        <button id="btnTentarNovo" style="margin-top:12px; padding:8px 18px; border-radius:10px; border:none; background:#6d28d9; color:white; font-weight:700; cursor:pointer;">Tentar novamente</button>
+      `;
+      const btn = document.getElementById('btnTentarNovo');
+      if (btn) btn.addEventListener('click', () => {
+        iaConteudo.innerHTML = '<div class="ia-loading"><div class="skeleton s95"></div><div class="skeleton s80"></div><div class="skeleton s95"></div></div>';
+        gerarAnaliseIA();
+      });
     }
   }
 
