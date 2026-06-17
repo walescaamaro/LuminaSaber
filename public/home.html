@@ -9,17 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
+
         body {
-            background-color: #00e1e1;
+            margin: 0;
+            height: 100vh;
             font-family: 'DM Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
             position: relative;
             overflow-x: hidden;
+
+            /* Plano de fundo único, substitui todas as imagens posicionadas manualmente */
+            background-image: url('Home (1).png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #00e1e1; /* fallback enquanto a imagem carrega */
         }
+
         .retangulo {
             background-color: rgba(255, 255, 255, 0.616);
             width: 50%;
@@ -29,6 +37,7 @@
             text-align: center;
             margin-top: 100px;
         }
+
         /* Botões no canto superior direito: Suporte, Cadastro, Login */
         .container {
             position: fixed;
@@ -47,6 +56,7 @@
             font-weight: 700;
             cursor: pointer;
         }
+
         /* Botão "Começar a Estudar" na parte inferior */
         .btn-comecar {
             position: fixed;
@@ -66,16 +76,15 @@
             transition: background-color 0.3s;
         }
         .btn-comecar:hover { background-color: #daa700; }
-        .logo { position: fixed; top: 8vh; left: 50%; transform: translateX(-50%); width: clamp(180px, 35vw, 500px); }
-        .menu { position: fixed; top: 20px; left: 20px; font-size: 14px; font-weight: 700; z-index: 3; }
-        .onda { position: fixed; top: 0; left: 0; width: clamp(180px, 30vw, 510px); height: auto; }
-        .estudantes { position: fixed; bottom: 0; right: 1vw; width: clamp(180px, 28vw, 380px); }
-        .livros { position: fixed; bottom: 5vh; left: 2vw; width: clamp(80px, 12vw, 180px); transform: rotate(-12deg); }
-        .estrela { position: fixed; bottom: 200px; left: 40px; width: 150px; transform: rotate(-2deg); z-index: 1; }
-        .giz { position: fixed; bottom: 300px; left: 200px; width: 100px; transform: rotate(-2deg); z-index: 1; }
-        .cadernos { position: fixed; bottom: 430px; right: 200px; width: 120px; transform: rotate(-1deg); z-index: 1; }
-        .foguete { position: fixed; bottom: 430px; right: 40px; width: 80px; transform: rotate(-1deg); z-index: 1; }
 
+        .menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            z-index: 3;
+        }
 
         .btn-admin {
             position: fixed;
@@ -94,24 +103,14 @@
             transition: background-color 0.3s;
         }
         .btn-admin:hover { background-color: #c3ff00; }
-    
-    
     </style>
 </head>
-    <a href="/cadastro-exercicios" class="btn-admin">⚙ Admin: Cadastrar Questão</a>
 <body>
-    <img src="onda.png" class="onda" alt="Ilustração">
-    <img src="logo.png" class="logo" alt="LuminaSaber">
-    <img src="estudante.png" class="estudantes" alt="Estudantes" style=>
-    <img src="livros.png" class="livros" alt="Livros">
-    <img src="caderno.png" class="cadernos" alt="Caderno">
-    <img src="foguete.png" class="foguete" alt="Ilustração">
-    <img src="star.png" class="estrela" alt="Ilustração">
-    <img src="giz.png" class="giz" alt="Ilustração">
+    <a href="/cadastro-exercicios" class="btn-admin">⚙ Admin: Cadastrar Questão</a>
 
     <div class="menu">HOME | SOBRE A PLATAFORMA</div>
 
-    <!-- Suporte adicionado ao lado de Login -->
+    <!-- Suporte, Cadastro e Login -->
     <div class="container">
         <button class="btn">Contato e Suporte</button>
         <button class="btn" onclick="location.href='/cadastro'">Cadastro</button>
@@ -127,7 +126,7 @@
         </b></p>
     </div>
 
-    <!-- Botão "Começar a Estudar" substitui "Contato e Suporte" -->
+    <!-- Botão "Começar a Estudar" -->
     <a href="/selecao" class="btn-comecar">Começar a Estudar</a>
 </body>
 </html>
