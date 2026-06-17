@@ -1,5 +1,5 @@
 <div align="center">
-      
+
 # 🌟 LuminaSaber
 
 ### Plataforma web gamificada e gratuita de apoio ao aprendizado na educação básica
@@ -8,16 +8,22 @@
 
 ---
 
-## 📖 Sobre o projeto
+## 📖 1. Visão geral do sistema
 
-O **LuminaSaber** é uma plataforma web voltada para estudantes da educação básica, oferecendo **exercícios de múltipla escolha organizados por disciplina**, com acompanhamento de metas de estudo e relatórios de desempenho.
+**Objetivo do sistema:** o LuminaSaber é uma plataforma web destinada ao **apoio ao estudo de estudantes da educação básica** (do jardim de infância ao 9º ano), permitindo cadastro e resolução de questões de múltipla escolha, definição de metas de estudo e geração de relatórios de desempenho com análise personalizada por IA.
 
-A proposta é incentivar a autonomia nos estudos por meio de uma experiência **gratuita, simples e organizada**, permitindo que o aluno escolha a disciplina, defina um tempo/meta de estudo, responda questões e acompanhe sua evolução — enquanto administradores conseguem cadastrar, editar e remover questões diretamente pela interface.
+**Público-alvo:** estudantes da educação básica que buscam praticar conteúdos por disciplina de forma gratuita e gamificada, e administradores responsáveis por cadastrar e manter o banco de questões.
 
-O projeto foi desenvolvido como atividade da disciplina de **Banco de Dados**, com foco na integração entre **front-end**, **back-end (Node.js/Express + TypeScript)** e **banco de dados relacional (SQLite)** através do **Prisma ORM**.
+**Principais funcionalidades:**
+- Cadastro de usuários (aluno ou administrador);
+- Seleção de disciplina, tempo de estudo e meta de questões;
+- Resolução de exercícios de múltipla escolha com busca e filtro por matéria;
+- Relatório de desempenho com pontos fortes e áreas de melhoria gerados por IA, citando exatamente os temas que o aluno acertou e errou;
+- CRUD completo de questões pelo painel administrativo.
 
----
-## 👩‍💻 Equipe
+O projeto foi desenvolvido como atividade da disciplina de **Banco de Dados** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**, com foco na integração entre **front-end**, **back-end (Node.js/Express + TypeScript)** e **banco de dados relacional (SQLite)** via **Prisma ORM**.
+
+### 👩‍💻 Equipe
 
 | Nome | Matrícula |
 |------|-----------|
@@ -26,95 +32,87 @@ O projeto foi desenvolvido como atividade da disciplina de **Banco de Dados**, c
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades e telas
 
 | Tela | Rota | Descrição | Acesso |
 |------|------|-----------|--------|
-| 🏠 **Home** | `/` | Apresentação da plataforma | Público |
-| 📝 **Cadastro de usuário** | `/cadastro` | Formulário de cadastro (aluno ou administrador) | Público |
-| 📚 **Seleção de disciplinas** | `/selecao` | Escolha da disciplina a ser estudada | Usuário |
-| ⏱️ **Definição de tempo** | `/tempo` | Definição do tempo de estudo | Usuário |
-| 🎯 **Meta de questões** | `/meta` | Definição da meta de questões a responder | Usuário |
-| ✏️ **Exercícios** | `/exercicios` | Resolução das questões de múltipla escolha, com filtros e busca | Usuário |
-| 📊 **Relatório** | `/relatorio` | Visualização de desempenho (acertos, pontos fortes e a melhorar) | Usuário |
-| ⚙️ **Cadastro de exercícios** | `/cadastro-exercicios` | CRUD completo de questões (criar, listar, editar e excluir) | Administrador |
-
-### Destaque: CRUD de Questões
-
-A tela **Cadastro de Exercícios** (`/cadastro-exercicios`) é a principal demonstração de integração CRUD do projeto:
-
-- **Create** — formulário cadastra novas questões via `POST /api/questoes`;
-- **Read** — tabela lista todas as questões via `GET /api/questoes`;
-- **Update** — botão "Editar" carrega os dados da questão e salva alterações via `PUT /api/questoes/:id`;
-- **Delete** — botão "Excluir" remove a questão (com confirmação) via `DELETE /api/questoes/:id`.
-
-Todas as operações são refletidas na interface em tempo real, sem necessidade de recarregar a página.
+| 🏠 Home | `/` | Apresentação da plataforma | Público |
+| 📝 Cadastro de usuário | `/cadastro` | Formulário de cadastro (aluno ou administrador) | Público |
+| 📚 Seleção de disciplinas | `/selecao` | Escolha da disciplina a ser estudada | Usuário |
+| ⏱️ Definição de tempo | `/tempo` | Definição do tempo de estudo | Usuário |
+| 🎯 Meta de questões | `/meta` | Definição da meta de questões a responder | Usuário |
+| ✏️ Exercícios | `/exercicios` | Resolução das questões, com filtros e busca | Usuário |
+| 📊 Relatório | `/relatorio` | Desempenho, pontos fortes/fracos e análise por IA | Usuário |
+| ⚙️ Cadastro de exercícios | `/cadastro-exercicios` | CRUD completo de questões | Administrador |
 
 ---
 
-## 🚀 Tecnologias
+## 🖥️ 2. Demonstração da interface (CRUD)
 
-### Back-end
-- **Node.js** + **Express.js** — servidor HTTP e roteamento
-- **TypeScript** (modo `strict`) — tipagem estática em todo o backend
-- **Prisma ORM** — modelagem, migrations e acesso ao banco
-- **@prisma/adapter-better-sqlite3** — adapter do Prisma para SQLite
-- **Morgan** — logger de requisições HTTP
-- **dotenv** — variáveis de ambiente
-- **tsx** — execução de TypeScript sem build manual
+A tela **Cadastro de Exercícios** (`/cadastro-exercicios`) é a principal demonstração de integração CRUD do projeto, cobrindo as quatro operações sobre a tabela `questao`:
 
-### Front-end
-- **HTML5** e **CSS3** (com seções responsivas via `@media queries`)
-- **JavaScript** (Fetch API) — consumo da API REST diretamente do navegador, sem frameworks
+| Operação | Como é feita na interface | Rota da API |
+|----------|---------------------------|-------------|
+| **Create** | Formulário cadastra uma nova questão | `POST /api/questoes` |
+| **Read** | Tabela lista todas as questões cadastradas | `GET /api/questoes` |
+| **Update** | Botão "Editar" carrega os dados no formulário e salva as alterações | `PUT /api/questoes/:id` |
+| **Delete** | Botão "Excluir" remove a questão, com confirmação prévia | `DELETE /api/questoes/:id` |
 
-### Banco de dados
-- **SQLite** — arquivo local (`backend/src/database/db.sqlite`)
-- **Prisma Migrate** — versionamento e criação automática das tabelas
-
-### Testes de API
-- **REST Client (VSCode)** — arquivo `backend/request.http` com casos de sucesso e erro
-
-### Versionamento
-- **Git / GitHub**
-
----
-
-## 🏗️ Arquitetura (MVC)
-
-O back-end segue o padrão **MVC (Model-View-Controller)**, adaptado para uma API REST:
+**Como ocorre a comunicação entre interface e banco de dados:** o front-end (HTML/JS puro, sem framework) usa a `Fetch API` do navegador para enviar requisições HTTP à API REST do Express. O `Controller` valida os dados recebidos e delega ao `Model`, que executa a operação no banco através do **Prisma Client**. A resposta (JSON) volta para o front-end, que atualiza a tabela na tela **sem precisar recarregar a página**.
 
 ```
-Requisição HTTP
-      │
-      ▼
-┌─────────────┐
-│   Routes    │  → define os endpoints (ex: GET /api/questoes)
-└─────┬───────┘
-      ▼
-┌─────────────┐
-│ Controllers │  → valida dados de entrada, aplica regras de negócio,
-└─────┬───────┘     trata erros e define o status HTTP da resposta
-      ▼
-┌─────────────┐
-│   Models    │  → centraliza o acesso ao banco usando o Prisma Client
-└─────┬───────┘
-      ▼
-┌─────────────┐
-│   SQLite    │  → banco de dados relacional
-└─────────────┘
+Front-end (fetch)  →  Routes  →  Controllers (validação)  →  Models (Prisma)  →  SQLite
+                                         ↓
+                                  resposta JSON (200/201/400/404/409)
 ```
 
-- **Routes** (`backend/src/routes`): mapeiam URLs para funções dos controllers (`questaoRoutes.ts`, `usuarioRoutes.ts`, `pageRoutes.ts`).
-- **Controllers** (`backend/src/controllers`): recebem `Request`/`Response`, validam parâmetros e o corpo da requisição, aplicam regras (ex.: campos obrigatórios, formato de e-mail, alternativa correta válida) e retornam respostas JSON com os códigos HTTP corretos (`200`, `201`, `400`, `404`, `409`).
-- **Models** (`backend/src/models`): concentram **todas** as chamadas ao `prisma.questao.*` e `prisma.usuario.*` — nenhuma query SQL aparece nos controllers.
-- **Erros**: uma classe `HttpError` (`backend/src/errors`) representa erros com status HTTP, capturados de forma centralizada por um middleware `errorHandler`.
-- **Middlewares**: `contentTypeJson` garante que requisições `POST`/`PUT`/`PATCH` enviem `Content-Type: application/json`.
+A tela de **Exercícios** (`/exercicios`) também demonstra a leitura (`Read`) do lado do aluno: as questões são buscadas via `GET /api/questoes`, filtradas por disciplina no próprio navegador, e cada resposta do aluno é exibida na hora (✅ acertou / ❌ errou, com a alternativa correta).
 
 ---
 
-## 🗄️ Modelagem do banco de dados
+## 💾 3. Persistência dos dados
 
-A modelagem está em `backend/prisma/schema.prisma`, com **11 models** que representam as entidades do sistema, incluindo chaves primárias, chaves estrangeiras e relacionamentos 1:N e N:N.
+Os dados são armazenados em um arquivo físico de banco de dados SQLite (`backend/src/database/db.sqlite`), e **não em memória** — por isso permanecem salvos mesmo após reiniciar o servidor ou o computador.
+
+**Como confirmar a persistência na prática:**
+
+1. Cadastre uma questão pela tela `/cadastro-exercicios` (ou um usuário pela tela `/cadastro`);
+2. Pare o servidor (`Ctrl+C` no terminal);
+3. Inicie o servidor novamente (`npm run dev`);
+4. Acesse `/cadastro-exercicios` (ou a listagem correspondente) — o registro cadastrado continua lá.
+
+**Visualizando a tabela diretamente no banco**, sem precisar passar pela interface:
+
+```bash
+npx prisma studio
+```
+
+Esse comando abre uma interface visual no navegador (`http://localhost:5555`) com todas as tabelas do banco. Basta clicar em `Questao` ou `Usuario` para ver os registros salvos, mesmo com o servidor principal desligado — prova de que o dado foi de fato persistido no SQLite e não apenas mantido na memória da aplicação.
+
+---
+
+## 🧪 4. Testes de integridade
+
+Os testes abaixo, presentes em [`backend/request.http`](backend/request.http) (extensão **REST Client** do VSCode), comprovam que o sistema rejeita dados inconsistentes antes de qualquer escrita no banco:
+
+| Teste | Cenário | Resultado esperado |
+|-------|---------|---------------------|
+| Campos obrigatórios vazios | `POST /api/questoes` sem `enunciado` ou sem alternativas | `400 Bad Request` — lista os campos ausentes |
+| Dado inválido | `alternativa_correta` fora de `a`, `b`, `c`, `d` | `400 Bad Request` |
+| ID malformado | `GET/PUT/DELETE /api/questoes/abc` (não numérico) | `400 Bad Request` |
+| Registro inexistente | `GET/PUT/DELETE` com um ID que não existe no banco | `404 Not Found` |
+| Cadastro duplicado | Repetir a mesma questão já cadastrada | `409 Conflict` |
+| Atualização parcial | `PUT` sem nenhum campo no corpo da requisição | `400 Bad Request` — "envie ao menos um campo" |
+| Atualização válida | `PUT` com um ou mais campos válidos | `200 OK` — questão atualizada |
+| Exclusão válida | `DELETE` de um ID existente | `200 OK` — confirma remoção |
+
+**Como o sistema evita inconsistências:** toda validação acontece na camada de **Controller**, antes de qualquer chamada ao banco — nenhuma query é executada com dados inválidos. IDs são convertidos e checados com `Number.isNaN`; campos obrigatórios são verificados em lista fixa (`CAMPOS_OBRIGATORIOS`); a letra da alternativa correta é normalizada e validada contra um conjunto fechado (`a/b/c/d`); e duplicidade é tratada como erro de negócio (`409`), não como falha genérica. Erros nunca retornam silenciosamente — todos passam por uma classe `HttpError` central, capturada por um middleware (`errorHandler`) que padroniza a resposta JSON de erro.
+
+---
+
+## 🗄️ 5. Estrutura do banco de dados
+
+A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.prisma), com **11 models** representando as entidades do sistema, incluindo chaves primárias, chaves estrangeiras e relacionamentos 1:N e N:N.
 
 <div align="center">
   <img src="docs/erd.png" alt="Diagrama ERD do LuminaSaber" width="100%" />
@@ -143,8 +141,59 @@ A modelagem está em `backend/prisma/schema.prisma`, com **11 models** que repre
 
 - **1:N** — Uma `Disciplina` possui várias `Questao` (`Questao.cod_disc → Disciplina.cod_disc`).
 - **1:N** — Um `Usuario` pode criar várias `Pasta` e `Anotacao`.
-- **N:N** — Um `Usuario` "estuda" várias `Disciplina` (e vice-versa), modelado pela tabela `Estuda`, que também guarda a meta e o tempo de estudo.
+- **N:N** — Um `Usuario` "estuda" várias `Disciplina` (e vice-versa), modelado pela tabela `Estuda`, que guarda também a meta e o tempo de estudo.
 - **N:N** — Uma `Pasta` pode conter várias `Anotacao` (e uma anotação pode pertencer a mais de uma pasta), via `Contem`.
+
+---
+
+## 🧰 6. Documentação técnica
+
+### Tecnologia utilizada
+
+**Back-end:** Node.js + Express.js para o servidor HTTP e roteamento; TypeScript em modo `strict` para tipagem estática; Morgan como logger de requisições; dotenv para variáveis de ambiente; tsx para execução de TypeScript sem build manual.
+
+**Front-end:** HTML5 e CSS3 (responsivo via `@media queries`) e JavaScript puro consumindo a API REST via `Fetch API`, sem frameworks.
+
+**Inteligência artificial:** a tela de relatório (`/relatorio`) usa a **API gratuita do Google Gemini** para gerar a análise de pontos fortes e áreas de melhoria. Em vez de frases genéricas fixas por matéria, o sistema envia ao modelo a lista real de questões que o aluno acertou e errou (enunciado, nível e alternativa escolhida) e recebe de volta um texto curto, em linguagem natural, citando exatamente os temas trabalhados — por exemplo, identificando que o aluno tem facilidade com fração e soma, mas dificuldade em potenciação. A chave de API é injetada pelo servidor a partir da variável `GEMINI_API_KEY` no `.env`, nunca exposta no código-fonte versionado.
+
+### Banco de dados empregado
+
+**SQLite**, banco relacional leve armazenado em um único arquivo local (`backend/src/database/db.sqlite`), adequado para o escopo do projeto por não exigir servidor de banco separado.
+
+### Estrutura de persistência
+
+**Prisma ORM** é responsável por três frentes: (1) a **modelagem**, definida declarativamente em `schema.prisma`; (2) as **migrations**, versionadas em `prisma/migrations`, que criam e atualizam as tabelas no SQLite de forma reproduzível em qualquer ambiente; e (3) o **seed** (`src/database/seed.ts`), que popula o banco com dados iniciais de teste usando `INSERT OR IGNORE`, evitando duplicação ao rodar mais de uma vez.
+
+### Forma como os dados são manipulados
+
+O back-end segue o padrão **MVC** adaptado para API REST:
+
+```
+Requisição HTTP
+      │
+      ▼
+┌─────────────┐
+│   Routes    │  → define os endpoints (ex: GET /api/questoes)
+└─────┬───────┘
+      ▼
+┌─────────────┐
+│ Controllers │  → valida dados de entrada, aplica regras de negócio,
+└─────┬───────┘     trata erros e define o status HTTP da resposta
+      ▼
+┌─────────────┐
+│   Models    │  → centraliza o acesso ao banco usando o Prisma Client
+└─────┬───────┘
+      ▼
+┌─────────────┐
+│   SQLite    │  → banco de dados relacional
+└─────────────┘
+```
+
+- **Routes** (`backend/src/routes`): mapeiam URLs para funções dos controllers (`questaoRoutes.ts`, `usuarioRoutes.ts`, `pageRoutes.ts`).
+- **Controllers** (`backend/src/controllers`): recebem `Request`/`Response`, validam parâmetros e corpo da requisição, aplicam regras de negócio e retornam JSON com os códigos HTTP corretos (`200`, `201`, `400`, `404`, `409`).
+- **Models** (`backend/src/models`): concentram todas as chamadas ao `prisma.questao.*` e `prisma.usuario.*` — nenhuma query aparece nos controllers.
+- **Erros**: a classe `HttpError` (`backend/src/errors`) representa erros com status HTTP, capturados de forma centralizada pelo middleware `errorHandler`.
+- **Middlewares**: `contentTypeJson` garante que requisições `POST`/`PUT`/`PATCH` enviem `Content-Type: application/json`.
 
 ---
 
@@ -159,7 +208,7 @@ LuminaSaber/
 │   ├── seleção_disciplinas.html
 │   ├── defina_seu_tempo.html
 │   ├── meta_questoes.html
-│   ├── relatorio.html
+│   ├── relatorio.html               # Relatório com análise de IA (Gemini)
 │   └── tela_exercicios/
 │       ├── exercicios.html
 │       ├── css/style.css
@@ -175,7 +224,7 @@ LuminaSaber/
 │   │   ├── schema.prisma             # Models, PKs, FKs e relacionamentos
 │   │   └── migrations/               # Histórico de migrations do Prisma
 │   └── src/
-│       ├── routes/                   # Definição dos endpoints REST
+│       ├── routes/                   # Endpoints REST + injeção da chave do Gemini
 │       ├── controllers/              # Validações, regras de negócio e respostas HTTP
 │       ├── models/                   # Acesso ao banco via Prisma Client
 │       ├── lib/prisma.ts             # Instância do Prisma Client (adapter SQLite)
@@ -199,6 +248,7 @@ LuminaSaber/
 
 - [Node.js](https://nodejs.org/) (recomendado: versão 18 ou superior)
 - [Git](https://git-scm.com/)
+- Uma chave gratuita da [API do Google Gemini](https://aistudio.google.com/) (para a análise de IA no relatório)
 - Extensão **REST Client** no VSCode (opcional, para testar a API)
 
 ### Passo a passo
@@ -216,6 +266,7 @@ npm install
 
 # 4. Crie o arquivo de variáveis de ambiente
 cp .env.example .env
+# Edite o .env e adicione sua chave: GEMINI_API_KEY=sua_chave_aqui
 
 # 5. Gere o Prisma Client
 npm run prisma:generate
@@ -226,15 +277,15 @@ npx prisma migrate dev
 # 7. Popule o banco com dados iniciais
 npm run seed
 
-# 8. Inicie o servidor
-npm start
+# 8. Inicie o servidor em modo desenvolvimento (reinicia automaticamente a cada alteração)
+npm run dev
 ```
 
 Acesse no navegador: **http://localhost:3000**
 
-> 💡 Durante o desenvolvimento, use `npm run dev` em vez de `npm start` — o servidor reinicia automaticamente a cada alteração.
+> 🔍 Para visualizar e editar os dados do banco em uma interface gráfica, use `npx prisma studio` (abre em `http://localhost:5555`).
 
-> 🔍 Para visualizar e editar os dados do banco em uma interface gráfica, use `npx prisma studio`.
+> 🚀 Para rodar em modo produção (sem reinício automático), use `npm start` no lugar do passo 8.
 
 ---
 
@@ -299,12 +350,7 @@ Content-Type: application/json
 
 ### Via REST Client (VSCode) — recomendado
 
-Abra o arquivo [`backend/request.http`](backend/request.http) e clique em **"Send Request"** acima de cada bloco. O arquivo já cobre:
-
-- consultas válidas, por ID inexistente e com ID inválido (`GET`);
-- criação válida, com campos obrigatórios ausentes e com dados inválidos (`POST`);
-- atualização válida, de registro inexistente e sem corpo (`PUT`);
-- remoção válida, de registro inexistente e com ID inválido (`DELETE`).
+Abra o arquivo [`backend/request.http`](backend/request.http) e clique em **"Send Request"** acima de cada bloco. O arquivo já cobre consultas válidas, por ID inexistente e com ID inválido (`GET`); criação válida, com campos obrigatórios ausentes e com dados inválidos (`POST`); atualização válida, de registro inexistente e sem corpo (`PUT`); e remoção válida, de registro inexistente e com ID inválido (`DELETE`).
 
 ### Via cURL
 
@@ -326,7 +372,7 @@ O comando `npm run seed` popula o banco com dados de exemplo para testes:
 |--------|-----------|----------|
 | Usuários | 10 | 2 administradores e 8 alunos |
 | Disciplinas | 7 | Matemática, Português, Ciências, Inglês, História, Geografia, Artes |
-| Questões | 35 | 5 a 6 questões por disciplina, níveis fácil/médio/difícil |
+| Questões | 175 | Níveis fácil, médio e difícil, distribuídas entre as 7 disciplinas |
 | Conteúdos | 12 | Tópicos como "Operações Básicas", "Interpretação de texto", etc. |
 | Pastas | 5 | Pastas de anotações por tema |
 | Anotações | 5 | Resumos de estudo |
