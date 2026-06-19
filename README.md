@@ -394,4 +394,4 @@ Funcionalidades previstas para próximas versões:
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins educacionais, como atividade da disciplina de **Banco de Dados** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
+Este projeto foi desenvolvido para fins educacionais, como atividade das disciplinas de **Projeto Integrador** e **Linguagem e Técnicas de Programação II** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
