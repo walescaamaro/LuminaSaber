@@ -32,13 +32,7 @@ export const UsuarioController = {
         return next(new HttpError(409, 'Este e-mail já está cadastrado. Use outro e-mail.'));
       }
 
-      const senhaExiste = await UsuarioModel.buscarPorSenha(senha);
-      if (senhaExiste) {
-        return next(new HttpError(409, 'Esta senha já está em uso. Por favor, escolha uma senha diferente.'));
-      }
-
       const id = await UsuarioModel.criar({ nome, email, senha, grau_escolar, data_nasc, tipo: tipoUsuario });
-
       return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!', id });
     } catch (error) {
       return next(error);
