@@ -156,6 +156,8 @@ A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.pris
 
 **Inteligência artificial:** a tela de relatório (`/relatorio`) usa a **API gratuita do Google Gemini** para gerar a análise de pontos fortes e áreas de melhoria. Em vez de frases genéricas fixas por matéria, o sistema envia ao modelo a lista real de questões que o aluno acertou e errou (enunciado, nível e alternativa escolhida) e recebe de volta um texto curto, em linguagem natural, citando exatamente os temas trabalhados — por exemplo, identificando que o aluno tem facilidade com fração e soma, mas dificuldade em potenciação. A chave de API é injetada pelo servidor a partir da variável `GEMINI_API_KEY` no `.env`, nunca exposta no código-fonte versionado.
 
+**Segurança:** as senhas dos usuários são armazenadas com hash **Argon2id** via função nativa `argon2Sync` do módulo `node:crypto` (disponível a partir do Node.js 22). Nunca é salva a senha em texto puro — ao cadastrar, a senha é hasheada antes de ir ao banco; ao autenticar, a comparação é feita com `timingSafeEqual` para evitar ataques de timing.
+
 ### Banco de dados empregado
 
 **SQLite**, banco relacional leve armazenado em um único arquivo local (`backend/src/database/db.sqlite`), adequado para o escopo do projeto por não exigir servidor de banco separado.
@@ -246,7 +248,7 @@ LuminaSaber/
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/) (recomendado: versão 18 ou superior)
+- [Node.js](https://nodejs.org/) (recomendado: versão 22 ou superior)
 - [Git](https://git-scm.com/)
 - Uma chave gratuita da [API do Google Gemini](https://aistudio.google.com/) (para a análise de IA no relatório)
 - Extensão **REST Client** no VSCode (opcional, para testar a API)
