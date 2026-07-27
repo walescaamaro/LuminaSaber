@@ -21,7 +21,7 @@
 - Relatório de desempenho com pontos fortes e áreas de melhoria gerados por IA, citando exatamente os temas que o aluno acertou e errou;
 - CRUD completo de questões pelo painel administrativo.
 
-O projeto foi desenvolvido como atividade da disciplina de **Banco de Dados** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**, com foco na integração entre **front-end**, **back-end (Node.js/Express + TypeScript)** e **banco de dados relacional (SQLite)** via **Prisma ORM**.
+O projeto foi originalmente desenvolvido para a disciplina de **Projeto Integrador**, já concluída, e atualmente segue em desenvolvimento como atividade da disciplina de **Linguagem e Técnicas de Programação II** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**, com foco na integração entre **front-end**, **back-end (Node.js/Express + TypeScript)** e **banco de dados relacional (SQLite)** via **Prisma ORM**.
 
 ### 👩‍💻 Equipe
 
@@ -112,7 +112,7 @@ Os testes abaixo, presentes em [`backend/request.http`](backend/request.http) (e
 
 ## 🗄️ 5. Estrutura do banco de dados
 
-A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.prisma), com **11 models** representando as entidades do sistema, incluindo chaves primárias, chaves estrangeiras e relacionamentos 1:N e N:N.
+A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.prisma), com **12 models** representando as entidades do sistema, incluindo chaves primárias, chaves estrangeiras e relacionamentos 1:N e N:N.
 
 <div align="center">
   <img src="docs/erd.png" alt="Diagrama ERD do LuminaSaber" width="100%" />
@@ -156,7 +156,7 @@ A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.pris
 
 **Inteligência artificial:** a tela de relatório (`/relatorio`) usa a **API gratuita do Google Gemini** para gerar a análise de pontos fortes e áreas de melhoria. Em vez de frases genéricas fixas por matéria, o sistema envia ao modelo a lista real de questões que o aluno acertou e errou (enunciado, nível e alternativa escolhida) e recebe de volta um texto curto, em linguagem natural, citando exatamente os temas trabalhados — por exemplo, identificando que o aluno tem facilidade com fração e soma, mas dificuldade em potenciação. A chave de API é injetada pelo servidor a partir da variável `GEMINI_API_KEY` no `.env`, nunca exposta no código-fonte versionado.
 
-**Segurança:** as senhas dos usuários são armazenadas com hash **Argon2id** via função nativa `argon2Sync` do módulo `node:crypto` (disponível a partir do Node.js 22). Nunca é salva a senha em texto puro — ao cadastrar, a senha é hasheada antes de ir ao banco; ao autenticar, a comparação é feita com `timingSafeEqual` para evitar ataques de timing.
+**Segurança:** as senhas dos usuários são armazenadas com hash **Argon2id**, usando a biblioteca [`argon2`](https://www.npmjs.com/package/argon2) (`argon2.hash`/`argon2.verify`). Nunca é salva a senha em texto puro — ao cadastrar, a senha é hasheada antes de ir ao banco; ao autenticar, a verificação é feita com `argon2.verify`, que já compara o hash de forma segura internamente.
 
 ### Banco de dados empregado
 
@@ -220,8 +220,11 @@ LuminaSaber/
 │   ├── server.ts                     # Ponto de entrada do servidor
 │   ├── prisma.config.ts              # Configuração do Prisma (schema, migrations, seed)
 │   ├── .env.example                  # Modelo de variáveis de ambiente
+│   ├── .gitignore
 │   ├── package.json
+│   ├── tsconfig.json
 │   ├── request.http                  # Testes de API (REST Client)
+│   ├── data/questoes.json            # Base de questões usada no seed
 │   ├── prisma/
 │   │   ├── schema.prisma             # Models, PKs, FKs e relacionamentos
 │   │   └── migrations/               # Histórico de migrations do Prisma
@@ -229,16 +232,24 @@ LuminaSaber/
 │       ├── routes/                   # Endpoints REST + injeção da chave do Gemini
 │       ├── controllers/              # Validações, regras de negócio e respostas HTTP
 │       ├── models/                   # Acesso ao banco via Prisma Client
-│       ├── lib/prisma.ts             # Instância do Prisma Client (adapter SQLite)
+│       ├── lib/
+│       │   ├── prisma.ts             # Instância do Prisma Client (adapter SQLite)
+│       │   └── crypto.ts             # Hash e verificação de senha (argon2)
 │       ├── middlewares/              # contentTypeJson, errorHandler
 │       ├── errors/HttpError.ts       # Classe de erro HTTP customizada
-│       ├── database/seed.ts          # Carga inicial de dados
+│       ├── database/
+│       │   ├── database.ts           # Conexão com o SQLite
+│       │   ├── migration.ts          # Script de criação das tabelas (SQL bruto)
+│       │   └── seed.ts               # Carga inicial de dados
 │       └── types/                    # Tipos TypeScript compartilhados
 │
 ├── docs/
 │   ├── erd.mmd                       # Diagrama ER (Mermaid)
-│   └── erd.png                       # Diagrama ER renderizado
+│   ├── erd.png                       # Diagrama ER renderizado
+│   ├── PI - Template Especificação Projeto.docx
+│   └── Protótipo_telas_LuminaSaber.pdf
 │
+├── .gitignore
 └── README.md
 ```
 
@@ -274,7 +285,12 @@ cp .env.example .env
 npm run prisma:generate
 
 # 6. Crie/atualize as tabelas do banco de dados (Prisma Migrate)
+# Se já existir uma migration em backend/prisma/migrations (caso do repositório clonado),
+# este comando apenas aplica a migration existente ao seu banco local:
 npx prisma migrate dev
+
+# Caso esteja criando a migration inicial do zero (schema novo, sem pasta migrations/):
+npx prisma migrate dev --name init
 
 # 7. Popule o banco com dados iniciais
 npm run seed
@@ -396,4 +412,4 @@ Funcionalidades previstas para próximas versões:
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins educacionais, como atividade das disciplinas de **Projeto Integrador** e **Linguagem e Técnicas de Programação II** do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
+Este projeto foi desenvolvido para fins educacionais. Teve início como atividade da disciplina de **Projeto Integrador**, já concluída, e atualmente segue em desenvolvimento como atividade da disciplina de **Linguagem e Técnicas de Programação II**, ambas do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.
