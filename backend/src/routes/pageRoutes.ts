@@ -11,6 +11,7 @@ export default function configurePageRoutes(publicDir: string) {
   router.get('/meta', (req, res) => res.sendFile(path.join(publicDir, 'meta_questoes.html')));
   router.get('/exercicios', (req, res) => res.sendFile(path.join(publicDir, 'tela_exercicios', 'exercicios.html')));
   router.get('/cadastro', (req, res) => res.sendFile(path.join(publicDir, 'cadastro.html')));
+  router.get('/login', (req, res) => res.sendFile(path.join(publicDir, 'login.html')));
   router.get('/cadastro-exercicios', (req, res) => res.sendFile(path.join(publicDir, 'cadastro_exercicios.html')));
 
   // Rota do relatório: injeta a API key do Gemini no HTML

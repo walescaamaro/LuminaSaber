@@ -158,6 +158,12 @@ A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.pris
 
 **Segurança:** as senhas dos usuários são armazenadas com hash **Argon2id**, usando a biblioteca [`argon2`](https://www.npmjs.com/package/argon2) (`argon2.hash`/`argon2.verify`). Nunca é salva a senha em texto puro — ao cadastrar, a senha é hasheada antes de ir ao banco; ao autenticar, a verificação é feita com `argon2.verify`, que já compara o hash de forma segura internamente.
 
+### Autenticação e proteção de rotas
+
+O projeto passou a incluir um fluxo completo de autenticação por **JWT** para manter a sessão do usuário após o login. O cadastro continua funcionando em `POST /api/usuarios`, e o login foi adicionado em `POST /api/usuarios/login`. Quando o usuário faz login com e-mail e senha válidos, o backend gera um token com `jsonwebtoken` e o retorna no corpo da resposta. Esse token deve ser enviado no header `Authorization: Bearer <token>` em rotas privadas.
+
+A proteção é realizada por um middleware (`src/middlewares/authMiddleware.ts`), que valida o token, identifica o usuário autenticado e injeta os dados no `req.user`. A rota `GET /api/usuarios/perfil` serve como exemplo de funcionalidade acessível apenas para usuários autenticados. Caso o cliente envie o token ausente, inválido ou expirado, a aplicação responde com `401 Unauthorized` e uma mensagem padronizada pela classe `HttpError`.
+
 ### Banco de dados empregado
 
 **SQLite**, banco relacional leve armazenado em um único arquivo local (`backend/src/database/db.sqlite`), adequado para o escopo do projeto por não exigir servidor de banco separado.

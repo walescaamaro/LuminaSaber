@@ -25,8 +25,8 @@ enum Tipo {
 model Usuario {
   cod_usuario  Int       @id @default(autoincrement()) @map("cod_usuario")
   nome         String    @map("nome")
-  email        String    @map("email")
-  senha        String    @unique @map("senha")
+  email        String    @unique @map("email")
+  senha        String    @map("senha")
   grau_escolar String?   @map("grau_escolar")
   data_nasc    DateTime  @map("data_nasc")
   tipo         Tipo      @map("tipo")

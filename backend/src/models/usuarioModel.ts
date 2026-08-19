@@ -1,12 +1,41 @@
 import { prisma } from '../lib/prisma.js';
 import { hashPassword } from '../lib/crypto.js';
-import type { UsuarioCreatePayload, UsuarioListItem } from '../types/usuario.js';
+import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
 
 export const UsuarioModel = {
   async buscarPorEmail(email: string) {
     return prisma.usuario.findFirst({
       where: { email },
       select: { cod_usuario: true },
+    });
+  },
+
+  async buscarPorEmailCompleto(email: string) {
+    return prisma.usuario.findFirst({
+      where: { email },
+      select: {
+        cod_usuario: true,
+        nome: true,
+        email: true,
+        senha: true,
+        tipo: true,
+        grau_escolar: true,
+        data_nasc: true,
+      },
+    });
+  },
+
+  async buscarPorId(codUsuario: number) {
+    return prisma.usuario.findUnique({
+      where: { cod_usuario: codUsuario },
+      select: {
+        cod_usuario: true,
+        nome: true,
+        email: true,
+        grau_escolar: true,
+        data_nasc: true,
+        tipo: true,
+      },
     });
   },
 

@@ -7,8 +7,7 @@
 */
 
 import { prisma } from '../lib/prisma.js';
-
-
+import { hashPassword } from '../lib/crypto.js';
 
 async function runSeed() {
   console.log('▶ Iniciando seed...');
@@ -27,10 +26,21 @@ async function runSeed() {
     { cod_usuario: 65928, nome: 'Fernanda Alves',  email: 'fernanda@gmail.com',    senha: 'fna1',  grau_escolar: '8° ano', data_nasc: new Date('2011-07-25'), tipo: 'aluno'          as const },
   ];
   for (const u of usuarios) {
+    const senhaHash = await hashPassword(u.senha);
     await prisma.usuario.upsert({
       where:  { cod_usuario: u.cod_usuario },
-      update: {},
-      create: u,
+      update: {
+        nome: u.nome,
+        email: u.email,
+        senha: senhaHash,
+        grau_escolar: u.grau_escolar,
+        data_nasc: u.data_nasc,
+        tipo: u.tipo,
+      },
+      create: {
+        ...u,
+        senha: senhaHash,
+      },
     });
   }
   console.log(`  ✓ ${usuarios.length} usuários.`);

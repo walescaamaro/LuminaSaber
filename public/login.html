@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #00e1e1;
+            font-family: 'DM Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            width: min(90vw, 900px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container h2 {
+            font-size: 34px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 auto 36px;
+            color: #000;
+            position: relative;
+            display: block;
+            width: min(100%, 700px);
+            z-index: 0;
+        }
+
+        .form-container h2::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 58px;
+            background-color: rgba(255, 255, 255, 0.658);
+            z-index: -1;
+            border-radius: 2px;
+        }
+
+        form {
+            width: min(100%, 700px);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            background: transparent;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #00b3b3;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        button {
+            width: 50%;
+            padding: 14px;
+            background-color: #22609b;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #daa700;
+        }
+
+        .link-cadastro {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .link-cadastro a {
+            color: #0d3d6b;
+            text-decoration: underline;
+        }
+
+        #mensagem {
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2 class="title">Entre aqui</h2>
+
+        <form id="formLogin">
+            <div class="field">
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+
+            <div class="field">
+                <input type="password" id="senha" placeholder="Senha" required>
+            </div>
+
+            <div class="btn">
+                <button type="submit">Entrar</button>
+            </div>
+        </form>
+
+        <p id="mensagem"></p>
+
+        <div class="link-cadastro">
+            Ainda não tem conta? <a href="/cadastro">Cadastre-se</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value;
+            const msg = document.getElementById('mensagem');
+
+            if (!email || !senha) {
+                msg.style.color = 'red';
+                msg.textContent = 'Preencha e-mail e senha.';
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/usuarios/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const dados = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('luminasaber_token', dados.token);
+                    localStorage.setItem('luminasaber_user', JSON.stringify(dados.usuario));
+                    msg.style.color = 'green';
+                    msg.textContent = 'Login realizado com sucesso!';
+                    setTimeout(() => window.location.href = '/', 800);
+                } else {
+                    msg.style.color = 'red';
+                    msg.textContent = dados.error || 'Falha ao fazer login.';
+                }
+            } catch (err) {
+                msg.style.color = 'red';
+                msg.textContent = 'Não foi possível conectar ao servidor.';
+            }
+        });
+    </script>
+</body>
+</html>
