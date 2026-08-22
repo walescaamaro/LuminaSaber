@@ -150,7 +150,8 @@
             Ainda não tem conta? <a href="/cadastro">Cadastre-se</a>
         </div>
     </div>
-
+    <script src="/js/auth.js"></script>
+    <script>redirecionarSeAutenticado();</script>
     <script>
         document.getElementById('formLogin').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -175,11 +176,10 @@
                 const dados = await res.json();
 
                 if (res.ok) {
-                    localStorage.setItem('luminasaber_token', dados.token);
-                    localStorage.setItem('luminasaber_user', JSON.stringify(dados.usuario));
+                    salvarSessao(dados.token, dados.usuario);
                     msg.style.color = 'green';
                     msg.textContent = 'Login realizado com sucesso!';
-                    setTimeout(() => window.location.href = '/', 800);
+                    setTimeout(() => window.location.replace('/painel'), 600);
                 } else {
                     msg.style.color = 'red';
                     msg.textContent = dados.error || 'Falha ao fazer login.';

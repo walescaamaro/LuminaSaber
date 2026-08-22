@@ -1,0 +1,91 @@
+<!-- public/painel.html (substitua tudo) -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel · LuminaSaber</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background-color: #00e1e1; display: flex; justify-content: center;
+            align-items: center; padding: 24px;
+        }
+        .painel {
+            background-color: rgba(255, 255, 255, 0.9); width: min(92vw, 520px);
+            border-radius: 20px; padding: 44px 36px; text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        .saudacao {
+            font-size: 15px; font-weight: 600; color: #22609b; margin: 0 0 4px;
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        h1 { font-size: 30px; font-weight: 700; margin: 0 0 36px; color: #000; }
+        .menu { display: grid; gap: 16px; }
+        .menu button {
+            width: 100%; padding: 16px 20px; border-radius: 14px; border: 2px solid #000;
+            background-color: #bbbeff; font-family: 'DM Sans', sans-serif; font-size: 16px;
+            font-weight: 700; color: #000; cursor: pointer; transition: background-color 0.2s;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .menu button:hover { background-color: #daa700; }
+        .menu button.admin { background-color: #ffb300; }
+        .menu button.admin:hover { background-color: #c3ff00; }
+        .menu button.sair { background-color: transparent; border-color: #b00020; color: #b00020; margin-top: 12px; }
+        .menu button.sair:hover { background-color: #b00020; color: #fff; }
+        .icone { font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div class="painel">
+        <p class="saudacao" id="saudacao">Olá!</p>
+        <h1>O que vamos fazer hoje?</h1>
+
+        <div class="menu" id="menu">
+            <button onclick="location.href='/selecao'">
+                <span class="icone">🚀</span> Começar a estudar
+            </button>
+            <button onclick="location.href='/anotacoes'">
+                <span class="icone">📝</span> Minhas anotações
+            </button>
+            <button onclick="location.href='/historico'">
+                <span class="icone">📊</span> Meu histórico
+            </button>
+            <button class="sair" id="btnSair">
+                <span class="icone">🚪</span> Sair da conta
+            </button>
+        </div>
+    </div>
+
+    <script>
+        (async function carregarPerfil() {
+            try {
+                const res = await fetchAutenticado('/api/usuarios/perfil');
+                const dados = await res.json();
+                document.getElementById('saudacao').textContent = `Olá, ${dados.usuario.nome.split(' ')[0]}!`;
+
+                if (dados.usuario.tipo === 'administrador') {
+                    const botaoAdmin = document.createElement('button');
+                    botaoAdmin.className = 'admin';
+                    botaoAdmin.innerHTML = '<span class="icone">⚙️</span> Cadastrar questão (admin)';
+                    botaoAdmin.onclick = () => location.href = '/admin';
+                    document.getElementById('menu').insertBefore(botaoAdmin, document.getElementById('btnSair'));
+                }
+            } catch (err) {
+                // fetchAutenticado já redireciona pro /login em caso de 401
+            }
+        })();
+
+        document.getElementById('btnSair').addEventListener('click', sair);
+    </script>
+</body>
+</html>

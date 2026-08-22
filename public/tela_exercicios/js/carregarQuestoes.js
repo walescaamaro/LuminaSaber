@@ -1,10 +1,4 @@
-/**
- * Carrega as questões da API e exibe na tela com filtro por disciplina e busca.
- * Integra com localStorage para persistência de respostas e acompanhamento de meta.
- *
- * MODIFICADO: agora salva dados completos de cada questão (enunciado, nível,
- * resposta escolhida, resposta correta) para permitir análise de IA no relatório.
- */
+// public/tela_exercicios/js/carregarQuestoes.js (substitua tudo)
 export async function carregarQuestoes() {
     try {
         const resposta = await fetch('/api/questoes');
@@ -22,31 +16,23 @@ export async function carregarQuestoes() {
         const materiasSelecionadas = JSON.parse(localStorage.getItem("materias") || "[]");
         const metaQuestoes         = parseInt(localStorage.getItem("metaQuestoes") || "0");
 
-        // Limpar resultados anteriores
         localStorage.removeItem('resultadosQuestoes');
 
         let resultados       = [];
         let questRespondidas = 0;
 
-        // Filtrar pelas matérias selecionadas
         const questoesFiltradas = materiasSelecionadas.length > 0
             ? questoes.filter(q => materiasSelecionadas.includes(q.materia))
             : questoes;
 
-        // Embaralhar para variar a ordem
         const todasQuestoes = [...questoesFiltradas].sort(() => Math.random() - 0.5);
 
         atualizarContadorMeta(questRespondidas, metaQuestoes);
 
-        /**
-         * Salva os resultados no localStorage e verifica se a meta foi atingida.
-         * Se atingida, redireciona para a tela de relatório.
-         */
         function salvarEVerificarMeta() {
             localStorage.setItem('resultadosQuestoes', JSON.stringify(resultados));
             atualizarContadorMeta(questRespondidas, metaQuestoes);
 
-            // Se bateu a meta, vai para o relatório após 1.5s
             if (metaQuestoes > 0 && questRespondidas >= metaQuestoes) {
                 const avisoMeta = document.getElementById('avisoMeta');
                 if (avisoMeta) avisoMeta.style.display = 'block';
@@ -54,11 +40,6 @@ export async function carregarQuestoes() {
             }
         }
 
-        /**
-         * Renderiza a lista de questões no DOM.
-         * Cada questão exibe enunciado, alternativas e feedback de acerto/erro.
-         * @param {Array} listaQuestoes - Array de questões a exibir
-         */
         function exibirQuestoes(listaQuestoes) {
             lista.innerHTML = "";
 
@@ -67,7 +48,6 @@ export async function carregarQuestoes() {
                 return;
             }
 
-            // Exibe TODAS as questões — o usuário escolhe quantas quer responder
             listaQuestoes.forEach((q, index) => {
                 const div = document.createElement("div");
                 div.classList.add("questao");
@@ -115,7 +95,6 @@ export async function carregarQuestoes() {
                     btn.style.opacity = '0.6';
                     questRespondidas++;
 
-                    // ── MODIFICADO: salva dados completos da questão ──
                     resultados.push({
                         materia:          q.materia,
                         nivel:            q.nivel,
@@ -126,12 +105,22 @@ export async function carregarQuestoes() {
                         acertou
                     });
 
+                    // ── NOVO: salva a resposta no banco, no histórico do usuário logado ──
+                    const letras = ['a', 'b', 'c', 'd'];
+                    fetchAutenticado('/api/historico', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cod_quest: q.id, alternativa: letras[escolhido] })
+                    }).catch(() => {
+                        // Se falhar, não trava a experiência do aluno — o resultado
+                        // já foi mostrado na tela normalmente.
+                    });
+
                     salvarEVerificarMeta();
                 });
             });
         }
 
-        // Evento de busca/filtro em tempo real
         if (inputPesquisa) {
             inputPesquisa.addEventListener('input', () => {
                 const termo = inputPesquisa.value.toLowerCase();
@@ -143,7 +132,6 @@ export async function carregarQuestoes() {
             });
         }
 
-        // Exibe todas as questões disponíveis inicialmente
         exibirQuestoes(todasQuestoes);
 
     } catch (erro) {
@@ -155,12 +143,6 @@ export async function carregarQuestoes() {
     }
 }
 
-/**
- * Atualiza o contador de questões respondidas na tela.
- * Muda a cor para verde quando a meta é atingida.
- * @param {number} respondidas - Quantidade de questões respondidas
- * @param {number} meta - Meta de questões a responder (0 = sem meta)
- */
 function atualizarContadorMeta(respondidas, meta) {
     const el = document.getElementById('contadorMeta');
     if (!el) return;

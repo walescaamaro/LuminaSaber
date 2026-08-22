@@ -1,0 +1,125 @@
+<!-- public/anotacoes.html (substitua tudo) -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Anotações · LuminaSaber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif; background-color: #00e1e1; padding: 40px 20px; }
+        .wrapper { max-width: 720px; margin: 0 auto; }
+        .voltar { display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000; text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px; }
+        h1 { background-color: rgba(255, 255, 255, 0.658); display: inline-block; padding: 10px 20px; border-radius: 10px; font-size: 28px; margin: 0; }
+
+        .form-nova { background: rgba(255,255,255,0.92); border-radius: 14px; padding: 20px 24px; margin-top: 24px; display: grid; gap: 12px; }
+        .form-nova input, .form-nova textarea {
+            width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid #ccc;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; resize: vertical;
+        }
+        .form-nova input:focus, .form-nova textarea:focus { border-color: #00b3b3; }
+        .form-nova button {
+            justify-self: start; padding: 10px 22px; background-color: #22609b; color: white;
+            border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+        }
+        .form-nova button:hover { background-color: #daa700; }
+        #mensagemForm { font-weight: 600; font-size: 13px; margin: 0; }
+
+        .lista { display: grid; gap: 16px; margin-top: 24px; }
+        .card { background: rgba(255,255,255,0.92); border-radius: 14px; padding: 20px 24px; }
+        .card h3 { margin: 0 0 8px; color: #22609b; }
+        .card p { margin: 0 0 8px; color: #222; }
+        .card time { font-size: 12px; color: #666; }
+        .vazio { background: rgba(255,255,255,0.85); padding: 24px; border-radius: 14px; text-align: center; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a class="voltar" href="/painel">&larr; Voltar ao painel</a>
+        <h1>📝 Minhas anotações</h1>
+
+        <form class="form-nova" id="formNovaAnotacao">
+            <input type="text" id="titulo" placeholder="Título da anotação" required maxlength="120">
+            <textarea id="texto" rows="3" placeholder="Escreva sua anotação..." required></textarea>
+            <button type="submit">Salvar anotação</button>
+            <p id="mensagemForm"></p>
+        </form>
+
+        <div class="lista" id="lista"><p class="vazio">Carregando...</p></div>
+    </div>
+
+    <script>
+        async function carregarAnotacoes() {
+            const lista = document.getElementById('lista');
+            try {
+                const res = await fetchAutenticado('/api/anotacoes');
+                const anotacoes = await res.json();
+
+                if (!res.ok) {
+                    lista.innerHTML = `<p class="vazio">${anotacoes.error || 'Não foi possível carregar suas anotações.'}</p>`;
+                    return;
+                }
+                if (anotacoes.length === 0) {
+                    lista.innerHTML = '<p class="vazio">Você ainda não tem anotações salvas.</p>';
+                    return;
+                }
+
+                lista.innerHTML = anotacoes.map(a => `
+                    <div class="card">
+                        <h3>${a.titulo}</h3>
+                        <p>${a.texto_anota}</p>
+                        <time>${a.data_anota}</time>
+                    </div>
+                `).join('');
+            } catch (err) {
+                lista.innerHTML = '<p class="vazio">Não foi possível conectar ao servidor.</p>';
+            }
+        }
+
+        document.getElementById('formNovaAnotacao').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const titulo = document.getElementById('titulo').value.trim();
+            const texto  = document.getElementById('texto').value.trim();
+            const msg    = document.getElementById('mensagemForm');
+
+            if (!titulo || !texto) {
+                msg.style.color = 'red';
+                msg.textContent = 'Preencha o título e o texto.';
+                return;
+            }
+
+            try {
+                const res = await fetchAutenticado('/api/anotacoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ titulo, texto_anota: texto })
+                });
+                const dados = await res.json();
+
+                if (res.ok) {
+                    msg.style.color = 'green';
+                    msg.textContent = 'Anotação salva!';
+                    document.getElementById('formNovaAnotacao').reset();
+                    carregarAnotacoes();
+                } else {
+                    msg.style.color = 'red';
+                    msg.textContent = dados.error || 'Não foi possível salvar.';
+                }
+            } catch (err) {
+                msg.style.color = 'red';
+                msg.textContent = 'Não foi possível conectar ao servidor.';
+            }
+        });
+
+        carregarAnotacoes();
+    </script>
+</body>
+</html>

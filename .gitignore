@@ -3,4 +3,3 @@ node_modules/
 generated/
 .env
 .env.example
-prisma/migrations/

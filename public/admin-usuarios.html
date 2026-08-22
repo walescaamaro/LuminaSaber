@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Usuários · LuminaSaber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background-color: #00e1e1; padding: 40px 20px;
+        }
+        .wrapper { max-width: 780px; margin: 0 auto; }
+        .voltar {
+            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
+            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+        }
+        h1 {
+            background-color: rgba(255, 255, 255, 0.658); display: inline-block;
+            padding: 10px 20px; border-radius: 10px; font-size: 26px; margin: 0 0 24px;
+        }
+        .lista { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+        .item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; border-bottom: 1px solid #eee;
+        }
+        .item:last-child { border-bottom: none; }
+        .item .nome { font-weight: 700; }
+        .item .tipo { font-size: 12px; color: #666; margin-left: 8px; }
+        .item button {
+            background: #b8bfc7; color: #000; border: none; padding: 6px 16px;
+            border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px;
+        }
+        .item button:hover { background: #9aa3ad; }
+
+        /* Painel de perfil */
+        .perfil {
+            display: none; background: #fff; border-radius: 14px; padding: 24px;
+            margin-top: 20px; box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+        }
+        .perfil.aberto { display: block; }
+        .perfil h2 { margin-top: 0; }
+        .perfil p { margin: 4px 0; }
+        .perfil .fechar {
+            float: right; background: none; border: none; font-size: 18px;
+            cursor: pointer; color: #666;
+        }
+        .perfil h3 { margin-top: 20px; font-size: 15px; border-top: 1px solid #eee; padding-top: 16px; }
+        .hist-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid #f2f2f2; font-size: 13px;
+        }
+        .status { font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 12px; }
+        .status.acertou { background: #d4f7dc; color: #1a7f37; }
+        .status.errou { background: #ffd9d9; color: #b00020; }
+        .vazio { color: #999; font-style: italic; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
+        <h1>👤 Gerenciamento de Usuários</h1>
+
+        <div class="lista" id="lista">
+            <div class="item"><span class="vazio">Carregando...</span></div>
+        </div>
+
+        <div class="perfil" id="perfil">
+            <button class="fechar" onclick="fecharPerfil()">✕</button>
+            <h2 id="perfilNome">—</h2>
+            <p><strong>Nível de perfil:</strong> <span id="perfilTipo"></span></p>
+            <p><strong>E-mail cadastrado:</strong> <span id="perfilEmail"></span></p>
+            <p><strong>Grau escolar:</strong> <span id="perfilGrau"></span></p>
+            <h3>Histórico de exercícios</h3>
+            <div id="perfilHistorico"><p class="vazio">Carregando...</p></div>
+        </div>
+    </div>
+
+    <script>
+        let usuarios = [];
+
+        async function carregarUsuarios() {
+            const lista = document.getElementById('lista');
+            try {
+                const res = await fetchAutenticado('/api/usuarios');
+                usuarios = await res.json();
+
+                if (!res.ok) {
+                    lista.innerHTML = `<div class="item"><span class="vazio">${usuarios.error || 'Não foi possível carregar os usuários.'}</span></div>`;
+                    return;
+                }
+                if (usuarios.length === 0) {
+                    lista.innerHTML = '<div class="item"><span class="vazio">Nenhum usuário cadastrado ainda.</span></div>';
+                    return;
+                }
+
+                lista.innerHTML = usuarios.map(u => `
+                    <div class="item">
+                        <span><span class="nome">${u.nome}</span><span class="tipo">${u.tipo === 'administrador' ? 'Administrador' : 'Aluno'}</span></span>
+                        <button onclick="abrirPerfil(${u.cod_usuario})">Acessar perfil</button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                lista.innerHTML = '<div class="item"><span class="vazio">Não foi possível conectar ao servidor.</span></div>';
+            }
+        }
+
+        async function abrirPerfil(id) {
+            const usuario = usuarios.find(u => u.cod_usuario === id);
+            if (!usuario) return;
+
+            document.getElementById('perfilNome').textContent = usuario.nome;
+            document.getElementById('perfilTipo').textContent = usuario.tipo === 'administrador' ? 'Administrador' : 'Aluno';
+            document.getElementById('perfilEmail').textContent = usuario.email;
+            document.getElementById('perfilGrau').textContent = usuario.grau_escolar || '—';
+
+            const historicoEl = document.getElementById('perfilHistorico');
+            historicoEl.innerHTML = '<p class="vazio">Carregando...</p>';
+
+            document.getElementById('perfil').classList.add('aberto');
+            document.getElementById('perfil').scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const res = await fetchAutenticado(`/api/admin/usuarios/${id}/historico`);
+                const historico = await res.json();
+
+                if (!res.ok) {
+                    historicoEl.innerHTML = `<p class="vazio">${historico.error || 'Não foi possível carregar o histórico.'}</p>`;
+                    return;
+                }
+                if (historico.length === 0) {
+                    historicoEl.innerHTML = '<p class="vazio">Este usuário ainda não respondeu nenhuma questão.</p>';
+                    return;
+                }
+
+                historicoEl.innerHTML = historico.map(h => `
+                    <div class="hist-item">
+                        <span><strong>${h.questao.materia}</strong> — ${h.questao.enunciado}</span>
+                        <span class="status ${h.status === 'Acertou' ? 'acertou' : 'errou'}">${h.status}</span>
+                    </div>
+                `).join('');
+            } catch (err) {
+                historicoEl.innerHTML = '<p class="vazio">Não foi possível conectar ao servidor.</p>';
+            }
+        }
+
+        function fecharPerfil() {
+            document.getElementById('perfil').classList.remove('aberto');
+        }
+
+        carregarUsuarios();
+    </script>
+</body>
+</html>

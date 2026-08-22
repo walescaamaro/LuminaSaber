@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parâmetros do Sistema · LuminaSaber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background-color: #00e1e1; padding: 40px 20px;
+        }
+        .wrapper { max-width: 900px; margin: 0 auto; }
+        .voltar {
+            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
+            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+        }
+        .aviso {
+            background: #fff3cd; border: 1px solid #ffe08a; color: #7a5b00; padding: 12px 16px;
+            border-radius: 10px; font-size: 13px; margin-bottom: 20px; font-weight: 600;
+        }
+        .faixa {
+            background-color: #e0c184; padding: 10px 20px; border-radius: 10px 10px 0 0;
+            font-weight: 700; text-align: center;
+        }
+        .painel { background: #fff; border-radius: 0 0 14px 14px; padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+        .coluna h2 { font-size: 16px; text-decoration: underline; margin-top: 0; }
+        label { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 6px; }
+        input[type="text"], select, textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid #b8c0c8; border-radius: 8px;
+            font-family: 'DM Sans', sans-serif; font-size: 14px;
+        }
+        button.acao {
+            margin-top: 16px; padding: 10px 20px; border: none; border-radius: 8px;
+            background: #cfcfcf; color: #444; font-weight: 700; cursor: not-allowed;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .toggle { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; }
+        .toggle span { font-weight: 700; font-size: 14px; }
+        .reset {
+            width: 100%; margin-top: 20px; padding: 12px; border: none; border-radius: 10px;
+            background: #1f5fa6; color: #fff; font-weight: 700; cursor: not-allowed;
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
+
+        <div class="aviso">
+            ⚠️ Esta tela é apenas uma demonstração visual do protótipo — nenhum campo aqui salva
+            dados de verdade. Não há tabela no banco para "parâmetros do sistema" ainda.
+        </div>
+
+        <div class="faixa">Parâmetros de Sistema</div>
+        <div class="painel">
+            <div class="coluna">
+                <h2>Informações Gerais</h2>
+                <label>Nome da Plataforma</label>
+                <input type="text" value="LuminaSaber" disabled>
+                <label>E-mail de Suporte</label>
+                <input type="text" value="suporte@luminasaber.com" disabled>
+                <label>Tempo padrão de estudo</label>
+                <select disabled><option>30 minutos</option></select>
+                <button class="acao" disabled>Salvar Alterações</button>
+            </div>
+            <div class="coluna">
+                <h2>Parâmetros Técnicos</h2>
+                <label>Manutenção Programada</label>
+                <input type="text" placeholder="..." disabled>
+                <div class="toggle">
+                    <span>Modo Manutenção</span>
+                    <input type="checkbox" disabled>
+                    <span>OFF</span>
+                </div>
+                <label>Mensagem exibida para usuários</label>
+                <textarea rows="2" disabled>Aguarde! Estamos em manutenção!</textarea>
+                <label>Backup Automático</label>
+                <select disabled><option>Selecione...</option></select>
+                <button class="acao" disabled>Aplicar Configurações</button>
+            </div>
+        </div>
+        <button class="reset" disabled>Resetar cache do sistema</button>
+    </div>
+</body>
+</html>

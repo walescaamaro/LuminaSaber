@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nova Questão</title>
 
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -121,7 +124,7 @@
 </head>
 <body>
 
-    <a href="/" class="voltar">← Voltar para a Home</a>
+    <a href="/admin" class="voltar">← Voltar ao gerenciamento</a>
 
     <div class="container">
         <div class="title">
@@ -310,14 +313,14 @@
 
             if (editandoId) {
                 // PUT — atualizar questão existente
-                res = await fetch(`/api/questoes/${editandoId}`, {
+                res = await fetchAutenticado(`/api/questoes/${editandoId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body
                 });
             } else {
                 // POST — nova questão
-                res = await fetch('/api/questoes', {
+                res = await fetchAutenticado('/api/questoes', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body
@@ -350,7 +353,7 @@
         if (!confirm(`Excluir questão ID ${id}?`)) return;
 
         try {
-            const res = await fetch(`/api/questoes/${id}`, { method: 'DELETE' });
+            const res = await fetchAutenticado(`/api/questoes/${id}`, { method: 'DELETE' });
             const dados = await res.json();
 
             if (res.ok) {

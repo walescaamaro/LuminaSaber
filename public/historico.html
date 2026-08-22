@@ -1,0 +1,69 @@
+<!-- public/historico.html (novo) -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Histórico · LuminaSaber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif; background-color: #00e1e1; padding: 40px 20px; }
+        .wrapper { max-width: 720px; margin: 0 auto; }
+        .voltar { display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000; text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px; }
+        h1 { background-color: rgba(255, 255, 255, 0.658); display: inline-block; padding: 10px 20px; border-radius: 10px; font-size: 28px; margin: 0; }
+        .lista { display: grid; gap: 12px; margin-top: 24px; }
+        .card { background: rgba(255,255,255,0.92); border-radius: 14px; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .card p { margin: 0; color: #222; }
+        .card small { color: #666; }
+        .status { font-weight: 700; padding: 6px 14px; border-radius: 999px; font-size: 13px; white-space: nowrap; }
+        .status.acertou { background: #d4f7dc; color: #1a7f37; }
+        .status.errou { background: #ffd9d9; color: #b00020; }
+        .vazio { background: rgba(255,255,255,0.85); padding: 24px; border-radius: 14px; text-align: center; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a class="voltar" href="/painel">&larr; Voltar ao painel</a>
+        <h1>📊 Meu histórico</h1>
+        <div class="lista" id="lista"><p class="vazio">Carregando...</p></div>
+    </div>
+
+    <script>
+        (async function carregarHistorico() {
+            const lista = document.getElementById('lista');
+            try {
+                const res = await fetchAutenticado('/api/historico');
+                const historico = await res.json();
+
+                if (!res.ok) {
+                    lista.innerHTML = `<p class="vazio">${historico.error || 'Não foi possível carregar seu histórico.'}</p>`;
+                    return;
+                }
+                if (historico.length === 0) {
+                    lista.innerHTML = '<p class="vazio">Você ainda não respondeu nenhuma questão.</p>';
+                    return;
+                }
+
+                lista.innerHTML = historico.map(h => `
+                    <div class="card">
+                        <div>
+                            <p><strong>${h.questao.materia}</strong> — ${h.questao.enunciado}</p>
+                            <small>${h.data_resposta}</small>
+                        </div>
+                        <span class="status ${h.status === 'Acertou' ? 'acertou' : 'errou'}">${h.status}</span>
+                    </div>
+                `).join('');
+            } catch (err) {
+                lista.innerHTML = '<p class="vazio">Não foi possível conectar ao servidor.</p>';
+            }
+        })();
+    </script>
+</body>
+</html>

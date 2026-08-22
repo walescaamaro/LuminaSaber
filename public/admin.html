@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento do Sistema · LuminaSaber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background-color: #00e1e1; padding: 40px 20px;
+        }
+        .wrapper { max-width: 960px; margin: 0 auto; }
+        .voltar {
+            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
+            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+        }
+        h1 {
+            background-color: rgba(255, 255, 255, 0.658); display: inline-block;
+            padding: 10px 20px; border-radius: 10px; font-size: 28px; margin: 0 0 28px;
+        }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .card {
+            background: #fff; border-radius: 14px; padding: 32px 20px; text-align: center;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+            align-items: center; gap: 16px;
+        }
+        .card .icone { font-size: 40px; }
+        .card h2 { font-size: 18px; margin: 0; }
+        .card button {
+            background-color: #1f5fa6; color: #fff; border: none; padding: 10px 24px;
+            border-radius: 10px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; font-size: 14px;
+        }
+        .card button:hover { background-color: #174b85; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a class="voltar" href="/painel">&larr; Voltar ao painel</a>
+        <h1>⚙️ Gerenciamento do Sistema</h1>
+
+        <div class="cards">
+            <div class="card">
+                <span class="icone">⚙️</span>
+                <h2>Parâmetros do Sistema</h2>
+                <button onclick="location.href='/admin-parametros'">Acessar</button>
+            </div>
+            <div class="card">
+                <span class="icone">👤</span>
+                <h2>Gerenciamento de Usuários</h2>
+                <button onclick="location.href='/admin-usuarios'">Acessar</button>
+            </div>
+            <div class="card">
+                <span class="icone">📋</span>
+                <h2>Gerenciamento de Questões</h2>
+                <button onclick="location.href='/cadastro-exercicios'">Acessar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

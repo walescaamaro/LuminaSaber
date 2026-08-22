@@ -1,3 +1,4 @@
+<!-- public/home.html (substitua tudo) -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -7,6 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Se já estiver logado, não faz sentido mostrar a home pública:
+         o usuário é enviado direto para o painel. -->
+    <script src="/js/auth.js"></script>
+    <script>redirecionarSeAutenticado();</script>
+
     <style>
         * { box-sizing: border-box; }
 
@@ -19,13 +26,11 @@
             align-items: center;
             position: relative;
             overflow-x: hidden;
-
-            /* Plano de fundo único, substitui todas as imagens posicionadas manualmente */
             background-image: url('Home (1).png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-color: #00e1e1; /* fallback enquanto a imagem carrega */
+            background-color: #00e1e1;
         }
 
         .retangulo {
@@ -38,7 +43,6 @@
             margin-top: 100px;
         }
 
-        /* Botões no canto superior direito: Suporte, Cadastro, Login */
         .container {
             position: fixed;
             top: 20px;
@@ -55,27 +59,9 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-        }
-
-        /* Botão "Começar a Estudar" na parte inferior */
-        .btn-comecar {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #bbbeff;
-            color: #000000;
-            border: 2px solid #000;
-            padding: 12px 28px;
-            border-radius: 18px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 3;
-            text-decoration: none;
             transition: background-color 0.3s;
         }
-        .btn-comecar:hover { background-color: #daa700; }
+        .btn:hover { background-color: #daa700; }
 
         .menu {
             position: fixed;
@@ -85,32 +71,11 @@
             font-weight: 700;
             z-index: 3;
         }
-
-        .btn-admin {
-            position: fixed;
-            bottom: 25px;
-            right: 20px;
-            background-color: #ffb300;
-            color: #000000;
-            border: 2px solid #000;
-            padding: 14px 28px;
-            border-radius: 18px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 3;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        .btn-admin:hover { background-color: #c3ff00; }
     </style>
 </head>
 <body>
-    <a href="/cadastro-exercicios" class="btn-admin">⚙ Admin: Cadastrar Questão</a>
-
     <div class="menu">HOME | SOBRE A PLATAFORMA</div>
 
-    <!-- Suporte, Cadastro e Login -->
     <div class="container">
         <button class="btn">Contato e Suporte</button>
         <button class="btn" onclick="location.href='/cadastro'">Cadastro</button>
@@ -125,8 +90,5 @@
             A plataforma também ajuda na organização dos estudos com relatórios de desempenho e um espaço para anotações digitais.
         </b></p>
     </div>
-
-    <!-- Botão "Começar a Estudar" -->
-    <a href="/selecao" class="btn-comecar">Começar a Estudar</a>
 </body>
 </html>
