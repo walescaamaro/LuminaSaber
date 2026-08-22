@@ -164,6 +164,7 @@
         <p id="mensagem" style="text-align:center; margin-top:16px; font-weight:600;"></p>
     </div>
 
+    <script src="/js/auth.js"></script>
     <script>
         document.getElementById('formCadastro').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -212,9 +213,8 @@
                 const dados = await res.json();
 
                 if (res.ok) {
-                    msg.style.color = 'green';
-                    msg.textContent = 'Cadastro realizado com sucesso!';
-                    document.getElementById('formCadastro').reset();
+                    salvarSessao(dados.token, dados.usuario);
+                    window.location.replace('/painel');
                 } else {
                     msg.style.color = 'red';
                     // Mensagem vinda do backend (e-mail duplicado, senha em uso, etc.)

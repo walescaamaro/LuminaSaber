@@ -10,18 +10,22 @@ const OITO_HORAS_MS = 8 * 60 * 60 * 1000;
 
 export const UsuarioController = {
   async criar(req: Request, res: Response, next: NextFunction) {
-    const { nome, email, senha, grau_escolar, data_nasc, tipo } = req.body as UsuarioCreatePayload;
+    const { nome, email, senha, grau_escolar, data_nasc } = req.body as UsuarioCreatePayload;
 
-    if (!nome || !email || !senha || !data_nasc || !tipo) {
+    if (!nome || !email || !senha || !data_nasc) {
       return next(new HttpError(400, 'Preencha todos os campos obrigatórios.'));
     }
 
-    const tipoUsuario = tipo as UsuarioTipo;
-    if (!['administrador', 'aluno'].includes(tipoUsuario)) {
-      return next(new HttpError(400, 'Tipo deve ser "administrador" ou "aluno".'));
+    if (nome.trim().length < 2) {
+      return next(new HttpError(400, 'O nome deve ter pelo menos 2 caracteres.'));
     }
 
-    if (tipoUsuario === 'aluno' && !grau_escolar) {
+    const dataNascimento = new Date(`${data_nasc}T00:00:00`);
+    if (Number.isNaN(dataNascimento.getTime()) || dataNascimento > new Date()) {
+      return next(new HttpError(400, 'Informe uma data de nascimento válida.'));
+    }
+
+    if (!grau_escolar) {
       return next(new HttpError(400, 'Alunos devem informar o grau escolar.'));
     }
 
@@ -30,25 +34,64 @@ export const UsuarioController = {
     }
 
     try {
-      const emailExiste = await UsuarioModel.buscarPorEmail(email);
+      const emailNormalizado = email.trim().toLowerCase();
+      const emailExiste = await UsuarioModel.buscarPorEmail(emailNormalizado);
       if (emailExiste) {
         return next(new HttpError(409, 'Este e-mail já está cadastrado. Use outro e-mail.'));
       }
 
-      const id = await UsuarioModel.criar({ nome, email, senha, grau_escolar, data_nasc, tipo: tipoUsuario });
-      return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!', id });
+      await UsuarioModel.criar({
+        nome: nome.trim(),
+        email: emailNormalizado,
+        senha,
+        grau_escolar,
+        data_nasc,
+        tipo: 'aluno',
+      });
+
+      const usuario = await UsuarioModel.buscarPorEmailCompleto(emailNormalizado);
+      if (!usuario) {
+        return next(new HttpError(500, 'Não foi possível iniciar a sessão.'));
+      }
+
+      const token = generateToken({
+        id: usuario.cod_usuario,
+        email: usuario.email,
+        tipo: usuario.tipo,
+      });
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: OITO_HORAS_MS,
+      });
+
+      return res.status(201).json({
+        mensagem: 'Usuário cadastrado com sucesso!',
+        token,
+        usuario: {
+          cod_usuario: usuario.cod_usuario,
+          nome: usuario.nome,
+          email: usuario.email,
+          tipo: usuario.tipo,
+          grau_escolar: usuario.grau_escolar,
+          data_nasc: usuario.data_nasc.toISOString().slice(0, 10),
+        },
+      });
     } catch (error) {
       return next(error);
     }
   },
 
   async login(req: Request, res: Response, next: NextFunction) {
-    const { email, senha } = req.body as { email?: string; senha?: string };
+    const { email: emailInformado, senha } = req.body as { email?: string; senha?: string };
 
-    if (!email || !senha) {
+    if (!emailInformado || !senha) {
       return next(new HttpError(400, 'E-mail e senha são obrigatórios.'));
     }
 
+    const email = emailInformado.trim().toLowerCase();
     if (!emailRegex.test(email)) {
       return next(new HttpError(400, 'E-mail inválido.'));
     }

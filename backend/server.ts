@@ -20,6 +20,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  throw new Error('Configure JWT_SECRET no arquivo .env com pelo menos 32 caracteres.');
+}
 const port = process.env.PORT || 3000;
 const publicDir = path.join(__dirname, '..', 'public');
 

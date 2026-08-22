@@ -2,4 +2,3 @@ node_modules/
 *.sqlite
 generated/
 .env
-.env.example
