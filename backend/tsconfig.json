@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "types": ["node", "express"]
+    "types": ["node", "express", "cookie-parser"]
   },
   "include": ["server.ts", "src/**/*.ts"]
 }

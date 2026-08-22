@@ -114,3 +114,100 @@ Accept: application/json
 ### Deletar com ID inválido (não numérico) → 400
 DELETE http://localhost:3000/api/questoes/xyz
 Accept: application/json
+
+### ─── AUTENTICAÇÃO (USUÁRIOS) ────────────────────────────────────────
+
+### Cadastro válido → 201
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Aluno Teste",
+  "email": "aluno.teste2@luminasaber.com",
+  "senha": "SenhaForte123",
+  "grau_escolar": "5º ano",
+  "data_nasc": "2014-03-10",
+  "tipo": "aluno"
+}
+
+### Cadastro com e-mail já existente → 409 (rode o bloco acima 2x pra ver)
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Aluno Teste",
+  "email": "aluno.teste2@luminasaber.com",
+  "senha": "OutraSenha456",
+  "grau_escolar": "5º ano",
+  "data_nasc": "2014-03-10",
+  "tipo": "aluno"
+}
+
+### Cadastro com campos obrigatórios faltando → 400
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "email": "incompleto@luminasaber.com",
+  "senha": "123456"
+}
+
+
+### Login válido → 200, retorna o token JWT
+# @name login
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "aluno.teste2@luminasaber.com",
+  "senha": "SenhaForte123"
+}
+
+### Login com senha incorreta → 401
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "aluno.teste2@luminasaber.com",
+  "senha": "senhaErrada"
+}
+
+### Login com usuário inexistente → 401
+POST http://localhost:3000/api/usuarios/login
+Content-Type: application/json
+
+{
+  "email": "naoexiste@luminasaber.com",
+  "senha": "qualquercoisa"
+}
+
+
+### Acessar rota protegida SEM token → 401
+GET http://localhost:3000/api/usuarios/perfil
+Accept: application/json
+
+### Acessar a MESMA rota protegida usando o token do login acima → 200
+GET http://localhost:3000/api/usuarios/perfil
+Authorization: Bearer {{login.response.body.token}}
+Accept: application/json
+
+
+### Anotações do usuário logado SEM token → 401
+GET http://localhost:3000/api/anotacoes
+Accept: application/json
+
+### Anotações do usuário logado COM token → 200
+GET http://localhost:3000/api/anotacoes
+Authorization: Bearer {{login.response.body.token}}
+Accept: application/json
+
+### Histórico do usuário logado COM token → 200
+GET http://localhost:3000/api/historico
+Authorization: Bearer {{login.response.body.token}}
+Accept: application/json
+
+### Logout (rota protegida) COM token → 200
+POST http://localhost:3000/api/usuarios/logout
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+Accept: application/json

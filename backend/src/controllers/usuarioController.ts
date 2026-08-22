@@ -6,6 +6,7 @@ import { UsuarioModel } from '../models/usuarioModel.js';
 import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const OITO_HORAS_MS = 8 * 60 * 60 * 1000;
 
 export const UsuarioController = {
   async criar(req: Request, res: Response, next: NextFunction) {
@@ -70,6 +71,17 @@ export const UsuarioController = {
         tipo: usuario.tipo,
       });
 
+      // Cookie httpOnly: usado só pelo SERVIDOR para decidir se envia as
+      // páginas privadas. O front-end não lê esse cookie (JS não acessa
+      // httpOnly) — ele usa o token do JSON abaixo, salvo no localStorage,
+      // para autenticar as chamadas fetch à API via header Authorization.
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        maxAge: OITO_HORAS_MS,
+      });
+
       return res.status(200).json({
         mensagem: 'Login realizado com sucesso!',
         token,
@@ -85,6 +97,11 @@ export const UsuarioController = {
     } catch (error) {
       return next(error);
     }
+  },
+
+  async logout(req: Request, res: Response, next: NextFunction) {
+    res.clearCookie('token', { path: '/' });
+    return res.status(200).json({ mensagem: 'Logout realizado com sucesso.' });
   },
 
   async perfil(req: Request, res: Response, next: NextFunction) {
