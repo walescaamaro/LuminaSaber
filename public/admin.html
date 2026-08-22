@@ -6,61 +6,114 @@
     <title>Gerenciamento do Sistema · LuminaSaber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
 
     <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+        }
         * { box-sizing: border-box; }
         body {
             margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
-            background-color: #00e1e1; padding: 40px 20px;
+            background-color: #00e1e1; padding: 32px 20px 60px; color: var(--ink);
         }
-        .wrapper { max-width: 960px; margin: 0 auto; }
+        .wrapper { max-width: 880px; margin: 0 auto; }
+
+        .topo { margin-bottom: 24px; }
         .voltar {
-            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
-            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+            display: inline-block; font-weight: 700; font-size: 14px; color: var(--ink);
+            text-decoration: none; background: #fff; border: 2px solid var(--ink);
+            padding: 8px 18px; border-radius: 999px; transition: background-color .15s;
         }
-        h1 {
-            background-color: rgba(255, 255, 255, 0.658); display: inline-block;
-            padding: 10px 20px; border-radius: 10px; font-size: 28px; margin: 0 0 28px;
+        .voltar:hover { background-color: var(--lemon-chiffon); }
+
+        .banner {
+            background: #ffffff; border-radius: 20px; padding: 24px 32px;
+            margin-bottom: 28px; box-shadow: 0 10px 26px rgba(0,0,0,0.12);
         }
-        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .card {
-            background: #fff; border-radius: 14px; padding: 32px 20px; text-align: center;
-            box-shadow: 0 10px 24px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-            align-items: center; gap: 16px;
+        .banner h1 { margin: 0; font-size: 26px; font-weight: 800; }
+        .banner p { margin: 6px 0 0; font-size: 14px; color: rgba(22,50,61,0.7); }
+
+        .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+
+        .cartao {
+            border-radius: 20px; padding: 32px 24px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+            transition: transform .15s ease, box-shadow .15s ease;
         }
-        .card .icone { font-size: 40px; }
-        .card h2 { font-size: 18px; margin: 0; }
-        .card button {
-            background-color: #1f5fa6; color: #fff; border: none; padding: 10px 24px;
-            border-radius: 10px; font-weight: 700; font-family: 'DM Sans', sans-serif;
-            cursor: pointer; font-size: 14px;
+        .cartao:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(0,0,0,0.16); }
+
+        .icone-caixa {
+            width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,0.65);
+            display: flex; align-items: center; justify-content: center;
         }
-        .card button:hover { background-color: #174b85; }
+        .icone-caixa svg { width: 28px; height: 28px; stroke: var(--ink); }
+
+        .cartao h2 { font-size: 17px; margin: 0; font-weight: 700; }
+        .cartao p { font-size: 13px; margin: -8px 0 4px; color: rgba(22,50,61,0.7); }
+
+        .cartao button {
+            background-color: var(--ink); color: #fff; border: none; padding: 10px 28px;
+            border-radius: 999px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; font-size: 14px; transition: opacity .15s;
+        }
+        .cartao button:hover { opacity: 0.85; }
+
+        .c-parametros { background: var(--mauve); }
+        .c-usuarios { background: var(--pink-orchid); }
+        .c-questoes { background: var(--aquamarine); }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <a class="voltar" href="/painel">&larr; Voltar ao painel</a>
-        <h1>⚙️ Gerenciamento do Sistema</h1>
+        <div class="topo">
+            <a class="voltar" href="/painel">Painel</a>
+        </div>
 
-        <div class="cards">
-            <div class="card">
-                <span class="icone">⚙️</span>
+        <div class="banner">
+            <h1>Gerenciamento do sistema</h1>
+            <p>Área restrita a administradores.</p>
+        </div>
+
+        <div class="grade">
+            <div class="cartao c-parametros">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+                </span>
                 <h2>Parâmetros do Sistema</h2>
+                <p>Configurações gerais</p>
                 <button onclick="location.href='/admin-parametros'">Acessar</button>
             </div>
-            <div class="card">
-                <span class="icone">👤</span>
+
+            <div class="cartao c-usuarios">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+                </span>
                 <h2>Gerenciamento de Usuários</h2>
+                <p>Ver alunos e admins cadastrados</p>
                 <button onclick="location.href='/admin-usuarios'">Acessar</button>
             </div>
-            <div class="card">
-                <span class="icone">📋</span>
+
+            <div class="cartao c-questoes">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+                </span>
                 <h2>Gerenciamento de Questões</h2>
+                <p>Criar, editar e remover questões</p>
                 <button onclick="location.href='/cadastro-exercicios'">Acessar</button>
             </div>
         </div>

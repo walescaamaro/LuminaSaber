@@ -1,4 +1,3 @@
-<!-- public/painel.html (substitua tudo) -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -8,60 +7,173 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
 
     <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+        }
         * { box-sizing: border-box; }
+        html, body { height: 100%; }
         body {
             margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
-            background-color: #00e1e1; display: flex; justify-content: center;
-            align-items: center; padding: 24px;
+            background: radial-gradient(circle at 20% 15%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
+            display: flex; justify-content: center; align-items: center;
+            padding: 60px 20px; color: var(--ink);
+            position: relative; overflow-x: hidden;
         }
-        .painel {
-            background-color: rgba(255, 255, 255, 0.9); width: min(92vw, 520px);
-            border-radius: 20px; padding: 44px 36px; text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+        /* ── Decoração de fundo ── */
+        .blob {
+            position: fixed; border-radius: 50%; filter: blur(2px);
+            opacity: 0.55; pointer-events: none; z-index: 0;
+        }
+        .blob.b1 { width: 260px; height: 260px; background: var(--celadon); top: -80px; left: -60px; }
+        .blob.b2 { width: 200px; height: 200px; background: var(--pink-orchid); bottom: -70px; right: -50px; }
+        .blob.b3 { width: 150px; height: 150px; background: var(--lemon-chiffon); bottom: 10%; left: -50px; }
+        .blob.b4 { width: 180px; height: 180px; background: var(--baby-blue-ice); top: 8%; right: -60px; }
+
+        .doodle {
+            position: fixed; pointer-events: none; z-index: 0; opacity: 0.85;
+            animation: flutuar 6s ease-in-out infinite;
+        }
+        .doodle svg { width: 100%; height: 100%; }
+        .d1 { width: 34px; height: 34px; top: 12%; left: 8%; animation-duration: 5s; }
+        .d2 { width: 26px; height: 26px; top: 20%; right: 12%; animation-duration: 7s; animation-delay: .6s; }
+        .d3 { width: 40px; height: 40px; bottom: 18%; right: 8%; animation-duration: 6.5s; animation-delay: 1.2s; }
+        .d4 { width: 24px; height: 24px; bottom: 12%; left: 12%; animation-duration: 5.5s; animation-delay: .3s; }
+        .d5 { width: 20px; height: 20px; top: 6%; left: 42%; animation-duration: 8s; animation-delay: .9s; }
+
+        @keyframes flutuar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-16px) rotate(10deg); }
+        }
+
+        .wrapper { position: relative; z-index: 1; width: 100%; max-width: 980px; text-align: center; }
+
+        .cabecalho {
+            background: #ffffff; border-radius: 24px; padding: 32px 40px;
+            margin: 0 auto 32px; max-width: 560px;
+            box-shadow: 0 14px 32px rgba(0,0,0,0.14);
         }
         .saudacao {
-            font-size: 15px; font-weight: 600; color: #22609b; margin: 0 0 4px;
-            letter-spacing: 0.5px; text-transform: uppercase;
+            font-family: 'Caveat', cursive; font-size: 26px; font-weight: 600;
+            color: #2a8f80; margin: 0 0 2px;
         }
-        h1 { font-size: 30px; font-weight: 700; margin: 0 0 36px; color: #000; }
-        .menu { display: grid; gap: 16px; }
-        .menu button {
-            width: 100%; padding: 16px 20px; border-radius: 14px; border: 2px solid #000;
-            background-color: #bbbeff; font-family: 'DM Sans', sans-serif; font-size: 16px;
-            font-weight: 700; color: #000; cursor: pointer; transition: background-color 0.2s;
-            display: flex; align-items: center; gap: 12px;
+        .cabecalho h1 { font-size: 27px; font-weight: 800; margin: 0; }
+        .cabecalho .sub { font-size: 14px; color: rgba(22,50,61,0.65); margin: 8px 0 0; }
+
+        .grade {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
         }
-        .menu button:hover { background-color: #daa700; }
-        .menu button.admin { background-color: #ffb300; }
-        .menu button.admin:hover { background-color: #c3ff00; }
-        .menu button.sair { background-color: transparent; border-color: #b00020; color: #b00020; margin-top: 12px; }
-        .menu button.sair:hover { background-color: #b00020; color: #fff; }
-        .icone { font-size: 20px; }
+
+        .cartao {
+            border: none; border-radius: 20px; padding: 26px 22px;
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+            cursor: pointer; text-align: center; font-family: 'DM Sans', sans-serif;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+            transition: transform .18s ease, box-shadow .18s ease;
+            width: 220px;
+        }
+        .cartao:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 16px 30px rgba(0,0,0,0.18); }
+
+        .icone-caixa {
+            width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,0.65);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .icone-caixa svg { width: 28px; height: 28px; stroke: var(--ink); }
+
+        .cartao .titulo { font-size: 16px; font-weight: 700; margin: 0; }
+        .cartao .desc { font-size: 12.5px; color: rgba(22,50,61,0.7); margin: 0; line-height: 1.4; }
+
+        .c-estudar { background: var(--baby-blue-ice); }
+        .c-anotacoes { background: var(--pink-orchid); }
+        .c-historico { background: var(--mauve); }
+        .c-admin { background: var(--celadon); }
+
+        .sair-wrap { margin-top: 32px; }
+        .btn-sair {
+            border: 2px solid var(--ink); background: rgba(255,255,255,0.9); color: var(--ink);
+            padding: 10px 26px; border-radius: 999px; font-weight: 700; font-size: 14px;
+            cursor: pointer; font-family: 'DM Sans', sans-serif;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: background-color .15s, color .15s;
+        }
+        .btn-sair:hover { background-color: var(--ink); color: #fff; }
+        .btn-sair svg { width: 16px; height: 16px; stroke: currentColor; }
+
+        @media (max-width: 720px) {
+            .cartao { width: 160px; padding: 20px 16px; }
+        }
+        @media (max-width: 520px) {
+            .cabecalho { padding: 24px 24px; }
+            .cartao { width: 100%; }
+            .doodle { display: none; }
+        }
     </style>
 </head>
 <body>
-    <div class="painel">
-        <p class="saudacao" id="saudacao">Olá!</p>
-        <h1>O que vamos fazer hoje?</h1>
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="blob b4"></span>
 
-        <div class="menu" id="menu">
-            <button onclick="location.href='/selecao'">
-                <span class="icone">🚀</span> Começar a estudar
+    <span class="doodle d1"><svg viewBox="0 0 24 24" fill="#fff" opacity="0.9"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+    <span class="doodle d2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
+    <span class="doodle d3"><svg viewBox="0 0 24 24" fill="#fde4cf"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+    <span class="doodle d4"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 12h16M12 4v16"/></svg></span>
+    <span class="doodle d5"><svg viewBox="0 0 24 24" fill="#f1c0e8"><circle cx="12" cy="12" r="10"/></svg></span>
+
+    <div class="wrapper">
+        <div class="cabecalho">
+            <p class="saudacao" id="saudacao">Olá!</p>
+            <h1>O que vamos fazer hoje?</h1>
+            <p class="sub">Escolha uma opção abaixo para continuar seus estudos.</p>
+        </div>
+
+        <div class="grade" id="grade">
+            <button class="cartao c-estudar" onclick="location.href='/selecao'">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z" fill="#16323d" stroke="none"/></svg>
+                </span>
+                <p class="titulo">Começar a estudar</p>
+                <p class="desc">Escolha uma disciplina e comece agora.</p>
             </button>
-            <button onclick="location.href='/anotacoes'">
-                <span class="icone">📝</span> Minhas anotações
+
+            <button class="cartao c-anotacoes" onclick="location.href='/anotacoes'">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>
+                </span>
+                <p class="titulo">Minhas anotações</p>
+                <p class="desc">Reveja o que você já anotou.</p>
             </button>
-            <button onclick="location.href='/historico'">
-                <span class="icone">📊</span> Meu histórico
+
+            <button class="cartao c-historico" onclick="location.href='/historico'">
+                <span class="icone-caixa">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                </span>
+                <p class="titulo">Meu histórico</p>
+                <p class="desc">Veja suas respostas anteriores.</p>
             </button>
-            <button class="sair" id="btnSair">
-                <span class="icone">🚪</span> Sair da conta
+        </div>
+
+        <div class="sair-wrap">
+            <button class="btn-sair" id="btnSair">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                Sair da conta
             </button>
         </div>
     </div>
@@ -74,11 +186,18 @@
                 document.getElementById('saudacao').textContent = `Olá, ${dados.usuario.nome.split(' ')[0]}!`;
 
                 if (dados.usuario.tipo === 'administrador') {
+                    const grade = document.getElementById('grade');
                     const botaoAdmin = document.createElement('button');
-                    botaoAdmin.className = 'admin';
-                    botaoAdmin.innerHTML = '<span class="icone">⚙️</span> Cadastrar questão (admin)';
+                    botaoAdmin.className = 'cartao c-admin';
+                    botaoAdmin.innerHTML = `
+                        <span class="icone-caixa">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+                        </span>
+                        <p class="titulo">Gerenciamento do sistema</p>
+                        <p class="desc">Área exclusiva de administrador.</p>
+                    `;
                     botaoAdmin.onclick = () => location.href = '/admin';
-                    document.getElementById('menu').insertBefore(botaoAdmin, document.getElementById('btnSair'));
+                    grade.appendChild(botaoAdmin);
                 }
             } catch (err) {
                 // fetchAutenticado já redireciona pro /login em caso de 401
