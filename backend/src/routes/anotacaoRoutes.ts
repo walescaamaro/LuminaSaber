@@ -4,8 +4,7 @@ import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// authMiddleware roda ANTES do controller — sem token válido, a requisição
-// nem chega em AnotacaoController.listarMinhas.
 router.get('/api/anotacoes', authMiddleware, AnotacaoController.listarMinhas);
+router.post('/api/anotacoes', authMiddleware, AnotacaoController.criar);
 
 export default router;

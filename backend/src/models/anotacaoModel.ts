@@ -1,4 +1,3 @@
-// backend/src/models/anotacaoModel.ts (substitua tudo)
 import { prisma } from '../lib/prisma.js';
 import { PastaModel } from './pastaModel.js';
 import type { AnotacaoResumo } from '../types/anotacao.js';

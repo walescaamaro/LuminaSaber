@@ -1,10 +1,6 @@
-// backend/src/models/pastaModel.ts (novo)
 import { prisma } from '../lib/prisma.js';
 
 export const PastaModel = {
-  // Toda anotação precisa estar dentro de uma pasta (regra do banco).
-  // Pra simplificar a experiência, criamos uma pasta padrão automaticamente
-  // na primeira anotação do usuário, sem exigir que ele gerencie pastas.
   async buscarOuCriarPadrao(codUsuario: number): Promise<number> {
     const existente = await prisma.pasta.findFirst({
       where: { cod_usuario: codUsuario },

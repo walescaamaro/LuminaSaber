@@ -1,20 +1,35 @@
-// backend/src/routes/anotacaoRoutes.ts (substitua tudo)
-import express from 'express';
-export class AnotacaoController {
-  static listarMinhas(req: any, res: any) {
-    return res.status(200).json({ message: 'listarMinhas' });
-  }
+import type { NextFunction, Request, Response } from 'express';
+import { HttpError } from '../errors/HttpError.js';
+import { AnotacaoModel } from '../models/anotacaoModel.js';
 
-  static criar(req: any, res: any) {
-    return res.status(201).json({ message: 'criar' });
-  }
-}
+export const AnotacaoController = {
+  async listarMinhas(req: Request, res: Response, next: NextFunction) {
+    const usuarioLogado = req.user;
+    if (!usuarioLogado) return next(new HttpError(401, 'Usuário não autenticado.'));
 
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+    try {
+      const anotacoes = await AnotacaoModel.listarPorUsuario(usuarioLogado.id);
+      return res.status(200).json(anotacoes);
+    } catch (error) {
+      return next(error);
+    }
+  },
 
-const router = express.Router();
+  async criar(req: Request, res: Response, next: NextFunction) {
+    const usuarioLogado = req.user;
+    if (!usuarioLogado) return next(new HttpError(401, 'Usuário não autenticado.'));
 
-router.get('/api/anotacoes', authMiddleware, AnotacaoController.listarMinhas);
-router.post('/api/anotacoes', authMiddleware, AnotacaoController.criar);
+    const { titulo, texto_anota } = req.body as { titulo?: string; texto_anota?: string };
 
-export default router;
+    if (!titulo || !texto_anota) {
+      return next(new HttpError(400, 'Preencha o título e o texto da anotação.'));
+    }
+
+    try {
+      const id = await AnotacaoModel.criar(usuarioLogado.id, titulo, texto_anota);
+      return res.status(201).json({ mensagem: 'Anotação salva com sucesso!', id });
+    } catch (error) {
+      return next(error);
+    }
+  },
+};
