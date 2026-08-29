@@ -3,165 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuminaSaber – Meta de Questões</title>
-<script src="/js/auth.js"></script>
-<script>protegerPagina();</script>
+<title>Meta de Questões · LuminaSaber</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --lemon-chiffon: #fbf8cc; --powder-petal: #fde4cf; --cotton-rose: #ffcfd2;
+    --pink-orchid: #f1c0e8; --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3;
+    --frosted-blue: #90dbf4; --electric-aqua: #8eecf5; --aquamarine: #98f5e1;
+    --celadon: #b9fbc0; --ink: #16323d;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(circle at 25% 25%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
+    display: flex; justify-content: center; align-items: center;
+    padding: 40px 18px; color: var(--ink); position: relative; overflow-x: hidden;
+}
 
-  :root {
-    --teal:      #00e1e1;
-    --header-bg: rgba(255,255,255,0.45);
-    --border-sel:#8b00c0;
-    --btn-dark:  #22609b;
-    --btn-hover: #daa700;
-  }
+.blob { position: fixed; border-radius: 50%; filter: blur(2px); opacity: .5; pointer-events: none; z-index: 0; }
+.blob.b1 { width: 220px; height: 220px; background: var(--aquamarine); top: -60px; right: -50px; }
+.blob.b2 { width: 170px; height: 170px; background: var(--cotton-rose); bottom: -60px; left: -50px; }
 
-  body {
-    min-height: 100vh;
-    background-color: var(--teal);
-    font-family: 'DM Sans', sans-serif;
-    color: #111;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    overflow-x: hidden;
-    gap: 0;
-  }
+.doodle { position: fixed; pointer-events: none; z-index: 0; opacity: .85; animation: flutuar 6s ease-in-out infinite; }
+.doodle svg { width: 100%; height: 100%; }
+.d1 { width: 26px; height: 26px; top: 14%; left: 12%; animation-duration: 5.5s; }
+.d2 { width: 22px; height: 22px; bottom: 16%; right: 14%; animation-duration: 7s; animation-delay: .5s; }
+@keyframes flutuar { 0%,100% { transform: translateY(0) rotate(0);} 50% { transform: translateY(-14px) rotate(8deg);} }
 
-  .wave { position: fixed; pointer-events: none; z-index: 0; }
-  .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
-  .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
+.container {
+    position: relative; z-index: 1; text-align: center;
+    width: min(94vw, 460px); background: #fff; border-radius: 24px;
+    padding: 44px 36px; box-shadow: 0 16px 36px rgba(0,0,0,0.16);
+}
 
-  .page-header {
-    position: fixed; top: 0; left: 0; right: 0;
-    z-index: 1; text-align: center;
-    padding: 20px 0 18px;
-    background: var(--header-bg);
-    backdrop-filter: blur(2px);
-  }
-  .page-header h1 { font-size: clamp(22px, 3.2vw, 36px); font-weight: 700; }
+.kicker { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; color: #2a8f80; margin: 0 0 2px; }
+h1 { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
+.sub { font-size: 14px; color: rgba(22,50,61,0.65); margin: 0 0 28px; }
 
-  .center-wrap {
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    margin-top: 20px;
-  }
+.icone-alvo {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 20px;
+    background: var(--celadon); display: flex; align-items: center; justify-content: center;
+}
+.icone-alvo svg { width: 28px; height: 28px; stroke: var(--ink); }
 
-  .subtitle {
-    font-size: clamp(14px, 1.8vw, 18px);
-    font-style: italic;
-    opacity: 0.8;
-    text-align: center;
-  }
+.input-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 22px; }
 
-  /* ── Input grande ── */
-  .input-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .input-meta {
-    width: 180px;
-    height: 100px;
-    font-size: 56px;
-    font-weight: 700;
-    font-family: 'DM Sans', sans-serif;
-    text-align: center;
-    background: white;
-    border: 3px solid rgba(0,0,0,0.08);
-    border-radius: 20px;
-    outline: none;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-    color: #111;
-    transition: border-color .2s;
-    /* esconder setas nativas */
+.input-meta {
+    width: 160px; height: 92px; font-size: 48px; font-weight: 800;
+    font-family: 'DM Sans', sans-serif; text-align: center;
+    background: #f7fafb; border: 3px solid #e6ecee; border-radius: 18px;
+    outline: none; color: var(--ink); transition: border-color .2s, background-color .2s;
     -moz-appearance: textfield;
-  }
-  .input-meta::-webkit-outer-spin-button,
-  .input-meta::-webkit-inner-spin-button { -webkit-appearance: none; }
-  .input-meta:focus { border-color: var(--border-sel); }
+}
+.input-meta::-webkit-outer-spin-button, .input-meta::-webkit-inner-spin-button { -webkit-appearance: none; }
+.input-meta:focus { border-color: var(--mauve); background: #fff; }
 
-  .input-label {
-    font-size: 14px; font-weight: 700;
-    letter-spacing: .06em; opacity: .6;
-  }
+.input-label { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; color: rgba(22,50,61,0.6); }
+.max-hint { font-size: 12.5px; color: rgba(22,50,61,0.5); }
 
-  .max-hint {
-    font-size: 13px; opacity: .65;
-    font-style: italic;
-  }
+.error-msg {
+    font-weight: 700; font-size: 13px; color: #b00020;
+    background: #ffe3e6; border-radius: 10px; padding: 8px 16px;
+    display: none; margin-bottom: 18px;
+}
+.error-msg.visible { display: block; }
 
-  /* ── Erro ── */
-  .error-msg {
-    font-weight: 700; font-size: 14px; color: #7a0000;
-    background: rgba(255,255,255,.7);
-    border-radius: 8px; padding: 6px 18px;
-    display: none;
-  }
-  .error-msg.visible { display: block; }
+button.pronto {
+    padding: 14px 60px; font-size: 15px; font-weight: 700; border: none;
+    border-radius: 999px; cursor: pointer; background-color: var(--ink); color: #fff;
+    font-family: 'DM Sans', sans-serif; transition: opacity .2s;
+}
+button.pronto:hover { opacity: 0.85; }
 
-  /* ── Botão ── */
-  .btn-pronto {
-    padding: 16px 64px;
-    background-color: var(--btn-dark); color: #fff;
-    font-size: clamp(15px, 1.7vw, 18px); font-weight: 700;
-    font-family: 'DM Sans', sans-serif;
-    border: none; border-radius: 14px; cursor: pointer;
-    letter-spacing: .04em; text-decoration: underline;
-    transition: background-color .25s, transform .15s;
-  }
-  .btn-pronto:hover { background-color: var(--btn-hover); transform: translateY(-2px); }
+@media (max-width: 480px) {
+    .container { padding: 36px 24px; }
+    button.pronto { width: 100%; }
+}
 </style>
 </head>
 <body>
+<span class="blob b1"></span>
+<span class="blob b2"></span>
+<span class="doodle d1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+<span class="doodle d2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
 
-<svg class="wave wave-tl" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M-10 280 C40 230,0 180,60 130 C120 80,180 100,240 60 C300 20,310 -20,310 -20 L-10 -20 Z" fill="white" opacity="0.55"/>
-</svg>
-<svg class="wave wave-br" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M260 0 C220 30,270 80,200 120 C130 160,80 140,40 190 C0 240,-10 260,-10 260 L260 260 Z" fill="white" opacity="0.55"/>
-</svg>
+<div class="container">
+    <span class="icone-alvo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="#16323d" stroke="none"/></svg>
+    </span>
 
-<header class="page-header">
-  <h1>Defina sua meta 🎯</h1>
-</header>
+    <p class="kicker">Quase lá</p>
+    <h1>Defina sua meta</h1>
+    <p class="sub">Quantas questões você quer responder hoje?</p>
 
-<div class="center-wrap">
-  <p class="subtitle">Quantas questões você quer responder hoje?</p>
+    <div class="input-wrap">
+        <input class="input-meta" id="inputMeta" type="number" min="1" max="30" placeholder="1" autofocus>
+        <span class="input-label">QUESTÕES</span>
+        <span class="max-hint">máximo: 30</span>
+    </div>
 
-  <div class="input-wrap">
-    <input
-      class="input-meta"
-      id="inputMeta"
-      type="number"
-      min="1"
-      max="30"
-      placeholder="1"
-      autofocus
-    >
-    <span class="input-label">QUESTÕES</span>
-    <span class="max-hint">máximo: 30</span>
-  </div>
+    <p class="error-msg" id="errorMsg">Digite um número entre 1 e 30.</p>
 
-  <p class="error-msg" id="errorMsg">Digite um número entre 1 e 30.</p>
-
-  <button class="btn-pronto" onclick="confirmar()">PRONTO</button>
+    <button class="pronto" onclick="confirmar()">Pronto</button>
 </div>
 
 <script>
   const input = document.getElementById('inputMeta');
 
-  // Corrigir valor ao sair do campo
   input.addEventListener('blur', () => corrigir());
   input.addEventListener('keydown', e => { if (e.key === 'Enter') confirmar(); });
 

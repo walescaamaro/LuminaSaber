@@ -111,9 +111,18 @@ export async function carregarQuestoes() {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ cod_quest: q.id, alternativa: letras[escolhido] })
-                    }).catch(() => {
+                    })
+                    .then(async (res) => {
+                        if (!res.ok) {
+                            const erro = await res.json().catch(() => ({}));
+                            console.error('Falha ao salvar no histórico:', res.status, erro);
+                        }
+                    })
+                    .catch((err) => {
                         // Se falhar, não trava a experiência do aluno — o resultado
-                        // já foi mostrado na tela normalmente.
+                        // já foi mostrado na tela normalmente. Mas registra no console
+                        // pra dar pra investigar depois.
+                        console.error('Erro de rede ao salvar no histórico:', err);
                     });
 
                     salvarEVerificarMeta();

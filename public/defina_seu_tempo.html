@@ -3,306 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuminaSaber – Defina seu Tempo</title>
-<script src="/js/auth.js"></script>
-<script>protegerPagina();</script>
+<title>Defina seu Tempo · LuminaSaber</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --lemon-chiffon: #fbf8cc; --powder-petal: #fde4cf; --cotton-rose: #ffcfd2;
+    --pink-orchid: #f1c0e8; --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3;
+    --frosted-blue: #90dbf4; --electric-aqua: #8eecf5; --aquamarine: #98f5e1;
+    --celadon: #b9fbc0; --ink: #16323d;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(circle at 75% 20%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
+    display: flex; justify-content: center; align-items: center;
+    padding: 40px 18px; color: var(--ink); position: relative; overflow-x: hidden;
+}
 
-  :root {
-    --teal:      #00e1e1;
-    --header-bg: rgba(255,255,255,0.45);
-    --pill-bg:   rgba(255,255,255,0.88);
-    --pill-sel:  #ffffff;
-    --border-sel:#8b00c0;
-    --btn-dark:  #22609b;
-    --btn-hover: #daa700;
-  }
+.blob { position: fixed; border-radius: 50%; filter: blur(2px); opacity: .5; pointer-events: none; z-index: 0; }
+.blob.b1 { width: 230px; height: 230px; background: var(--pink-orchid); top: -60px; left: -60px; }
+.blob.b2 { width: 180px; height: 180px; background: var(--aquamarine); bottom: -60px; right: -50px; }
 
-  body {
-    min-height: 100vh;
-    background-color: var(--teal);
-    font-family: 'DM Sans', sans-serif;
-    color: #111;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    overflow-x: hidden;
-  }
+.doodle { position: fixed; pointer-events: none; z-index: 0; opacity: .85; animation: flutuar 6s ease-in-out infinite; }
+.doodle svg { width: 100%; height: 100%; }
+.d1 { width: 26px; height: 26px; top: 14%; right: 14%; animation-duration: 5.5s; }
+.d2 { width: 22px; height: 22px; bottom: 16%; left: 10%; animation-duration: 7s; animation-delay: .5s; }
+@keyframes flutuar { 0%,100% { transform: translateY(0) rotate(0);} 50% { transform: translateY(-14px) rotate(8deg);} }
 
-  /* ondas */
-  .wave { position: fixed; pointer-events: none; z-index: 0; }
-  .wave-tl { top: -10px; left: -10px; width: clamp(140px, 25vw, 320px); }
-  .wave-br { bottom: -10px; right: -10px; width: clamp(110px, 20vw, 260px); }
+.container {
+    position: relative; z-index: 1; text-align: center;
+    width: min(94vw, 560px); background: #fff; border-radius: 24px;
+    padding: 40px 36px; box-shadow: 0 16px 36px rgba(0,0,0,0.16);
+}
 
-  /* cabeçalho */
-  .page-header {
-    position: relative; z-index: 1;
-    width: 100%; text-align: center;
-    padding: 20px 0 18px;
-    background: var(--header-bg);
-    backdrop-filter: blur(2px);
-  }
-  .page-header h1 {
-    font-size: clamp(22px, 3.2vw, 36px);
-    font-weight: 700;
-  }
+.icone-relogio {
+    width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 18px;
+    background: var(--frosted-blue); display: flex; align-items: center; justify-content: center;
+}
+.icone-relogio svg { width: 28px; height: 28px; stroke: var(--ink); }
 
-  /* subtítulo */
-  .subtitle {
-    margin-top: 20px;
-    font-size: clamp(14px, 1.8vw, 18px);
-    font-style: italic;
-    opacity: 0.8;
-    z-index: 1;
-  }
+.kicker { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; color: #2a8f80; margin: 0 0 2px; }
+h1 { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
+.sub { font-size: 14px; color: rgba(22,50,61,0.65); margin: 0 0 26px; }
 
-  /* grade de opções */
-  .tempo-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-    margin-top: 28px;
-    z-index: 1;
-    width: clamp(280px, 52%, 500px);
-  }
+.tempo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; width: 100%; }
 
-  .tempo-btn {
-    background: var(--pill-bg);
-    border: 2px solid transparent;
-    border-radius: 50px;
-    padding: 18px 10px;
-    font-size: clamp(15px, 1.7vw, 19px);
-    font-weight: 700;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: border-color .2s, transform .15s, box-shadow .2s;
-    text-align: center;
-    color: #111;
-    user-select: none;
-  }
-  .tempo-btn:hover { border-color: var(--border-sel); transform: translateY(-2px); }
-  .tempo-btn.selected {
-    border-color: var(--border-sel);
-    background: var(--pill-sel);
-    box-shadow: 0 0 0 3px rgba(139,0,192,.15);
-  }
-  .tempo-btn.personalizar {
-    grid-column: span 2;
-    justify-self: center;
-    width: 54%;
-  }
+.tempo-btn {
+    border: 3px solid transparent; border-radius: 16px; padding: 18px 10px;
+    font-size: 15px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: transform .15s, box-shadow .15s; color: var(--ink);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+.tempo-btn:hover { transform: translateY(-2px); }
+.tempo-btn.selected { border-color: var(--ink); box-shadow: 0 6px 16px rgba(0,0,0,0.16); }
 
-  /* ── PICKER PERSONALIZADO ── */
-  .picker-wrap {
-    grid-column: span 2;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    padding: 20px 24px;
-    background: rgba(255,255,255,0.55);
-    border-radius: 18px;
-    animation: fadeIn .25s ease;
-  }
-  .picker-wrap.visible { display: flex; }
+.t1 { background: var(--baby-blue-ice); }
+.t2 { background: var(--pink-orchid); }
+.t3 { background: var(--celadon); }
+.t4 { background: var(--mauve); }
 
-  .picker-row {
-    display: flex;
-    gap: 14px;
-    align-items: flex-end;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+.tempo-btn.personalizar {
+    grid-column: span 2; background: #f7fafb; border: 3px dashed #d7e0e3; color: rgba(22,50,61,0.75);
+    box-shadow: none;
+}
+.tempo-btn.personalizar.selected { border-style: solid; border-color: var(--ink); background: var(--lemon-chiffon); color: var(--ink); }
 
-  .picker-col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-  .picker-col label {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    opacity: 0.7;
-  }
+/* Picker personalizado */
+.picker-wrap {
+    grid-column: span 2; display: none; flex-direction: column; align-items: center; gap: 14px;
+    padding: 20px; background: #f7fafb; border-radius: 16px; margin-top: 4px; animation: fadeIn .25s ease;
+}
+.picker-wrap.visible { display: flex; }
 
-  /* Spinner: botão ▲ / número / botão ▼ */
-  .spinner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-  .spin-btn {
-    width: 64px; height: 32px;
-    background: rgba(255,255,255,0.8);
-    border: 1.5px solid rgba(0,0,0,0.12);
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background .15s;
-    line-height: 1;
-    user-select: none;
-  }
-  .spin-btn:hover { background: rgba(255,255,255,1); }
-  .spin-btn.up { border-radius: 8px 8px 0 0; border-bottom: none; }
-  .spin-btn.down { border-radius: 0 0 8px 8px; border-top: none; }
+.picker-row { display: flex; gap: 12px; align-items: flex-end; justify-content: center; flex-wrap: wrap; }
+.picker-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.picker-col label { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; color: rgba(22,50,61,0.55); }
 
-  .spin-value {
-    width: 64px; height: 46px;
-    background: white;
-    border: 1.5px solid rgba(0,0,0,0.12);
-    border-top: none; border-bottom: none;
-    font-size: 22px;
-    font-weight: 700;
-    text-align: center;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    /* esconder setas nativas */
+.spinner { display: flex; flex-direction: column; align-items: center; }
+.spin-btn {
+    width: 58px; height: 26px; background: #fff; border: 1.5px solid #e6ecee;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background-color .15s;
+}
+.spin-btn svg { width: 14px; height: 14px; stroke: var(--ink); }
+.spin-btn:hover { background: var(--lemon-chiffon); }
+.spin-btn.up { border-radius: 10px 10px 0 0; border-bottom: none; }
+.spin-btn.down { border-radius: 0 0 10px 10px; border-top: none; }
+
+.spin-value {
+    width: 58px; height: 44px; background: #fff; border: 1.5px solid #e6ecee;
+    border-top: none; border-bottom: none; font-size: 20px; font-weight: 800;
+    text-align: center; font-family: 'DM Sans', sans-serif; outline: none; color: var(--ink);
     -moz-appearance: textfield;
-  }
-  .spin-value::-webkit-outer-spin-button,
-  .spin-value::-webkit-inner-spin-button { -webkit-appearance: none; }
+}
+.spin-value::-webkit-outer-spin-button, .spin-value::-webkit-inner-spin-button { -webkit-appearance: none; }
 
-  .picker-divider {
-    font-size: 28px;
-    font-weight: 700;
-    padding-bottom: 8px;
-    opacity: 0.5;
-  }
+.picker-divider { font-size: 24px; font-weight: 700; padding-bottom: 12px; opacity: .4; }
+.picker-preview { font-size: 13.5px; font-weight: 700; color: rgba(22,50,61,0.65); min-height: 18px; }
 
-  .picker-preview {
-    font-size: 14px;
-    font-weight: 600;
-    opacity: 0.7;
-    min-height: 20px;
-  }
+button.pronto {
+    margin-top: 28px; padding: 14px 60px; font-size: 15px; font-weight: 700; border: none;
+    border-radius: 999px; cursor: pointer; background-color: var(--ink); color: #fff;
+    font-family: 'DM Sans', sans-serif; transition: opacity .2s;
+}
+button.pronto:hover { opacity: 0.85; }
 
-  /* botão pronto */
-  .btn-pronto {
-    margin-top: 36px; z-index: 1;
-    padding: 16px 64px;
-    background-color: var(--btn-dark);
-    color: #fff;
-    font-size: clamp(15px, 1.7vw, 18px);
-    font-weight: 700; font-family: 'DM Sans', sans-serif;
-    border: none; border-radius: 14px;
-    cursor: pointer; letter-spacing: .04em;
-    text-decoration: underline;
-    transition: background-color .25s, transform .15s;
-    margin-bottom: 40px;
-  }
-  .btn-pronto:hover { background-color: var(--btn-hover); transform: translateY(-2px); }
+.error-msg {
+    margin-top: 16px; font-weight: 700; font-size: 13px; color: #b00020;
+    background: #ffe3e6; border-radius: 10px; padding: 8px 16px; display: none;
+}
+.error-msg.visible { display: block; }
 
-  /* erro */
-  .error-msg {
-    margin-top: 10px; z-index: 1;
-    font-weight: 700; font-size: 14px;
-    color: #7a0000;
-    background: rgba(255,255,255,.7);
-    border-radius: 8px;
-    padding: 6px 18px;
-    display: none;
-  }
-  .error-msg.visible { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+@media (max-width: 480px) {
+    .container { padding: 32px 22px; }
+    button.pronto { width: 100%; }
+}
 </style>
 </head>
 <body>
+<span class="blob b1"></span>
+<span class="blob b2"></span>
+<span class="doodle d1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+<span class="doodle d2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
 
-<svg class="wave wave-tl" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M-10 280 C40 230,0 180,60 130 C120 80,180 100,240 60 C300 20,310 -20,310 -20 L-10 -20 Z" fill="white" opacity="0.55"/>
-</svg>
-<svg class="wave wave-br" viewBox="0 0 260 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M260 0 C220 30,270 80,200 120 C130 160,80 140,40 190 C0 240,-10 260,-10 260 L260 260 Z" fill="white" opacity="0.55"/>
-</svg>
+<div class="container">
+    <span class="icone-relogio">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+    </span>
 
-<header class="page-header">
-  <h1>Defina seu tempo ⏰</h1>
-</header>
+    <p class="kicker">Vamos organizar</p>
+    <h1>Defina seu tempo</h1>
+    <p class="sub">Quanto tempo você quer dedicar aos estudos agora?</p>
 
-<p class="subtitle">Defina o tempo que deseja estudar</p>
+    <div class="tempo-grid" id="tempoGrid">
+        <button class="tempo-btn t1" data-s="900"  onclick="selecionarTempo(this)">15 minutos</button>
+        <button class="tempo-btn t2" data-s="2700" onclick="selecionarTempo(this)">45 minutos</button>
+        <button class="tempo-btn t3" data-s="1800" onclick="selecionarTempo(this)">30 minutos</button>
+        <button class="tempo-btn t4" data-s="3600" onclick="selecionarTempo(this)">1 hora</button>
 
-<div class="tempo-grid" id="tempoGrid">
+        <button class="tempo-btn personalizar" id="btnPersonalizar" onclick="togglePersonalizar()">
+            Personalizar...
+        </button>
 
-  <button class="tempo-btn" data-s="900"  onclick="selecionarTempo(this)">15 minutos</button>
-  <button class="tempo-btn" data-s="2700" onclick="selecionarTempo(this)">45 minutos</button>
-  <button class="tempo-btn" data-s="1800" onclick="selecionarTempo(this)">30 minutos</button>
-  <button class="tempo-btn" data-s="3600" onclick="selecionarTempo(this)">1 hora</button>
+        <div class="picker-wrap" id="pickerWrap">
+            <div class="picker-row">
+                <div class="picker-col">
+                    <label>HORAS</label>
+                    <div class="spinner">
+                        <button class="spin-btn up" onclick="spin('h', 1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+                        </button>
+                        <input class="spin-value" id="val-h" type="number" min="0" max="99" value="0" oninput="clamp(this,0,99);atualizarPreview()">
+                        <button class="spin-btn down" onclick="spin('h', -1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
 
-  <button class="tempo-btn personalizar" id="btnPersonalizar" onclick="togglePersonalizar()">
-    Personalizar...
-  </button>
+                <span class="picker-divider">:</span>
 
-  <!-- PICKER PERSONALIZADO -->
-  <div class="picker-wrap" id="pickerWrap">
+                <div class="picker-col">
+                    <label>MINUTOS</label>
+                    <div class="spinner">
+                        <button class="spin-btn up" onclick="spin('m', 1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+                        </button>
+                        <input class="spin-value" id="val-m" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
+                        <button class="spin-btn down" onclick="spin('m', -1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
 
-    <div class="picker-row">
+                <span class="picker-divider">:</span>
 
-      <!-- Horas -->
-      <div class="picker-col">
-        <label>HORAS</label>
-        <div class="spinner">
-          <button class="spin-btn up" onclick="spin('h', 1)">▲</button>
-          <input class="spin-value" id="val-h" type="number" min="0" max="99" value="0" oninput="clamp(this,0,99);atualizarPreview()">
-          <button class="spin-btn down" onclick="spin('h', -1)">▼</button>
+                <div class="picker-col">
+                    <label>SEGUNDOS</label>
+                    <div class="spinner">
+                        <button class="spin-btn up" onclick="spin('s', 1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+                        </button>
+                        <input class="spin-value" id="val-s" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
+                        <button class="spin-btn down" onclick="spin('s', -1)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="picker-preview" id="pickerPreview">Defina um tempo acima</p>
         </div>
-      </div>
-
-      <span class="picker-divider">:</span>
-
-      <!-- Minutos -->
-      <div class="picker-col">
-        <label>MINUTOS</label>
-        <div class="spinner">
-          <button class="spin-btn up" onclick="spin('m', 1)">▲</button>
-          <input class="spin-value" id="val-m" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
-          <button class="spin-btn down" onclick="spin('m', -1)">▼</button>
-        </div>
-      </div>
-
-      <span class="picker-divider">:</span>
-
-      <!-- Segundos -->
-      <div class="picker-col">
-        <label>SEGUNDOS</label>
-        <div class="spinner">
-          <button class="spin-btn up" onclick="spin('s', 1)">▲</button>
-          <input class="spin-value" id="val-s" type="number" min="0" max="59" value="0" oninput="clamp(this,0,59);atualizarPreview()">
-          <button class="spin-btn down" onclick="spin('s', -1)">▼</button>
-        </div>
-      </div>
-
     </div>
 
-    <p class="picker-preview" id="pickerPreview">Defina um tempo acima</p>
-  </div>
-  <!-- fim picker -->
+    <p class="error-msg" id="errorMsg">Selecione um tempo antes de continuar!</p>
 
+    <button class="pronto" onclick="confirmarTempo()">Pronto</button>
 </div>
 
-<p class="error-msg" id="errorMsg">Selecione um tempo antes de continuar!</p>
-
-<button class="btn-pronto" onclick="confirmarTempo()">PRONTO</button>
-
 <script>
-  let tempoSegundos = null;   // tempo total em segundos escolhido
+  let tempoSegundos = null;
   let pickerAberto  = false;
 
-  /* ── Opções pré-definidas ── */
   function selecionarTempo(btn) {
     if (pickerAberto) fecharPicker();
     document.querySelectorAll('.tempo-btn:not(.personalizar)')
@@ -312,7 +220,6 @@
     esconderErro();
   }
 
-  /* ── Toggle personalizar ── */
   function togglePersonalizar() {
     pickerAberto ? fecharPicker() : abrirPicker();
   }
@@ -324,7 +231,6 @@
     tempoSegundos = null;
     document.getElementById('btnPersonalizar').classList.add('selected');
     document.getElementById('pickerWrap').classList.add('visible');
-    // resetar valores
     ['h','m','s'].forEach(id => {
       document.getElementById('val-'+id).value = 0;
     });
@@ -340,7 +246,6 @@
     }
   }
 
-  /* ── Spinner ── */
   function spin(campo, delta) {
     const el = document.getElementById('val-' + campo);
     const max = campo === 'h' ? 99 : 59;
@@ -360,7 +265,6 @@
     el.value = v;
   }
 
-  /* ── Preview do tempo customizado ── */
   function atualizarPreview() {
     const h = parseInt(document.getElementById('val-h').value) || 0;
     const m = parseInt(document.getElementById('val-m').value) || 0;
@@ -376,13 +280,12 @@
       if (h) partes.push(h + (h === 1 ? ' hora' : ' horas'));
       if (m) partes.push(m + ' min');
       if (s) partes.push(s + ' seg');
-      prev.textContent = '⏱ ' + partes.join(' e ');
+      prev.textContent = partes.join(' e ');
       tempoSegundos = total;
     }
     esconderErro();
   }
 
-  /* ── Confirmar ── */
   function confirmarTempo() {
     if (!tempoSegundos || tempoSegundos <= 0) {
       document.getElementById('errorMsg').textContent = 'Selecione ou defina um tempo antes de continuar!';

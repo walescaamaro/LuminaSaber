@@ -3,141 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
+    <title>Cadastro · LuminaSaber</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>redirecionarSeAutenticado();</script>
 
     <style>
-        * {
-            box-sizing: border-box;
+        :root {
+            --lemon-chiffon: #fbf8cc; --powder-petal: #fde4cf; --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8; --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4; --electric-aqua: #8eecf5; --aquamarine: #98f5e1;
+            --celadon: #b9fbc0; --ink: #16323d;
         }
-
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
         body {
-            background-color: #00e1e1;
-            font-family: 'DM Sans', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background: radial-gradient(circle at 20% 80%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
+            display: flex; justify-content: center; align-items: center;
+            padding: 40px 20px; color: var(--ink); position: relative; overflow-x: hidden;
         }
 
-        
-        .form-container h2 {
+        .blob { position: fixed; border-radius: 50%; filter: blur(2px); opacity: 0.5; pointer-events: none; z-index: 0; }
+        .blob.b1 { width: 240px; height: 240px; background: var(--powder-petal); top: -70px; right: -60px; }
+        .blob.b2 { width: 190px; height: 190px; background: var(--aquamarine); bottom: -60px; left: -50px; }
+        .blob.b3 { width: 130px; height: 130px; background: var(--pink-orchid); top: 14%; left: -40px; }
+
+        .doodle { position: fixed; pointer-events: none; z-index: 0; opacity: .85; animation: flutuar 6s ease-in-out infinite; }
+        .doodle svg { width: 100%; height: 100%; }
+        .d1 { width: 26px; height: 26px; top: 10%; right: 14%; animation-duration: 5.5s; }
+        .d2 { width: 22px; height: 22px; bottom: 20%; right: 16%; animation-duration: 7s; animation-delay: .4s; }
+        .d3 { width: 30px; height: 30px; bottom: 10%; left: 12%; animation-duration: 6.4s; animation-delay: .9s; }
+        @keyframes flutuar { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-14px) rotate(8deg); } }
+
+        .cartao {
+            position: relative; z-index: 1;
+            background: #fff; border-radius: 24px; padding: 40px 44px;
+            width: min(94vw, 640px); box-shadow: 0 16px 36px rgba(0,0,0,0.16);
             text-align: center;
-            margin-top: 0;
-            margin-bottom: 70px;
-            color: #000;
-            width: 1000px;
-            font-size: 40px;
         }
-
-        .form-container h2 {
-            font-size: 34px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 32px;
-            color: #000;
-            position: relative;
-            display: inline-block;
+        .cartao .kicker {
+            font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600;
+            color: #2a8f80; margin: 0 0 2px;
         }
+        .cartao h1 { font-size: 26px; font-weight: 800; margin: 0 0 28px; }
 
-        .form-container h2::before {
-            content: "";
-            position: absolute;
-            left: -1px;
-            bottom: -2px;
-            width: calc(30% + 700px);
-            height: 55px;
-            background-color: rgba(255, 255, 255, 0.658);
-            z-index: -1;
-            border-radius: 2px;
-        }
-
-
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px 50px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 14px;
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #000;
-        }
-
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; text-align: left; }
+        .field { display: flex; flex-direction: column; }
+        .field label { font-size: 12.5px; font-weight: 700; color: rgba(22,50,61,0.65); margin-bottom: 6px; }
         input, select {
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            outline: none;
+            padding: 13px 15px; border-radius: 12px; border: 2px solid #e6ecee;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none;
+            background: #f7fafb; transition: border-color .15s, background-color .15s;
         }
+        input:focus, select:focus { border-color: var(--baby-blue-ice); background: #fff; }
 
-        input:focus, select:focus {
-            border-color: #00b3b3;
-        }
-
-        .btn {
-            grid-column: span 2;
-            display: flex;
-            justify-content: center;
-            margin-top: 60px;
-        }
-
+        .btn-wrap { grid-column: span 2; display: flex; justify-content: center; margin-top: 8px; }
         button {
-            width: 50%;
-            padding: 14px;
-            background-color: #22609b;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
+            padding: 14px 60px; background-color: var(--ink); color: #fff;
+            border: none; border-radius: 999px; font-size: 15px; font-weight: 700;
+            cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .2s;
         }
+        button:hover { opacity: 0.85; }
 
-        button:hover {
-            background-color: #daa700;
+        #mensagem { grid-column: span 2; text-align: center; margin: 4px 0 0; font-weight: 700; font-size: 13.5px; }
+
+        @media (max-width: 560px) {
+            form { grid-template-columns: 1fr; }
+            .btn-wrap, #mensagem { grid-column: span 1; }
         }
-
-        input::placeholder,
-        select {
-            font-size: 15px;
-        }
-
     </style>
 </head>
 
 <body>
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="doodle d1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+    <span class="doodle d2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
+    <span class="doodle d3"><svg viewBox="0 0 24 24" fill="#cfbaf0"><circle cx="12" cy="12" r="10"/></svg></span>
 
-    <div class="form-container">
-        <h2 class="title">Cadastra-se aqui</h2>
+    <div class="cartao">
+        <p class="kicker">Vamos começar!</p>
+        <h1>Crie sua conta</h1>
+
         <form id="formCadastro">
             <div class="field">
-                <input type="text" id="nome" placeholder="Nome de usuário" required>
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Seu nome completo" required>
             </div>
             <div class="field">
-                <input type="email" id="email" placeholder="Email" required>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="voce@email.com" required>
             </div>
             <div class="field">
-                <input type="password" id="senha" placeholder="Senha" required>
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="••••••••" required>
             </div>
             <div class="field">
+                <label for="confirmarSenha">Confirme a senha</label>
+                <input type="password" id="confirmarSenha" placeholder="••••••••" required>
+            </div>
+            <div class="field">
+                <label for="grau_escolar">Grau escolar</label>
                 <select id="grau_escolar" required>
-                    <option value="" selected disabled>Grau escolar</option>
+                    <option value="" selected disabled>Selecione...</option>
                     <option>Jardim I</option>
                     <option>Jardim II</option>
                     <option>1º ano</option>
@@ -152,19 +126,17 @@
                 </select>
             </div>
             <div class="field">
-                <input type="password" id="confirmarSenha" placeholder="Confirme sua senha" required>
-            </div>
-            <div class="field">
+                <label for="data_nasc">Data de nascimento</label>
                 <input type="date" id="data_nasc" required>
             </div>
-            <div class="btn">
-                <button type="submit">Cadastrar-se</button>
+
+            <div class="btn-wrap">
+                <button type="submit">Cadastrar</button>
             </div>
+            <p id="mensagem"></p>
         </form>
-        <p id="mensagem" style="text-align:center; margin-top:16px; font-weight:600;"></p>
     </div>
 
-    <script src="/js/auth.js"></script>
     <script>
         document.getElementById('formCadastro').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -177,21 +149,20 @@
             const data_nasc = document.getElementById('data_nasc').value;
             const msg       = document.getElementById('mensagem');
 
-            // Validações na tela antes de chamar o banco
             if (!nome || !email || !senha || !grau || !data_nasc) {
-                msg.style.color = 'red';
+                msg.style.color = '#b00020';
                 msg.textContent = 'Preencha todos os campos obrigatórios.';
                 return;
             }
 
             if (senha !== confirmar) {
-                msg.style.color = 'red';
+                msg.style.color = '#b00020';
                 msg.textContent = 'As senhas não coincidem.';
                 return;
             }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                msg.style.color = 'red';
+                msg.style.color = '#b00020';
                 msg.textContent = 'Informe um e-mail válido.';
                 return;
             }
@@ -201,9 +172,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        nome,
-                        email,
-                        senha,
+                        nome, email, senha,
                         grau_escolar: grau,
                         data_nasc,
                         tipo: 'aluno'
@@ -213,19 +182,18 @@
                 const dados = await res.json();
 
                 if (res.ok) {
-                    salvarSessao(dados.token, dados.usuario);
-                    window.location.replace('/painel');
+                    msg.style.color = '#1a7f37';
+                    msg.textContent = 'Cadastro realizado com sucesso! Você já pode fazer login.';
+                    document.getElementById('formCadastro').reset();
                 } else {
-                    msg.style.color = 'red';
-                    // Mensagem vinda do backend (e-mail duplicado, senha em uso, etc.)
+                    msg.style.color = '#b00020';
                     msg.textContent = dados.error;
                 }
             } catch (err) {
-                msg.style.color = 'red';
+                msg.style.color = '#b00020';
                 msg.textContent = 'Não foi possível conectar ao servidor.';
             }
         });
     </script>
-
 </body>
 </html>

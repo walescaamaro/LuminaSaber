@@ -3,167 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seleção de Disciplinas</title>
-<script src="/js/auth.js"></script>
-<script>protegerPagina();</script>
+<title>Seleção de Disciplinas · LuminaSaber</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
 
 <style>
-* {
-    box-sizing: border-box;
+:root {
+    --lemon-chiffon: #fbf8cc; --powder-petal: #fde4cf; --cotton-rose: #ffcfd2;
+    --pink-orchid: #f1c0e8; --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3;
+    --frosted-blue: #90dbf4; --electric-aqua: #8eecf5; --aquamarine: #98f5e1;
+    --celadon: #b9fbc0; --ink: #16323d;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(circle at 75% 75%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
+    display: flex; justify-content: center; align-items: center;
+    padding: 40px 18px; color: var(--ink); position: relative; overflow-x: hidden;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background-color: #00e1e1;
-    font-family: 'DM Sans', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 32px 18px;
-}
+.blob { position: fixed; border-radius: 50%; filter: blur(2px); opacity: .5; pointer-events: none; z-index: 0; }
+.blob.b1 { width: 230px; height: 230px; background: var(--frosted-blue); top: -60px; left: -60px; }
+.blob.b2 { width: 180px; height: 180px; background: var(--lemon-chiffon); bottom: -60px; right: -50px; }
+
+.doodle { position: fixed; pointer-events: none; z-index: 0; opacity: .85; animation: flutuar 6s ease-in-out infinite; }
+.doodle svg { width: 100%; height: 100%; }
+.d1 { width: 26px; height: 26px; top: 12%; right: 12%; animation-duration: 5.5s; }
+.d2 { width: 22px; height: 22px; bottom: 14%; left: 10%; animation-duration: 7s; animation-delay: .5s; }
+@keyframes flutuar { 0%,100% { transform: translateY(0) rotate(0);} 50% { transform: translateY(-14px) rotate(8deg);} }
 
 .container {
-    text-align: center;
-    color: #000000;
-    width: 600px;
-    max-width: 90%;
-    background: rgba(255, 255, 255, 0.28);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 8px;
-    padding: clamp(24px, 5vw, 38px);
+    position: relative; z-index: 1; text-align: center;
+    width: min(94vw, 620px); background: #fff; border-radius: 24px;
+    padding: 40px 36px; box-shadow: 0 16px 36px rgba(0,0,0,0.16);
 }
 
-h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-    position: relative;
-    display: inline-block;
-}
+.kicker { font-family: 'Caveat', cursive; font-size: 24px; font-weight: 600; color: #2a8f80; margin: 0 0 2px; }
+h1 { font-size: 24px; font-weight: 800; margin: 0 0 6px; }
+.sub { font-size: 14px; color: rgba(22,50,61,0.65); margin: 0 0 28px; }
 
-h1::before {
-    content: none;
-    position: absolute;
-    left: -100px;
-    bottom: -2px;
-    width: calc(20% + 550px);
-    height: 55px;
-    background-color: rgba(255, 255, 255, 0.658);
-    z-index: -1;
-    border-radius: 2px;
-}
+form { display: flex; flex-direction: column; align-items: center; }
 
-p {
-    margin-bottom: 30px;
-    font-size: 15px;
-}
+.disciplinas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 28px; width: 100%; }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.disciplinas {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 30px;
-    width: 100%;
-}
-
-input[type="checkbox"] {
-    display: none;
-}
+input[type="checkbox"] { display: none; }
 
 label {
-    padding: 14px;
-    background-color: rgba(255,255,255,0.85);
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.25s;
-    border: 2px solid transparent;
-    text-align: center;
+    padding: 16px; border-radius: 14px; cursor: pointer; font-weight: 700;
+    transition: transform .15s, box-shadow .15s; border: 3px solid transparent;
+    text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
+label:hover { transform: translateY(-2px); }
 
-input[type="checkbox"]:checked + label {
-    border: 2px solid #ac03c2;
-    background-color: #fff;
-}
+label[for="mat"]  { background: var(--baby-blue-ice); }
+label[for="port"] { background: var(--pink-orchid); }
+label[for="hist"] { background: var(--powder-petal); }
+label[for="geo"]  { background: var(--celadon); }
+label[for="art"]  { background: var(--mauve); }
+label[for="ing"]  { background: var(--frosted-blue); }
+label[for="cien"] { background: var(--lemon-chiffon); }
 
-button {
-    padding: 14px 50px;
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: #22609b;
-    color: #fff;
-
-}
+input[type="checkbox"]:checked + label { border-color: var(--ink); box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
 
 button {
-    transition: 0.3s;
+    padding: 14px 60px; font-size: 15px; font-weight: 700; border: none;
+    border-radius: 999px; cursor: pointer; background-color: var(--ink); color: #fff;
+    font-family: 'DM Sans', sans-serif; transition: opacity .2s;
 }
-
-button:hover {
-    background-color: #daa700;
-    color: #ffffff;
-}
+button:hover { opacity: 0.85; }
 
 .error {
-    margin-top: 15px;
-    font-weight: 600;
+    margin-top: 14px; font-weight: 700; font-size: 13px; color: #b00020;
     display: none;
 }
 
-label.full {
-    grid-column: span 2;   
-    justify-self: center; 
-    width: 50%;           
-}
+label.full { grid-column: span 2; justify-self: center; width: 50%; }
 
 @media (max-width: 560px) {
-    .container {
-        max-width: 100%;
-    }
-
-    h1 {
-        font-size: 26px;
-    }
-
-    .disciplinas {
-        grid-template-columns: 1fr;
-    }
-
-    label.full {
-        grid-column: auto;
-        width: 100%;
-    }
-
-    button {
-        width: 100%;
-    }
+    .container { padding: 32px 24px; }
+    .disciplinas { grid-template-columns: 1fr; }
+    label.full { grid-column: auto; width: 100%; }
+    button { width: 100%; }
 }
-
 </style>
 </head>
 
 <body>
+<span class="blob b1"></span>
+<span class="blob b2"></span>
+<span class="doodle d1"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 6.9L21 11l-6.6 2.1L12 20l-2.4-6.9L3 11l6.6-2.1z"/></svg></span>
+<span class="doodle d2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></span>
 
 <div class="container">
-    <h1>SELEÇÃO DE DISCIPLINAS</h1>
-    <p>Selecione as disciplinas que deseja estudar agora!</p>
+    <p class="kicker">Vamos escolher juntos</p>
+    <h1>Seleção de disciplinas</h1>
+    <p class="sub">Selecione até 3 disciplinas que deseja estudar agora.</p>
 
     <form id="form">
         <div class="disciplinas">
-
             <input type="checkbox" id="mat">
             <label for="mat">Matemática</label>
 
@@ -184,13 +124,10 @@ label.full {
 
             <input type="checkbox" id="cien">
             <label for="cien" class="full">Ciências</label>
-
         </div>
 
         <button type="submit">Pronto</button>
-        <div class="error" id="error">
-            Escolha pelo menos 1 e no máximo 3 disciplinas!
-        </div>
+        <div class="error" id="error">Escolha pelo menos 1 e no máximo 3 disciplinas!</div>
     </form>
 </div>
 
@@ -198,37 +135,29 @@ label.full {
 const form = document.getElementById("form");
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
 const error = document.getElementById("error");
+
 form.addEventListener("submit", function(e) {
+    e.preventDefault();
     const checked = document.querySelectorAll("input[type='checkbox']:checked");
 
     if (checked.length === 0 || checked.length > 3) {
-        e.preventDefault();
         error.style.display = "block";
-    } else {
-        e.preventDefault();
-        error.style.display = "none";
-
-        const materias = [];
-
-        checked.forEach(item => {
-            materias.push(item.nextElementSibling.textContent);
-        });
-
-        localStorage.setItem("materias", JSON.stringify(materias));
-
-        window.location.href = "/tempo";
+        return;
     }
+
+    error.style.display = "none";
+    const materias = [];
+    checked.forEach(item => materias.push(item.nextElementSibling.textContent));
+    localStorage.setItem("materias", JSON.stringify(materias));
+    window.location.href = "/tempo";
 });
 
 checkboxes.forEach(box => {
     box.addEventListener("change", () => {
         const checked = document.querySelectorAll("input[type='checkbox']:checked");
-        if (checked.length > 3) {
-            box.checked = false;
-        }
+        if (checked.length > 3) box.checked = false;
     });
 });
 </script>
-
 </body>
 </html>
