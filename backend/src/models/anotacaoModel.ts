@@ -10,9 +10,9 @@ export const AnotacaoModel = {
       select: { cod_anota: true, titulo: true, texto_anota: true, data_anota: true },
     });
 
-    return anotacoes.map((a) => ({
-      ...a,
-      data_anota: a.data_anota.toISOString().slice(0, 10),
+    return anotacoes.map((anotacao) => ({
+      ...anotacao,
+      data_anota: anotacao.data_anota.toISOString().slice(0, 10),
     }));
   },
 

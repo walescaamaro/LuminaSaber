@@ -7,7 +7,10 @@ export function errorHandler(error: unknown, req: Request, res: Response, next: 
   }
 
   if (error instanceof HttpError) {
-    return res.status(error.statusCode).json({ error: error.message });
+    return res.status(error.statusCode).json({
+      error: error.message,
+      ...(error.issues ? { issues: error.issues } : {}),
+    });
   }
 
   console.error('Unhandled error:', error);

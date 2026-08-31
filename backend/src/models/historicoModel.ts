@@ -10,14 +10,14 @@ export const HistoricoModel = {
       include: { questao: { include: { disciplina: true } } },
     });
 
-    return historicos.map((h) => ({
-      cod_resposta: h.cod_resposta,
-      status: h.status,
-      data_resposta: h.data_resposta.toISOString().slice(0, 10),
+    return historicos.map((historico) => ({
+      cod_resposta: historico.cod_resposta,
+      status: historico.status,
+      data_resposta: historico.data_resposta.toISOString().slice(0, 10),
       questao: {
-        cod_quest: h.questao.cod_quest,
-        enunciado: h.questao.enunciado,
-        materia: h.questao.disciplina.nome_disc,
+        cod_quest: historico.questao.cod_quest,
+        enunciado: historico.questao.enunciado,
+        materia: historico.questao.disciplina.nome_disc,
       },
     }));
   },
