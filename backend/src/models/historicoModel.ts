@@ -1,6 +1,7 @@
 // backend/src/models/historicoModel.ts (substitua tudo)
 import { prisma } from '../lib/prisma.js';
 import type { HistoricoResumo } from '../types/historico.js';
+import { ESTRELAS_POR_CORRECAO_DE_ERRO } from '../constants/loja.js';
 
 export const HistoricoModel = {
   async listarPorUsuario(codUsuario: number): Promise<HistoricoResumo[]> {
@@ -24,7 +25,16 @@ export const HistoricoModel = {
 
   // Recalcula se acertou/errou no SERVIDOR (não confia no que o front manda),
   // comparando com a alternativa_correta salva no banco.
-  async registrar(codUsuario: number, codQuest: number, alternativaEscolhida: string): Promise<string> {
+  //
+  // Também premia o aluno com Estrelas (Mercado Lumina) quando ele acerta
+  // uma questão que já havia errado anteriormente — a verificação do erro
+  // anterior é feita consultando o histórico já salvo, então não dá pra
+  // manipular pelo front-end.
+  async registrar(
+    codUsuario: number,
+    codQuest: number,
+    alternativaEscolhida: string,
+  ): Promise<{ status: string; estrelasGanhas: number }> {
     const questao = await prisma.questao.findUnique({ where: { cod_quest: codQuest } });
 
     if (!questao) {
@@ -35,6 +45,19 @@ export const HistoricoModel = {
       ? 'Acertou'
       : 'Errou';
 
+    let estrelasGanhas = 0;
+
+    if (status === 'Acertou') {
+      const errouAntes = await prisma.historico.findFirst({
+        where: { cod_usuario: codUsuario, cod_quest: codQuest, status: 'Errou' },
+        select: { cod_resposta: true },
+      });
+
+      if (errouAntes) {
+        estrelasGanhas = ESTRELAS_POR_CORRECAO_DE_ERRO;
+      }
+    }
+
     await prisma.historico.create({
       data: {
         cod_usuario: codUsuario,
@@ -44,6 +67,13 @@ export const HistoricoModel = {
       },
     });
 
-    return status;
+    if (estrelasGanhas > 0) {
+      await prisma.usuario.update({
+        where: { cod_usuario: codUsuario },
+        data: { estrelas: { increment: estrelasGanhas } },
+      });
+    }
+
+    return { status, estrelasGanhas };
   },
 };

@@ -46,8 +46,12 @@ export const HistoricoController = {
     }
 
     try {
-      const status = await HistoricoModel.registrar(usuarioLogado.id, Number(cod_quest), String(alternativa));
-      return res.status(201).json({ mensagem: 'Resposta registrada com sucesso!', status });
+      const { status, estrelasGanhas } = await HistoricoModel.registrar(
+        usuarioLogado.id,
+        Number(cod_quest),
+        String(alternativa),
+      );
+      return res.status(201).json({ mensagem: 'Resposta registrada com sucesso!', status, estrelasGanhas });
     } catch (error) {
       if (error instanceof Error && error.message === 'QUESTAO_NAO_ENCONTRADA') {
         return next(new HttpError(404, 'Questão não encontrada.'));

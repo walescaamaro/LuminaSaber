@@ -17,7 +17,7 @@ export default function configurePageRoutes(publicDir: string) {
   router.get('/tempo', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'defina_seu_tempo.html')));
   router.get('/meta', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'meta_questoes.html')));
   router.get('/exercicios', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'tela_exercicios', 'exercicios.html')));
-
+  router.get('/loja', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'loja.html')));
   router.get('/cadastro-exercicios', authPageAdminMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'cadastro_exercicios.html')));
   router.get('/admin', authPageAdminMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'admin.html')));
   router.get('/admin-usuarios', authPageAdminMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'admin-usuarios.html')));

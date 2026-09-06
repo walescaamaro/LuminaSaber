@@ -30,11 +30,14 @@ model Usuario {
   grau_escolar String?   @map("grau_escolar")
   data_nasc    DateTime  @map("data_nasc")
   tipo         Tipo      @map("tipo")
+  estrelas     Int       @default(0) @map("estrelas")
 
   pastas       Pasta[]
   historicos   Historico[]
   anotacoes    Anotacao[]
   estuda       Estuda[]
+  compras      Compra[]
+  beneficios   InventarioBeneficio[]
 
   @@map("USUARIO")
 }
@@ -162,6 +165,35 @@ model Contem {
 
   @@id([cod_pasta, cod_anota])
   @@map("contem")
+}
+
+// ── Mercado Lumina (loja de recompensas em Estrelas) ──
+
+// Registro histórico de cada compra feita na loja (auditoria/extrato).
+model Compra {
+  cod_compra   Int      @id @default(autoincrement()) @map("cod_compra")
+  cod_usuario  Int      @map("cod_usuario")
+  item         String   @map("item")
+  quantidade   Int      @map("quantidade")
+  custo        Int      @map("custo")
+  data_compra  DateTime @map("data_compra")
+
+  usuario Usuario @relation(fields: [cod_usuario], references: [cod_usuario])
+
+  @@map("compra")
+}
+
+// Saldo de benefícios comprados e ainda não usados pelo aluno,
+// agrupado por tipo ('dica' | 'tempo_extra' | 'chance_extra').
+model InventarioBeneficio {
+  cod_usuario Int    @map("cod_usuario")
+  tipo        String @map("tipo")
+  quantidade  Int    @default(0) @map("quantidade")
+
+  usuario Usuario @relation(fields: [cod_usuario], references: [cod_usuario])
+
+  @@id([cod_usuario, tipo])
+  @@map("inventario_beneficio")
 }
 
 model Possui {

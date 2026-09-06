@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script src="/js/auth.js"></script>
+<script>protegerPagina();</script>
+<script src="/js/estrelas.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -75,7 +78,7 @@
   .meta-wrap { width: 100%; background: #fff; border-radius: 18px; padding: 20px 26px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
   .meta-wrap h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
   .meta-bar-bg { width: 100%; height: 18px; background: #eef2f3; border-radius: 20px; overflow: hidden; }
-  .meta-bar-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--aquamarine), var(--baby-blue-ice)); transition: width 1s ease; }
+  .meta-bar-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--cotton-rose), var(--powder-petal), var(--lemon-chiffon), var(--celadon), var(--aquamarine), var(--frosted-blue), var(--baby-blue-ice), var(--mauve), var(--pink-orchid)); transition: width 1s ease; }
   .meta-texto { margin-top: 10px; font-size: 13.5px; font-weight: 600; color: rgba(22,50,61,0.7); }
 
   .secao { width: 100%; }
@@ -120,6 +123,16 @@
     font-family: 'DM Sans', sans-serif; cursor: pointer; transition: opacity .2s, transform .15s;
   }
   .btn-voltar:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  .recompensa-sessao {
+    position: relative; z-index: 1; width: 100%; max-width: 860px;
+    margin: 16px auto 0; padding: 14px 26px;
+    background: #fff8e1; border: 2px solid #f4b400; border-radius: 16px;
+    display: flex; align-items: center; gap: 10px; justify-content: center;
+    font-weight: 800; color: #8a5a00; font-size: 14.5px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.1);
+  }
+  .recompensa-sessao .icone-estrela-img { width: 22px; height: 22px; flex-shrink: 0; object-fit: contain; }
 </style>
 </head>
 <body>
@@ -134,8 +147,13 @@
     </span>
     <h1>Você conseguiu! Estudo concluído.</h1>
   </div>
-  <button class="btn-sair" onclick="window.location.href='/painel'">Sair</button>
+  <div style="display:flex; align-items:center; gap:14px;">
+    <div id="badgeSaldoRelatorio"></div>
+    <button class="btn-sair" onclick="window.location.href='/painel'">Sair</button>
+  </div>
 </header>
+
+<div id="recompensaSessao" class="recompensa-sessao" style="display:none;"></div>
 
 <div class="body-wrap">
 
@@ -216,6 +234,56 @@
     ? `Você respondeu ${totalResp} de ${meta} questões (${progMeta}% da meta)`
     : `Você respondeu ${totalResp} questões`;
   document.getElementById('metaTexto').textContent = metaMsg;
+
+  // ── Mercado Lumina: credita as Estrelas da sessão concluída ──
+  // Guarda por localStorage pra não creditar de novo se a pessoa
+  // atualizar a página do relatório (a chave é limpa a cada nova
+  // sessão de exercícios, ver carregarQuestoes.js).
+  (async function creditarRecompensaDaSessao() {
+    if (!window.Estrelas) {
+      console.error('Mercado Lumina: /js/estrelas.js não carregou — confira se o <script> está no <head>.');
+      return;
+    }
+
+    const saldoAtual = await window.Estrelas.buscarSaldoEstrelas();
+    const atualizarBadge = window.Estrelas.montarBadge(document.getElementById('badgeSaldoRelatorio'), saldoAtual);
+
+    const jaResgatou = localStorage.getItem('recompensaSessaoResgatada') === 'true';
+    if (jaResgatou) {
+      console.info('Mercado Lumina: recompensa desta sessão já havia sido creditada.');
+      return;
+    }
+    if (totalResp === 0) {
+      console.info('Mercado Lumina: nenhuma questão respondida nesta sessão, sem recompensa a creditar.');
+      return;
+    }
+
+    try {
+      const res = await fetchAutenticado('/api/loja/sessao-concluida', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ meta, respondidas: totalResp }),
+      });
+
+      const dados = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        console.error('Mercado Lumina: falha ao creditar recompensa da sessão.', res.status, dados);
+        return;
+      }
+      localStorage.setItem('recompensaSessaoResgatada', 'true');
+
+      const banner = document.getElementById('recompensaSessao');
+      banner.style.display = 'flex';
+      banner.innerHTML = window.Estrelas.ICONE_ESTRELA_SVG +
+        `<span>Você ganhou ${dados.estrelasGanhas} Estrela${dados.estrelasGanhas === 1 ? '' : 's'} por concluir esta sessão!</span>`;
+
+      atualizarBadge(dados.estrelas, true);
+      window.Estrelas.animarGanho(dados.estrelasGanhas, document.getElementById('badgeSaldoRelatorio'));
+    } catch (err) {
+      console.error('Erro ao creditar recompensa da sessão:', err);
+    }
+  })();
 
   const stats = {};
   resultados.forEach(r => {

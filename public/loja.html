@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja Estelar · LuminaSaber</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+
+    <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+            --green: #1a7f37;
+            --red: #e0435c;
+
+            --bg-app: radial-gradient(circle at 20% 15%, #5fe3d9 0%, #4fd1c5 45%, #3fc0b8 100%);
+            --bg-card: #fffdf8;
+            --bg-panel: #f6f3ea;
+            --bg-panel-border: #e9e2d0;
+            --text-main: var(--ink);
+            --text-muted: rgba(22,50,61,0.65);
+            --sombra-card: 0 14px 32px rgba(22,50,61,0.14);
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background: var(--bg-app);
+            color: var(--text-main); position: relative; overflow-x: hidden;
+            padding: 40px 20px 60px; font-size: 16px;
+            transition: background-color .2s, color .2s;
+        }
+
+        .blob { position: fixed; border-radius: 50%; filter: blur(2px); opacity: 0.35; pointer-events: none; z-index: 0; }
+        .blob.b1 { width: 240px; height: 240px; background: var(--mauve); top: -70px; left: -60px; }
+        .blob.b2 { width: 200px; height: 200px; background: var(--lemon-chiffon); bottom: -60px; right: -60px; }
+
+        .wrapper { position: relative; z-index: 1; width: 100%; max-width: 980px; margin: 0 auto; }
+
+        .topo {
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+            background: var(--bg-card); border-radius: 22px; padding: 22px 28px;
+            box-shadow: var(--sombra-card); margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .topo-titulo { display: flex; align-items: center; gap: 14px; }
+        .topo-titulo .icone-caixa {
+            width: 52px; height: 52px; border-radius: 14px; background: var(--lemon-chiffon);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .topo-titulo .icone-caixa svg { width: 27px; height: 27px; stroke: var(--ink); fill: none; }
+        .topo-titulo .icone-caixa img { width: 27px; height: 27px; object-fit: contain; display: block; }
+        .topo-titulo h1 { margin: 0; font-size: clamp(21px, 3vw, 27px); font-weight: 800; color: var(--text-main); }
+        .topo-titulo p { margin: 3px 0 0; font-size: 14px; color: var(--text-muted); }
+
+        .topo-acoes { display: flex; align-items: center; gap: 14px; }
+
+        .btn-voltar {
+            background: transparent; color: var(--text-main); border: 2px solid var(--text-main);
+            border-radius: 999px; padding: 10px 22px; font-size: 14.5px; font-weight: 700;
+            cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background-color .2s, color .2s;
+        }
+        .btn-voltar:hover { background: var(--text-main); color: var(--bg-card); }
+
+        .secao-titulo {
+            font-size: 14px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+            color: rgba(255,255,255,0.95); margin: 0 0 14px 4px;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+        }
+
+        .grade-itens {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; margin-bottom: 36px;
+        }
+
+        .item-card {
+            background: var(--bg-card); border-radius: 22px; padding: 28px 24px;
+            box-shadow: var(--sombra-card);
+            display: flex; flex-direction: column; gap: 13px;
+        }
+        .item-icone {
+            width: 56px; height: 56px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .item-icone svg { width: 28px; height: 28px; stroke: var(--ink); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .item-card.i-dica .item-icone { background: var(--celadon); }
+        .item-card.i-tempo_extra .item-icone { background: var(--baby-blue-ice); }
+        .item-card.i-chance_extra .item-icone { background: var(--cotton-rose); }
+
+        .item-nome { font-size: 18.5px; font-weight: 800; margin: 0; color: var(--text-main); }
+        .item-desc { font-size: 14.5px; color: var(--text-muted); margin: 0; line-height: 1.55; flex-grow: 1; }
+
+        .item-rodape { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+
+        .item-custo {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #fff8e1; border: 2px solid #f4b400; color: #8a5a00;
+            border-radius: 999px; padding: 7px 13px; font-weight: 800; font-size: 15px;
+        }
+        .item-custo .icone-estrela-img { width: 22px; height: 22px; object-fit: contain; }
+
+        .btn-comprar {
+            border: none; border-radius: 999px; padding: 11px 22px;
+            background: var(--ink); color: #fff; font-weight: 700; font-size: 14.5px;
+            cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .15s, transform .15s;
+        }
+        .btn-comprar:hover:not(:disabled) { opacity: .85; transform: translateY(-2px); }
+        .btn-comprar:disabled { opacity: .45; cursor: not-allowed; }
+
+        .item-possui {
+            font-size: 12.5px; font-weight: 700; color: var(--green);
+            background: rgba(185,251,192,0.5); border-radius: 999px;
+            padding: 4px 11px; align-self: flex-start;
+        }
+        .item-possui.zero { color: var(--text-muted); background: rgba(120,130,140,0.12); }
+
+        .msg-vazio, .msg-erro {
+            grid-column: 1 / -1; background: var(--bg-card); border-radius: 18px;
+            padding: 30px; text-align: center; color: var(--text-muted);
+            box-shadow: var(--sombra-card); font-size: 15px;
+        }
+        .msg-erro p:first-child { color: var(--text-main); font-weight: 700; font-size: 16px; margin: 0 0 6px; }
+        .msg-erro-detalhe { font-size: 13px; opacity: .8; margin: 0 0 14px; }
+        .btn-tentar-novo {
+            border: none; border-radius: 999px; padding: 10px 22px;
+            background: var(--ink); color: #fff; font-weight: 700; font-size: 13.5px;
+            cursor: pointer; font-family: 'DM Sans', sans-serif;
+        }
+
+        .aviso-toast {
+            position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px);
+            background: var(--ink); color: #fff; padding: 13px 24px; border-radius: 999px;
+            font-weight: 700; font-size: 14px; box-shadow: 0 12px 26px rgba(0,0,0,0.3);
+            opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 10000;
+        }
+        .aviso-toast.erro { background: var(--red); }
+        .aviso-toast.mostrar { opacity: 1; transform: translate(-50%, 0); }
+
+        .rodape-nota {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            max-width: 640px; margin: 8px auto 0;
+            background: var(--bg-card); color: var(--text-main);
+            border-radius: 999px; padding: 14px 26px;
+            font-size: 14.5px; font-weight: 700; text-align: center;
+            box-shadow: var(--sombra-card);
+        }
+        .rodape-nota .icone-estrela-img { width: 20px; height: 20px; flex-shrink: 0; }
+
+        @media (max-width: 560px) {
+            .topo { padding: 18px 20px; }
+            .topo-acoes { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+
+    <div class="wrapper">
+        <div class="topo">
+            <div class="topo-titulo">
+                <span class="icone-caixa">
+                    <img src="/img/loja.png" alt="">
+                </span>
+                <div>
+                    <h1>Loja Estelar</h1>
+                    <p>Troque suas Estrelas por benefícios de estudo.</p>
+                </div>
+            </div>
+            <div class="topo-acoes">
+                <div id="badgeSaldo"></div>
+                <button class="btn-voltar" onclick="window.location.href='/painel'">Voltar</button>
+            </div>
+        </div>
+
+        <p class="secao-titulo">Itens disponíveis</p>
+        <div class="grade-itens" id="gradeItens">
+            <p class="msg-vazio">Carregando itens...</p>
+        </div>
+
+        <p class="rodape-nota" id="rodapeNota">Ganhe Estrelas acertando questões que você já havia errado e concluindo suas sessões de estudo.</p>
+    </div>
+
+    <div class="aviso-toast" id="avisoToast"></div>
+
+    <script src="/js/estrelas.js"></script>
+    <script src="/js/loja.js"></script>
+    <script>
+        document.getElementById('rodapeNota').insertAdjacentHTML('afterbegin', window.Estrelas.ICONE_ESTRELA_SVG);
+    </script>
+</body>
+</html>

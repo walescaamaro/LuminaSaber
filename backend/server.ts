@@ -9,7 +9,9 @@ import type { NextFunction, Request, Response } from 'express';
 import questaoRoutes from './src/routes/questaoRoutes.js';
 import usuarioRoutes from './src/routes/usuarioRoutes.js';
 import anotacaoRoutes from './src/routes/anotacaoRoutes.js';
+import pastaRoutes from './src/routes/pastaRoutes.js';
 import historicoRoutes from './src/routes/historicoRoutes.js';
+import lojaRoutes from './src/routes/lojaRoutes.js';
 import configurePageRoutes from './src/routes/pageRoutes.js';
 import { contentTypeJson } from './src/middlewares/contentTypeJson.js';
 import { blockDirectHtmlAccess } from './src/middlewares/blockDirectHtmlAccess.js';
@@ -39,7 +41,9 @@ app.use('/api', contentTypeJson);
 app.use(questaoRoutes);
 app.use(usuarioRoutes);
 app.use(anotacaoRoutes);
+app.use(pastaRoutes);
 app.use(historicoRoutes);
+app.use(lojaRoutes);
 app.use(configurePageRoutes(publicDir));
 
 app.use((req: Request, res: Response, next: NextFunction) => {

@@ -11,6 +11,7 @@
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
+    <script src="/js/estrelas.js"></script>
 
     <style>
         :root {
@@ -25,21 +26,33 @@
             --aquamarine: #98f5e1;
             --celadon: #b9fbc0;
             --ink: #16323d;
+
+            --bg-app: radial-gradient(circle at 20% 15%, #5fe3d9 0%, #4fd1c5 45%, #3fc0b8 100%);
+            --bg-card: #fffdf8;
+            --text-main: var(--ink);
+            --text-muted: rgba(22,50,61,0.65);
+            --icone-caixa-bg: rgba(255,255,255,0.65);
+            --sombra-card: 0 14px 32px rgba(0,0,0,0.14);
+            --sombra-cartao: 0 10px 22px rgba(0,0,0,0.12);
+            --sombra-cartao-hover: 0 16px 30px rgba(0,0,0,0.18);
+            --divisor: rgba(255,255,255,0.35);
         }
+
         * { box-sizing: border-box; }
         html, body { height: 100%; }
         body {
             margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
-            background: radial-gradient(circle at 20% 15%, #21e8e8 0%, #00e1e1 45%, #00cfcf 100%);
-            display: flex; justify-content: center; align-items: center;
-            padding: 60px 20px; color: var(--ink);
+            background: var(--bg-app);
+            color: var(--text-main);
             position: relative; overflow-x: hidden;
+            transition: background-color .2s, color .2s;
+            padding-bottom: 90px;
         }
 
         /* ── Decoração de fundo ── */
         .blob {
             position: fixed; border-radius: 50%; filter: blur(2px);
-            opacity: 0.55; pointer-events: none; z-index: 0;
+            opacity: 0.45; pointer-events: none; z-index: 0;
         }
         .blob.b1 { width: 260px; height: 260px; background: var(--celadon); top: -80px; left: -60px; }
         .blob.b2 { width: 200px; height: 200px; background: var(--pink-orchid); bottom: -70px; right: -50px; }
@@ -62,39 +75,69 @@
             50% { transform: translateY(-16px) rotate(10deg); }
         }
 
-        .wrapper { position: relative; z-index: 1; width: 100%; max-width: 980px; text-align: center; }
+        /* ── Barra superior ── */
+        .barra-topo {
+            position: relative; z-index: 2;
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 980px; margin: 0 auto; padding: 24px 20px 0;
+        }
+
+        .btn-sair {
+            border: 2px solid var(--text-main); background: var(--bg-card); color: var(--text-main);
+            padding: 10px 22px; border-radius: 999px; font-weight: 700; font-size: 13.5px;
+            cursor: pointer; font-family: 'DM Sans', sans-serif;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: background-color .15s, color .15s;
+        }
+        .btn-sair:hover { background-color: var(--text-main); color: var(--bg-card); }
+        .btn-sair svg { width: 15px; height: 15px; stroke: currentColor; flex-shrink: 0; }
+
+        .barra-topo-direita { display: flex; align-items: center; gap: 12px; }
+        .barra-topo-direita #badgeSaldo { cursor: pointer; transition: transform .15s ease; }
+        .barra-topo-direita #badgeSaldo:hover { transform: translateY(-2px); }
+
+        /* ── Conteúdo principal ── */
+        .wrapper {
+            position: relative; z-index: 1; width: 100%; max-width: 980px;
+            margin: 0 auto; padding: 28px 20px 0; text-align: center;
+        }
 
         .cabecalho {
-            background: #ffffff; border-radius: 24px; padding: 32px 40px;
-            margin: 0 auto 32px; max-width: 560px;
-            box-shadow: 0 14px 32px rgba(0,0,0,0.14);
+            background: var(--bg-card); border-radius: 24px; padding: 30px 40px;
+            margin: 0 auto 36px; max-width: 560px;
+            box-shadow: var(--sombra-card);
         }
         .saudacao {
-            font-family: 'Caveat', cursive; font-size: 26px; font-weight: 600;
+            font-family: 'Caveat', cursive; font-size: 27px; font-weight: 600;
             color: #2a8f80; margin: 0 0 2px;
         }
-        .cabecalho h1 { font-size: 27px; font-weight: 800; margin: 0; }
-        .cabecalho .sub { font-size: 14px; color: rgba(22,50,61,0.65); margin: 8px 0 0; }
+        .cabecalho h1 { font-size: 27px; font-weight: 800; margin: 0; color: var(--text-main); }
+        .cabecalho .sub { font-size: 14px; color: var(--text-muted); margin: 8px 0 0; }
 
         .grade {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 220px);
+            justify-content: center;
+            gap: 22px;
         }
+        .grade-extra { margin-top: 22px; }
 
         .cartao {
             border: none; border-radius: 20px; padding: 26px 22px;
             display: flex; flex-direction: column; align-items: center; gap: 14px;
             cursor: pointer; text-align: center; font-family: 'DM Sans', sans-serif;
-            box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+            box-shadow: var(--sombra-cartao);
             transition: transform .18s ease, box-shadow .18s ease;
-            width: 220px;
+            width: 100%; color: var(--ink);
         }
-        .cartao:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 16px 30px rgba(0,0,0,0.18); }
+        .cartao:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--sombra-cartao-hover); }
 
         .icone-caixa {
-            width: 56px; height: 56px; border-radius: 16px; background: rgba(255,255,255,0.65);
+            width: 56px; height: 56px; border-radius: 16px; background: var(--icone-caixa-bg);
             display: flex; align-items: center; justify-content: center;
         }
         .icone-caixa svg { width: 28px; height: 28px; stroke: var(--ink); }
+        .icone-caixa img { width: 28px; height: 28px; object-fit: contain; display: block; }
 
         .cartao .titulo { font-size: 16px; font-weight: 700; margin: 0; }
         .cartao .desc { font-size: 12.5px; color: rgba(22,50,61,0.7); margin: 0; line-height: 1.4; }
@@ -102,21 +145,30 @@
         .c-estudar { background: var(--baby-blue-ice); }
         .c-anotacoes { background: var(--pink-orchid); }
         .c-historico { background: var(--mauve); }
-        .c-admin { background: var(--celadon); }
+        .c-loja { background: var(--lemon-chiffon); grid-column: 2; }
+        .c-admin { background: var(--celadon); grid-column: 3; }
 
-        .sair-wrap { margin-top: 32px; }
-        .btn-sair {
-            border: 2px solid var(--ink); background: rgba(255,255,255,0.9); color: var(--ink);
-            padding: 10px 26px; border-radius: 999px; font-weight: 700; font-size: 14px;
-            cursor: pointer; font-family: 'DM Sans', sans-serif;
-            display: inline-flex; align-items: center; gap: 8px;
-            transition: background-color .15s, color .15s;
+        /* Quando existe o card de admin, a linha extra vira uma grade de
+           2 colunas própria, pra o par Loja + Admin ficar centralizado
+           de verdade (em vez de ocupar só as colunas 2-3 da grade de cima). */
+        .grade-extra.tem-admin {
+            grid-template-columns: repeat(2, 220px);
         }
-        .btn-sair:hover { background-color: var(--ink); color: #fff; }
-        .btn-sair svg { width: 16px; height: 16px; stroke: currentColor; }
+        .grade-extra.tem-admin .c-loja { grid-column: 1; }
+        .grade-extra.tem-admin .c-admin { grid-column: 2; }
 
         @media (max-width: 720px) {
-            .cartao { width: 160px; padding: 20px 16px; }
+            .grade { grid-template-columns: repeat(3, 160px); gap: 14px; }
+            .grade-extra.tem-admin { grid-template-columns: repeat(2, 160px); }
+        }
+        @media (max-width: 560px) {
+            .grade { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto; }
+            .grade-extra.tem-admin { grid-template-columns: 1fr; max-width: 260px; margin: 0 auto; }
+            .c-loja, .c-admin { grid-column: 1; }
+        }
+        @media (max-width: 560px) {
+            .barra-topo { flex-direction: column; align-items: stretch; gap: 14px; }
+            .barra-topo-direita { justify-content: flex-end; }
         }
         @media (max-width: 520px) {
             .cabecalho { padding: 24px 24px; }
@@ -137,6 +189,16 @@
     <span class="doodle d4"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M4 12h16M12 4v16"/></svg></span>
     <span class="doodle d5"><svg viewBox="0 0 24 24" fill="#f1c0e8"><circle cx="12" cy="12" r="10"/></svg></span>
 
+    <div class="barra-topo">
+        <button class="btn-sair" id="btnSair">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+            Sair da conta
+        </button>
+        <div class="barra-topo-direita">
+            <div id="badgeSaldo" onclick="window.location.href='/loja'"></div>
+        </div>
+    </div>
+
     <div class="wrapper">
         <div class="cabecalho">
             <p class="saudacao" id="saudacao">Olá!</p>
@@ -147,7 +209,7 @@
         <div class="grade" id="grade">
             <button class="cartao c-estudar" onclick="location.href='/selecao'">
                 <span class="icone-caixa">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z" fill="#16323d" stroke="none"/></svg>
+                    <img src="/img/estudar.png" alt="">
                 </span>
                 <p class="titulo">Começar a estudar</p>
                 <p class="desc">Escolha uma disciplina e comece agora.</p>
@@ -163,22 +225,30 @@
 
             <button class="cartao c-historico" onclick="location.href='/historico'">
                 <span class="icone-caixa">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                    <img src="/img/historico.png" alt="">
                 </span>
                 <p class="titulo">Meu histórico</p>
                 <p class="desc">Veja suas respostas anteriores.</p>
             </button>
         </div>
 
-        <div class="sair-wrap">
-            <button class="btn-sair" id="btnSair">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
-                Sair da conta
+        <div class="grade grade-extra" id="gradeExtra">
+            <button class="cartao c-loja" onclick="location.href='/loja'">
+                <span class="icone-caixa">
+                    <img src="/img/loja.png" alt="">
+                </span>
+                <p class="titulo">Loja Estelar</p>
+                <p class="desc">Troque Estrelas por benefícios.</p>
             </button>
         </div>
     </div>
 
     <script>
+        (async function carregarSaldoEstrelas() {
+            const saldo = await window.Estrelas.buscarSaldoEstrelas();
+            window.Estrelas.montarBadge(document.getElementById('badgeSaldo'), saldo);
+        })();
+
         (async function carregarPerfil() {
             try {
                 const res = await fetchAutenticado('/api/usuarios/perfil');
@@ -186,7 +256,8 @@
                 document.getElementById('saudacao').textContent = `Olá, ${dados.usuario.nome.split(' ')[0]}!`;
 
                 if (dados.usuario.tipo === 'administrador') {
-                    const grade = document.getElementById('grade');
+                    const gradeExtra = document.getElementById('gradeExtra');
+                    gradeExtra.classList.add('tem-admin');
                     const botaoAdmin = document.createElement('button');
                     botaoAdmin.className = 'cartao c-admin';
                     botaoAdmin.innerHTML = `
@@ -197,7 +268,7 @@
                         <p class="desc">Área exclusiva de administrador.</p>
                     `;
                     botaoAdmin.onclick = () => location.href = '/admin';
-                    grade.appendChild(botaoAdmin);
+                    gradeExtra.appendChild(botaoAdmin);
                 }
             } catch (err) {
                 // fetchAutenticado já redireciona pro /login em caso de 401

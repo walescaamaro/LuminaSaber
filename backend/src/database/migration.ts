@@ -151,6 +151,38 @@ async function runMigration() {
     `);
   console.log('  ✓ Tabela possui');
 
+  // ── Mercado Lumina (loja de recompensas em Estrelas) ──
+  try {
+    await conn.run('ALTER TABLE USUARIO ADD COLUMN estrelas INTEGER NOT NULL DEFAULT 0');
+    console.log('  ✓ Coluna USUARIO.estrelas');
+  } catch (err) {
+    // Coluna já existe (migration rodada novamente) — ignora.
+  }
+
+  await conn.run(`
+        CREATE TABLE IF NOT EXISTS compra (
+            cod_compra   INTEGER PRIMARY KEY AUTOINCREMENT,
+            cod_usuario  INTEGER NOT NULL,
+            item         VARCHAR(30) NOT NULL,
+            quantidade   INTEGER NOT NULL,
+            custo        INTEGER NOT NULL,
+            data_compra  DATE NOT NULL,
+            FOREIGN KEY (cod_usuario) REFERENCES USUARIO(cod_usuario)
+        )
+    `);
+  console.log('  ✓ Tabela compra');
+
+  await conn.run(`
+        CREATE TABLE IF NOT EXISTS inventario_beneficio (
+            cod_usuario INTEGER NOT NULL,
+            tipo        VARCHAR(20) NOT NULL,
+            quantidade  INTEGER NOT NULL DEFAULT 0,
+            PRIMARY KEY (cod_usuario, tipo),
+            FOREIGN KEY (cod_usuario) REFERENCES USUARIO(cod_usuario)
+        )
+    `);
+  console.log('  ✓ Tabela inventario_beneficio');
+
   await conn.close();
   console.log('✅ Migration concluída com sucesso!');
 }

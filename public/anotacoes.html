@@ -6,7 +6,7 @@
     <title>Minhas Anotações · LuminaSaber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
@@ -18,7 +18,7 @@
             background-color: #00e1e1; padding: 32px 20px 60px;
             color: #16323d;
         }
-        .wrapper { max-width: 760px; margin: 0 auto; }
+        .wrapper { max-width: 1000px; margin: 0 auto; }
 
         .topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .voltar {
@@ -35,6 +35,50 @@
         .banner h1 { margin: 0; font-size: 24px; font-weight: 700; }
         .banner p { margin: 4px 0 0; font-size: 14px; color: #2a5049; }
 
+        .layout { display: flex; gap: 22px; align-items: flex-start; }
+
+        /* ── Barra lateral de pastas ── */
+        .lateral {
+            width: 230px; flex-shrink: 0; background: #fff; border-radius: 14px;
+            padding: 18px 16px; box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+        .lateral h2 {
+            font-size: 12.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+            color: rgba(22,50,61,0.55); margin: 0 0 12px;
+        }
+        .lista-pastas { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+        .item-pasta {
+            display: flex; align-items: center; justify-content: space-between; gap: 6px;
+            padding: 9px 10px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 13.5px;
+            transition: background-color .15s; border: 2px solid transparent;
+        }
+        .item-pasta:hover { background: #f2f6f7; }
+        .item-pasta.ativa { background: #b8ecd9; border-color: #16323d; }
+        .item-pasta .nome-pasta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+        .item-pasta .qtd-pasta {
+            font-size: 11px; font-weight: 800; background: rgba(22,50,61,0.08);
+            border-radius: 999px; padding: 2px 7px; flex-shrink: 0;
+        }
+        .item-pasta .acoes-pasta { display: none; gap: 4px; flex-shrink: 0; }
+        .item-pasta:hover .acoes-pasta { display: flex; }
+        .item-pasta.especial:hover .acoes-pasta { display: none; }
+        .btn-icone-pasta {
+            width: 20px; height: 20px; border: none; background: transparent; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; border-radius: 6px; padding: 0;
+            color: rgba(22,50,61,0.55);
+        }
+        .btn-icone-pasta:hover { background: rgba(22,50,61,0.12); color: #16323d; }
+        .btn-icone-pasta svg { width: 13px; height: 13px; }
+
+        .btn-nova-pasta {
+            width: 100%; padding: 9px; border: 2px dashed rgba(22,50,61,0.3); background: transparent;
+            border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; color: #16323d;
+            font-family: 'DM Sans', sans-serif; transition: background-color .15s;
+        }
+        .btn-nova-pasta:hover { background: #f2f6f7; }
+
+        .principal { flex: 1; min-width: 0; }
+
         .form-nova {
             background: #fbe7ad;
             background-image: repeating-linear-gradient(
@@ -44,17 +88,22 @@
             border-radius: 14px; padding: 24px; margin-bottom: 28px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
-        .form-nova input, .form-nova textarea {
+        .form-nova input[type="text"], .form-nova textarea {
             width: 100%; border: none; background: transparent; outline: none;
             font-family: 'DM Sans', sans-serif; color: #16323d; resize: vertical;
         }
-        .form-nova input {
+        .form-nova input[type="text"] {
             font-size: 18px; font-weight: 700; padding-bottom: 10px;
             border-bottom: 1px solid rgba(22,50,61,0.25); margin-bottom: 8px;
         }
         .form-nova input::placeholder, .form-nova textarea::placeholder { color: rgba(22,50,61,0.45); }
         .form-nova textarea { font-size: 15px; line-height: 34px; padding-top: 4px; }
-        .form-rodape { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+        .form-rodape { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; gap: 12px; flex-wrap: wrap; }
+        .form-rodape select {
+            border: 2px solid rgba(22,50,61,0.25); background: #fff; border-radius: 10px;
+            padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px;
+            color: #16323d;
+        }
         .form-nova button {
             padding: 10px 26px; background-color: #16323d; color: #fff; border: none;
             border-radius: 999px; font-weight: 700; font-size: 14px; cursor: pointer;
@@ -68,12 +117,93 @@
             background: #fff; border-radius: 14px; padding: 20px 24px;
             box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
-        .card h3 { margin: 0 0 6px; font-size: 16px; }
-        .card p { margin: 0 0 10px; color: #33505a; line-height: 1.5; font-size: 14px; }
+        .card-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+        .card h3 { margin: 0; font-size: 16px; }
+        .card p.texto { margin: 0 0 10px; color: #33505a; line-height: 1.5; font-size: 14px; white-space: pre-wrap; }
+        .card .rodape-card { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
         .card time { font-size: 12px; color: #8a9aa0; }
+        .tag-pasta {
+            font-size: 11px; font-weight: 800; background: #dff0ff; color: #16323d;
+            padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+        }
+        .acoes-card { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-acao {
+            display: inline-flex; align-items: center; gap: 5px;
+            border: none; border-radius: 999px; padding: 7px 14px;
+            font-weight: 700; font-size: 12.5px; cursor: pointer;
+            font-family: 'DM Sans', sans-serif; transition: opacity .15s;
+        }
+        .btn-acao svg { width: 13px; height: 13px; }
+        .btn-acao.editar { background: #dceeff; color: #16323d; }
+        .btn-acao.excluir { background: #ffd9dc; color: #7a0d18; }
+        .btn-acao.imprimir { background: #e4dcff; color: #16323d; }
+        .btn-acao:hover { opacity: .8; }
+
         .vazio {
             background: rgba(255,255,255,0.85); padding: 28px; border-radius: 14px;
             text-align: center; font-weight: 600; color: #2a5049;
+        }
+
+        /* ── Edição inline ── */
+        .card.editando .conteudo-normal { display: none; }
+        .card .conteudo-edicao { display: none; }
+        .card.editando .conteudo-edicao { display: block; }
+        .conteudo-edicao input[type="text"], .conteudo-edicao textarea, .conteudo-edicao select {
+            width: 100%; border: 2px solid rgba(22,50,61,0.2); border-radius: 10px;
+            padding: 8px 10px; font-family: 'DM Sans', sans-serif; color: #16323d;
+            margin-bottom: 8px; outline: none;
+        }
+        .conteudo-edicao input[type="text"] { font-size: 16px; font-weight: 700; }
+        .conteudo-edicao textarea { font-size: 14px; line-height: 1.5; resize: vertical; }
+        .acoes-edicao { display: flex; gap: 8px; justify-content: flex-end; }
+        .btn-acao.salvar { background: #16323d; color: #fff; }
+        .btn-acao.cancelar { background: #eef2f3; color: #16323d; }
+
+        /* ── Modal genérico (confirmação / criar-renomear pasta) ── */
+        .modal-fundo {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+            align-items: center; justify-content: center; z-index: 9999; padding: 20px;
+        }
+        .modal-fundo.aberto { display: flex; }
+        .modal-caixa {
+            background: #fff; border-radius: 16px; padding: 26px; width: min(94vw, 380px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .modal-caixa h3 { margin: 0 0 10px; font-size: 17px; }
+        .modal-caixa p { margin: 0 0 16px; font-size: 14px; color: #33505a; line-height: 1.5; }
+        .modal-caixa input[type="text"] {
+            width: 100%; border: 2px solid rgba(22,50,61,0.2); border-radius: 10px;
+            padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+            margin-bottom: 16px; outline: none; color: #16323d;
+        }
+        .modal-acoes { display: flex; justify-content: flex-end; gap: 10px; }
+        .modal-acoes button {
+            border: none; border-radius: 999px; padding: 9px 20px; font-weight: 700;
+            font-size: 13.5px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+        }
+        .modal-acoes .btn-cancelar { background: #eef2f3; color: #16323d; }
+        .modal-acoes .btn-confirmar { background: #16323d; color: #fff; }
+        .modal-acoes .btn-confirmar.perigo { background: #b00020; }
+        #modalErro { font-size: 12.5px; font-weight: 700; color: #b00020; margin: -8px 0 12px; display: none; }
+
+        /* ── Área de impressão (usada só ao imprimir/baixar PDF) ── */
+        #areaImpressao { display: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #areaImpressao, #areaImpressao * { visibility: visible; }
+            #areaImpressao {
+                display: block !important; position: absolute; top: 0; left: 0; width: 100%;
+                padding: 30px; color: #000;
+            }
+            #areaImpressao h1 { font-size: 22px; margin: 0 0 4px; }
+            #areaImpressao .meta-impressao { font-size: 12px; color: #444; margin-bottom: 20px; }
+            #areaImpressao .texto-impressao { font-size: 14px; line-height: 1.7; white-space: pre-wrap; }
+        }
+
+        @media (max-width: 720px) {
+            .layout { flex-direction: column; }
+            .lateral { width: 100%; }
         }
     </style>
 </head>
@@ -88,51 +218,410 @@
             <p>Registre aqui o que você aprendeu para revisar depois.</p>
         </div>
 
-        <form class="form-nova" id="formNovaAnotacao">
-            <input type="text" id="titulo" placeholder="Título da anotação" required maxlength="120">
-            <textarea id="texto" rows="4" placeholder="Digite suas ideias..." required></textarea>
-            <div class="form-rodape">
-                <p id="mensagemForm"></p>
-                <button type="submit">Salvar anotação</button>
+        <div class="layout">
+            <div class="lateral">
+                <h2>Pastas</h2>
+                <div class="lista-pastas" id="listaPastas">
+                    <p style="font-size:13px; opacity:.6;">Carregando...</p>
+                </div>
+                <button class="btn-nova-pasta" id="btnNovaPasta">+ Nova pasta</button>
             </div>
-        </form>
 
-        <div class="lista" id="lista"><p class="vazio">Carregando...</p></div>
+            <div class="principal">
+                <form class="form-nova" id="formNovaAnotacao">
+                    <input type="text" id="titulo" placeholder="Título da anotação" required maxlength="120">
+                    <textarea id="texto" rows="4" placeholder="Digite suas ideias..." required></textarea>
+                    <div class="form-rodape">
+                        <select id="pastaForm"></select>
+                        <p id="mensagemForm"></p>
+                        <button type="submit">Salvar anotação</button>
+                    </div>
+                </form>
+
+                <div class="lista" id="lista"><p class="vazio">Carregando...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal genérico: confirmação e criar/renomear pasta -->
+    <div class="modal-fundo" id="modalFundo">
+        <div class="modal-caixa">
+            <h3 id="modalTitulo">Título</h3>
+            <p id="modalTexto"></p>
+            <p id="modalErro"></p>
+            <input type="text" id="modalInput" style="display:none;">
+            <div class="modal-acoes">
+                <button class="btn-cancelar" id="modalBtnCancelar">Cancelar</button>
+                <button class="btn-confirmar" id="modalBtnConfirmar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Área usada apenas na hora de imprimir / baixar PDF -->
+    <div id="areaImpressao">
+        <h1 id="impTitulo"></h1>
+        <p class="meta-impressao" id="impMeta"></p>
+        <p class="texto-impressao" id="impTexto"></p>
     </div>
 
     <script>
-        async function carregarAnotacoes() {
-            const lista = document.getElementById('lista');
+        let pastas = [];
+        let anotacoes = [];
+        let pastaSelecionada = null; // null = "todas as anotações"
+
+        // ── Modal genérico ──
+        const modalFundo       = document.getElementById('modalFundo');
+        const modalTitulo      = document.getElementById('modalTitulo');
+        const modalTexto       = document.getElementById('modalTexto');
+        const modalInput       = document.getElementById('modalInput');
+        const modalErro        = document.getElementById('modalErro');
+        const modalBtnCancelar = document.getElementById('modalBtnCancelar');
+        const modalBtnConfirmar = document.getElementById('modalBtnConfirmar');
+
+        function fecharModal() {
+            modalFundo.classList.remove('aberto');
+            modalErro.style.display = 'none';
+            modalInput.style.display = 'none';
+        }
+        modalBtnCancelar.addEventListener('click', fecharModal);
+        modalFundo.addEventListener('click', (e) => { if (e.target === modalFundo) fecharModal(); });
+
+        // Modal de confirmação (sim/não).
+        function confirmar({ titulo, texto, textoBotao = 'Confirmar', perigo = false, aoConfirmar }) {
+            modalTitulo.textContent = titulo;
+            modalTexto.textContent = texto;
+            modalInput.style.display = 'none';
+            modalErro.style.display = 'none';
+            modalBtnConfirmar.textContent = textoBotao;
+            modalBtnConfirmar.className = 'btn-confirmar' + (perigo ? ' perigo' : '');
+            modalFundo.classList.add('aberto');
+
+            modalBtnConfirmar.onclick = async () => {
+                modalBtnConfirmar.disabled = true;
+                try {
+                    await aoConfirmar();
+                    fecharModal();
+                } catch (err) {
+                    modalErro.textContent = err.message || 'Algo deu errado. Tente novamente.';
+                    modalErro.style.display = 'block';
+                } finally {
+                    modalBtnConfirmar.disabled = false;
+                }
+            };
+        }
+
+        // Modal com campo de texto (criar/renomear pasta).
+        function pedirTexto({ titulo, texto, valorInicial = '', placeholder = '', textoBotao = 'Salvar', aoConfirmar }) {
+            modalTitulo.textContent = titulo;
+            modalTexto.textContent = texto;
+            modalInput.style.display = 'block';
+            modalInput.value = valorInicial;
+            modalInput.placeholder = placeholder;
+            modalErro.style.display = 'none';
+            modalBtnConfirmar.textContent = textoBotao;
+            modalBtnConfirmar.className = 'btn-confirmar';
+            modalFundo.classList.add('aberto');
+            setTimeout(() => modalInput.focus(), 50);
+
+            modalBtnConfirmar.onclick = async () => {
+                const valor = modalInput.value.trim();
+                if (!valor) {
+                    modalErro.textContent = 'Preencha o nome.';
+                    modalErro.style.display = 'block';
+                    return;
+                }
+                modalBtnConfirmar.disabled = true;
+                try {
+                    await aoConfirmar(valor);
+                    fecharModal();
+                } catch (err) {
+                    modalErro.textContent = err.message || 'Algo deu errado. Tente novamente.';
+                    modalErro.style.display = 'block';
+                } finally {
+                    modalBtnConfirmar.disabled = false;
+                }
+            };
+        }
+
+        // ── Pastas ──
+        async function carregarPastas() {
+            const container = document.getElementById('listaPastas');
             try {
-                const res = await fetchAutenticado('/api/anotacoes');
-                const anotacoes = await res.json();
-
-                if (!res.ok) {
-                    lista.innerHTML = `<p class="vazio">${anotacoes.error || 'Não foi possível carregar suas anotações.'}</p>`;
-                    return;
-                }
-                if (anotacoes.length === 0) {
-                    lista.innerHTML = '<p class="vazio">Você ainda não tem anotações salvas.</p>';
-                    return;
-                }
-
-                lista.innerHTML = anotacoes.map(a => `
-                    <div class="card">
-                        <h3>${a.titulo}</h3>
-                        <p>${a.texto_anota}</p>
-                        <time>${a.data_anota}</time>
-                    </div>
-                `).join('');
+                const res = await fetchAutenticado('/api/pastas');
+                pastas = await res.json();
+                renderizarPastas();
+                renderizarSelectPasta();
             } catch (err) {
-                lista.innerHTML = '<p class="vazio">Não foi possível conectar ao servidor.</p>';
+                container.innerHTML = '<p style="font-size:13px; color:#b00020;">Não foi possível carregar as pastas.</p>';
             }
         }
 
+        function renderizarPastas() {
+            const container = document.getElementById('listaPastas');
+            const totalGeral = anotacoes.length;
+
+            let html = `
+                <div class="item-pasta especial ${pastaSelecionada === null ? 'ativa' : ''}" data-pasta="todas">
+                    <span class="nome-pasta">Todas as anotações</span>
+                    <span class="qtd-pasta">${totalGeral}</span>
+                </div>
+            `;
+
+            html += pastas.map(p => `
+                <div class="item-pasta ${pastaSelecionada === p.cod_pasta ? 'ativa' : ''}" data-pasta="${p.cod_pasta}">
+                    <span class="nome-pasta">${p.nome_pasta}</span>
+                    <span class="qtd-pasta">${p.total_anotacoes}</span>
+                    <span class="acoes-pasta">
+                        <button type="button" class="btn-icone-pasta" data-acao="renomear" data-id="${p.cod_pasta}" title="Renomear pasta">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+                        </button>
+                        <button type="button" class="btn-icone-pasta" data-acao="excluir" data-id="${p.cod_pasta}" title="Excluir pasta">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                        </button>
+                    </span>
+                </div>
+            `).join('');
+
+            container.innerHTML = html;
+
+            container.querySelectorAll('.item-pasta').forEach((el) => {
+                el.addEventListener('click', (e) => {
+                    if (e.target.closest('.btn-icone-pasta')) return; // não filtra ao clicar nos ícones
+                    const valor = el.dataset.pasta;
+                    pastaSelecionada = valor === 'todas' ? null : Number(valor);
+                    renderizarPastas();
+                    renderizarLista();
+                });
+            });
+
+            container.querySelectorAll('[data-acao="renomear"]').forEach((btn) => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = Number(btn.dataset.id);
+                    const pasta = pastas.find(p => p.cod_pasta === id);
+                    pedirTexto({
+                        titulo: 'Renomear pasta',
+                        texto: 'Escolha um novo nome para a pasta.',
+                        valorInicial: pasta ? pasta.nome_pasta : '',
+                        placeholder: 'Nome da pasta',
+                        textoBotao: 'Renomear',
+                        aoConfirmar: async (novoNome) => {
+                            const res = await fetchAutenticado(`/api/pastas/${id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ nome_pasta: novoNome }),
+                            });
+                            const dados = await res.json();
+                            if (!res.ok) throw new Error(dados.error);
+                            await carregarPastas();
+                        },
+                    });
+                });
+            });
+
+            container.querySelectorAll('[data-acao="excluir"]').forEach((btn) => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = Number(btn.dataset.id);
+                    const pasta = pastas.find(p => p.cod_pasta === id);
+                    confirmar({
+                        titulo: 'Excluir pasta',
+                        texto: `Tem certeza que deseja excluir a pasta "${pasta ? pasta.nome_pasta : ''}"? As anotações dela serão movidas para outra pasta — nenhuma anotação será apagada.`,
+                        textoBotao: 'Excluir pasta',
+                        perigo: true,
+                        aoConfirmar: async () => {
+                            const res = await fetchAutenticado(`/api/pastas/${id}`, { method: 'DELETE' });
+                            const dados = await res.json();
+                            if (!res.ok) throw new Error(dados.error);
+                            if (pastaSelecionada === id) pastaSelecionada = null;
+                            await Promise.all([carregarPastas(), carregarAnotacoes()]);
+                        },
+                    });
+                });
+            });
+        }
+
+        function renderizarSelectPasta(selecionarId) {
+            const select = document.getElementById('pastaForm');
+            select.innerHTML = pastas.map(p =>
+                `<option value="${p.cod_pasta}">${p.nome_pasta}</option>`
+            ).join('');
+            const alvo = selecionarId ?? pastaSelecionada;
+            if (alvo) select.value = String(alvo);
+        }
+
+        document.getElementById('btnNovaPasta').addEventListener('click', () => {
+            pedirTexto({
+                titulo: 'Nova pasta',
+                texto: 'Dê um nome para organizar suas anotações.',
+                placeholder: 'Ex: Matemática',
+                textoBotao: 'Criar pasta',
+                aoConfirmar: async (nome) => {
+                    const res = await fetchAutenticado('/api/pastas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome_pasta: nome }),
+                    });
+                    const dados = await res.json();
+                    if (!res.ok) throw new Error(dados.error);
+                    await carregarPastas();
+                },
+            });
+        });
+
+        // ── Anotações ──
+        async function carregarAnotacoes() {
+            try {
+                const res = await fetchAutenticado('/api/anotacoes');
+                anotacoes = await res.json();
+                if (!res.ok) throw new Error(anotacoes.error);
+                renderizarPastas();
+                renderizarLista();
+            } catch (err) {
+                document.getElementById('lista').innerHTML =
+                    `<p class="vazio">${err.message || 'Não foi possível carregar suas anotações.'}</p>`;
+            }
+        }
+
+        function escaparHtml(texto) {
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+
+        function renderizarLista() {
+            const lista = document.getElementById('lista');
+            const filtradas = pastaSelecionada === null
+                ? anotacoes
+                : anotacoes.filter(a => a.cod_pasta === pastaSelecionada);
+
+            if (filtradas.length === 0) {
+                lista.innerHTML = '<p class="vazio">Nenhuma anotação por aqui ainda.</p>';
+                return;
+            }
+
+            lista.innerHTML = filtradas.map(a => `
+                <div class="card" data-id="${a.cod_anota}">
+                    <div class="conteudo-normal">
+                        <div class="card-topo">
+                            <h3>${escaparHtml(a.titulo)}</h3>
+                            <span class="tag-pasta">${escaparHtml(a.nome_pasta)}</span>
+                        </div>
+                        <p class="texto">${escaparHtml(a.texto_anota)}</p>
+                        <div class="rodape-card">
+                            <time>${a.data_anota}</time>
+                            <div class="acoes-card">
+                                <button type="button" class="btn-acao imprimir" data-acao="imprimir">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+                                    Baixar PDF / Imprimir
+                                </button>
+                                <button type="button" class="btn-acao editar" data-acao="editar">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+                                    Editar
+                                </button>
+                                <button type="button" class="btn-acao excluir" data-acao="excluir">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conteudo-edicao">
+                        <input type="text" class="edit-titulo" value="${escaparHtml(a.titulo)}" maxlength="120">
+                        <textarea class="edit-texto" rows="4">${escaparHtml(a.texto_anota)}</textarea>
+                        <select class="edit-pasta">
+                            ${pastas.map(p => `<option value="${p.cod_pasta}" ${p.cod_pasta === a.cod_pasta ? 'selected' : ''}>${escaparHtml(p.nome_pasta)}</option>`).join('')}
+                        </select>
+                        <p class="erro-edicao" style="color:#b00020; font-size:12.5px; font-weight:700; display:none; margin:0 0 8px;"></p>
+                        <div class="acoes-edicao">
+                            <button type="button" class="btn-acao cancelar" data-acao="cancelar-edicao">Cancelar</button>
+                            <button type="button" class="btn-acao salvar" data-acao="salvar-edicao">Salvar alterações</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            lista.querySelectorAll('.card').forEach((card) => {
+                const id = Number(card.dataset.id);
+                const anotacao = anotacoes.find(a => a.cod_anota === id);
+
+                card.querySelector('[data-acao="imprimir"]').addEventListener('click', () => imprimirAnotacao(anotacao));
+
+                card.querySelector('[data-acao="editar"]').addEventListener('click', () => {
+                    card.classList.add('editando');
+                });
+
+                card.querySelector('[data-acao="cancelar-edicao"]').addEventListener('click', () => {
+                    card.classList.remove('editando');
+                });
+
+                card.querySelector('[data-acao="salvar-edicao"]').addEventListener('click', async () => {
+                    const btnSalvar   = card.querySelector('[data-acao="salvar-edicao"]');
+                    const erroEdicao  = card.querySelector('.erro-edicao');
+                    const novoTitulo  = card.querySelector('.edit-titulo').value.trim();
+                    const novoTexto   = card.querySelector('.edit-texto').value.trim();
+                    const novaPasta   = Number(card.querySelector('.edit-pasta').value);
+
+                    if (!novoTitulo || !novoTexto) {
+                        erroEdicao.textContent = 'Preencha o título e o texto.';
+                        erroEdicao.style.display = 'block';
+                        return;
+                    }
+
+                    btnSalvar.disabled = true;
+                    erroEdicao.style.display = 'none';
+
+                    try {
+                        const res = await fetchAutenticado(`/api/anotacoes/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ titulo: novoTitulo, texto_anota: novoTexto, cod_pasta: novaPasta }),
+                        });
+                        const dados = await res.json();
+                        if (!res.ok) throw new Error(dados.error);
+
+                        await Promise.all([carregarPastas(), carregarAnotacoes()]);
+                    } catch (err) {
+                        erroEdicao.textContent = err.message || 'Não foi possível salvar as alterações.';
+                        erroEdicao.style.display = 'block';
+                    } finally {
+                        btnSalvar.disabled = false;
+                    }
+                });
+
+                card.querySelector('[data-acao="excluir"]').addEventListener('click', () => {
+                    confirmar({
+                        titulo: 'Excluir anotação',
+                        texto: `Tem certeza que deseja excluir "${anotacao.titulo}"? Essa ação não pode ser desfeita.`,
+                        textoBotao: 'Excluir permanentemente',
+                        perigo: true,
+                        aoConfirmar: async () => {
+                            const res = await fetchAutenticado(`/api/anotacoes/${id}`, { method: 'DELETE' });
+                            const dados = await res.json();
+                            if (!res.ok) throw new Error(dados.error);
+                            await Promise.all([carregarPastas(), carregarAnotacoes()]);
+                        },
+                    });
+                });
+            });
+        }
+
+        // ── Impressão / PDF ──
+        function imprimirAnotacao(anotacao) {
+            document.getElementById('impTitulo').textContent = anotacao.titulo;
+            document.getElementById('impMeta').textContent =
+                `Pasta: ${anotacao.nome_pasta} · ${anotacao.data_anota}`;
+            document.getElementById('impTexto').textContent = anotacao.texto_anota;
+            window.print();
+        }
+
+        // ── Nova anotação ──
         document.getElementById('formNovaAnotacao').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const titulo = document.getElementById('titulo').value.trim();
             const texto  = document.getElementById('texto').value.trim();
+            const codPasta = Number(document.getElementById('pastaForm').value) || undefined;
             const msg    = document.getElementById('mensagemForm');
 
             if (!titulo || !texto) {
@@ -145,7 +634,7 @@
                 const res = await fetchAutenticado('/api/anotacoes', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ titulo, texto_anota: texto })
+                    body: JSON.stringify({ titulo, texto_anota: texto, cod_pasta: codPasta })
                 });
                 const dados = await res.json();
 
@@ -153,7 +642,8 @@
                     msg.style.color = '#1a7f37';
                     msg.textContent = 'Anotação salva!';
                     document.getElementById('formNovaAnotacao').reset();
-                    carregarAnotacoes();
+                    renderizarSelectPasta(codPasta);
+                    await Promise.all([carregarPastas(), carregarAnotacoes()]);
                 } else {
                     msg.style.color = '#b00020';
                     msg.textContent = dados.error || 'Não foi possível salvar.';
@@ -164,7 +654,10 @@
             }
         });
 
-        carregarAnotacoes();
+        (async function iniciar() {
+            await carregarPastas();
+            await carregarAnotacoes();
+        })();
     </script>
 </body>
 </html>
