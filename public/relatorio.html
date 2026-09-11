@@ -365,7 +365,7 @@
       `- [${r.materia} / ${r.nivel || 'N/A'}] ${r.enunciado}\n  Escolheu: "${r.respostaEscolhida}" | Correta: "${r.respostaCorreta}"`
     ).join('\n');
 
-    const prompt = `Você é um professor analisando o desempenho de um aluno. Fale como gente, tom de conversa, sem economês, sem "observa-se que".
+    const prompt = `Você é um professor particular analisando o desempenho de um aluno. Fale como gente, tom de conversa, sem economês, sem "observa-se que".
 
 RESUMO: ${totalResp} questões, ${totalAcert} acertos (${pct}%). Matérias: ${materias.length > 0 ? materias.join(', ') : 'Geral'}
 
@@ -378,10 +378,11 @@ ${listaErradas || '(nenhuma)'}
 Responda APENAS com JSON puro, sem markdown, neste formato:
 {"forte": "texto", "fraco": "texto"}
 
-forte: 2-3 frases citando o tema exato acertado e por que mostra entendimento. Se nada acertou, diga leve e incentive.
-fraco: 2-3 frases citando o tema exato errado, hipótese rápida do motivo, e o que estudar primeiro. Se nada errou, parabenize.
+forte: 4-6 frases. Cite os temas e subtemas exatos que o aluno acertou (não só a matéria geral, mas o assunto específico dentro dela). Explique o que esse acerto revela sobre o domínio do aluno naquele conceito. Se der pra notar um padrão entre os acertos (ex: vai bem em questões teóricas mas não em cálculo, ou domina um assunto específico dentro da matéria), aponte isso. Se nada acertou, seja leve, incentive e destaque algum progresso possível.
 
-Sem bullets, títulos ou aspas internas. Segunda pessoa (você). Português do Brasil, tom natural.`;
+fraco: 5-8 frases, bem específico e acionável. Para cada erro relevante: cite o assunto exato (não a matéria inteira, o tópico específico dentro dela), compare a resposta escolhida com a correta pra identificar o tipo de engano (confusão de conceito, erro de interpretação, decorar sem entender, falta de atenção, etc), e diga exatamente o que o aluno precisa estudar ou revisar primeiro — nomeie o conceito, fórmula, regra ou tipo de exercício, não fale de forma genérica como "revisar a matéria". Se houver mais de um erro na mesma matéria, indique qual desses pontos é prioridade pra estudar. Se nada errou, parabenize e sugira um próximo desafio pra continuar evoluindo.
+
+Sem bullets, títulos ou aspas internas. Segunda pessoa (você). Português do Brasil, tom natural e específico, evite generalidades.`;
 
     try {
       console.log('📊 Chamando API de IA com fallback automático...');

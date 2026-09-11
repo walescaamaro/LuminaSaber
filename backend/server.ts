@@ -1,4 +1,5 @@
 import 'dotenv/config';
+console.log('Groq key carregada?', !!process.env.GROQ_API_KEY);
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
@@ -12,6 +13,7 @@ import anotacaoRoutes from './src/routes/anotacaoRoutes.js';
 import pastaRoutes from './src/routes/pastaRoutes.js';
 import historicoRoutes from './src/routes/historicoRoutes.js';
 import lojaRoutes from './src/routes/lojaRoutes.js';
+import iaRoutes from './src/routes/iaRoutes.js';      
 import configurePageRoutes from './src/routes/pageRoutes.js';
 import { contentTypeJson } from './src/middlewares/contentTypeJson.js';
 import { blockDirectHtmlAccess } from './src/middlewares/blockDirectHtmlAccess.js';
@@ -44,6 +46,7 @@ app.use(anotacaoRoutes);
 app.use(pastaRoutes);
 app.use(historicoRoutes);
 app.use(lojaRoutes);
+app.use(iaRoutes);
 app.use(configurePageRoutes(publicDir));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
