@@ -236,9 +236,6 @@
   document.getElementById('metaTexto').textContent = metaMsg;
 
   // ── Mercado Lumina: credita as Estrelas da sessão concluída ──
-  // Guarda por localStorage pra não creditar de novo se a pessoa
-  // atualizar a página do relatório (a chave é limpa a cada nova
-  // sessão de exercícios, ver carregarQuestoes.js).
   (async function creditarRecompensaDaSessao() {
     if (!window.Estrelas) {
       console.error('Mercado Lumina: /js/estrelas.js não carregou — confira se o <script> está no <head>.');
@@ -357,13 +354,6 @@
       return;
     }
 
-    const apiKey = window.GEMINI_KEY;
-
-    if (!apiKey) {
-      mostrarErro('IA não configurada.', 'Adicione GEMINI_API_KEY no .env do servidor.');
-      return;
-    }
-
     const acertadas = resultados.filter(r => r.acertou);
     const erradas   = resultados.filter(r => !r.acertou);
 
@@ -393,50 +383,20 @@ fraco: 2-3 frases citando o tema exato errado, hipótese rápida do motivo, e o 
 
 Sem bullets, títulos ou aspas internas. Segunda pessoa (você). Português do Brasil, tom natural.`;
 
-    const modelos = ['gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.5-flash'];
-    const maxTentativasPorModelo = 1;
-
-    async function chamarGemini() {
-      for (const modelo of modelos) {
-        for (let tentativa = 1; tentativa <= maxTentativasPorModelo; tentativa++) {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent?key=${apiKey}`;
-
-          try {
-            const response = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                  temperature: 0.7,
-                  maxOutputTokens: 350,
-                  thinkingConfig: { thinkingBudget: 0 }
-                }
-              })
-            });
-
-            if (response.ok) {
-              return await response.json();
-            }
-
-            if (response.status === 503 || response.status === 429) {
-              console.warn(`${modelo} sobrecarregado (tentativa ${tentativa})`);
-              continue;
-            }
-
-            const err = await response.json();
-            throw new Error(err.error?.message || `Erro ${response.status}`);
-
-          } catch (e) {
-            if (e.message && !e.message.includes('fetch')) throw e;
-          }
-        }
-      }
-      throw new Error('Servidores do Gemini sobrecarregados no momento.');
-    }
-
     try {
-      const data = await chamarGemini();
+      console.log('📊 Chamando API de IA com fallback automático...');
+      const response = await fetch('/api/ai/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt }),
+      });
+
+      if (!response.ok) {
+        const erro = await response.json().catch(() => ({}));
+        throw new Error(erro.error || `Erro ${response.status}`);
+      }
+
+      const data = await response.json();
       let texto = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
 
       texto = texto.replace(/```json|```/g, '').trim();
@@ -453,8 +413,8 @@ Sem bullets, títulos ou aspas internas. Segunda pessoa (você). Português do B
       elAnaliseFraco.textContent = json.fraco || 'Sem áreas críticas identificadas no momento.';
 
     } catch (erro) {
-      console.error('Erro ao chamar API Gemini:', erro);
-      mostrarErro('Os servidores do Gemini estão sobrecarregados agora. Isso é temporário.', erro.message);
+      console.error('Erro ao chamar API de IA:', erro);
+      mostrarErro('Os servidores de IA estão indisponíveis no momento. Tente novamente.', erro.message);
     }
   }
 
