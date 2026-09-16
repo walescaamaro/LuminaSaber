@@ -6,61 +6,125 @@
     <title>Parâmetros do Sistema · LuminaSaber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
 
     <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+        }
+
         * { box-sizing: border-box; }
         body {
             margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
-            background-color: #00e1e1; padding: 40px 20px;
+            background-color: #00e1e1; padding: 32px 20px 60px; color: var(--ink);
         }
+
         .wrapper { max-width: 900px; margin: 0 auto; }
+
+        .topo { margin-bottom: 24px; }
         .voltar {
-            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
-            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+            display: inline-block; font-weight: 700; font-size: 14px; color: var(--ink);
+            text-decoration: none; background: #fff; border: 2px solid var(--ink);
+            padding: 8px 18px; border-radius: 999px; transition: background-color .15s;
         }
+        .voltar:hover { background-color: var(--lemon-chiffon); }
+
+        .banner {
+            background: #fff; border-radius: 20px; padding: 22px 32px; margin-bottom: 20px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+            display: flex; align-items: center; gap: 16px;
+        }
+        .banner .icone-caixa {
+            width: 52px; height: 52px; border-radius: 16px; background: var(--mauve);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .banner .icone-caixa svg { width: 26px; height: 26px; stroke: var(--ink); }
+        .banner h1 { margin: 0; font-size: 24px; font-weight: 800; }
+        .banner p { margin: 4px 0 0; font-size: 13.5px; color: rgba(22,50,61,0.7); }
+
         .aviso {
-            background: #fff3cd; border: 1px solid #ffe08a; color: #7a5b00; padding: 12px 16px;
-            border-radius: 10px; font-size: 13px; margin-bottom: 20px; font-weight: 600;
+            background: var(--lemon-chiffon); border-radius: 14px; padding: 13px 18px;
+            font-size: 13px; font-weight: 600; margin-bottom: 24px; color: #6b5900;
+            display: flex; align-items: flex-start; gap: 10px;
         }
-        .faixa {
-            background-color: #e0c184; padding: 10px 20px; border-radius: 10px 10px 0 0;
-            font-weight: 700; text-align: center;
+        .aviso svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; stroke: #8a7300; }
+
+        .painel {
+            background: #fff; border-radius: 20px; padding: clamp(22px, 4vw, 32px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px;
+            margin-bottom: 22px;
         }
-        .painel { background: #fff; border-radius: 0 0 14px 14px; padding: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
-        .coluna h2 { font-size: 16px; text-decoration: underline; margin-top: 0; }
-        label { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 6px; }
+        .coluna:first-child { border-right: 1px solid #eef1f2; padding-right: 40px; }
+        .coluna:last-child { padding-left: 0; }
+
+        .coluna h2 {
+            font-size: 14.5px; font-weight: 800; margin: 0 0 4px;
+            text-transform: uppercase; letter-spacing: .03em; color: rgba(22,50,61,0.55);
+        }
+
+        label { display: block; font-weight: 700; font-size: 13.5px; margin: 16px 0 6px; }
+
         input[type="text"], select, textarea {
-            width: 100%; padding: 10px 12px; border: 1px solid #b8c0c8; border-radius: 8px;
-            font-family: 'DM Sans', sans-serif; font-size: 14px;
+            width: 100%; padding: 10px 13px; border: 1.5px solid #e3e8ea; border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+            background: #f7f9fa; resize: vertical;
         }
-        button.acao {
-            margin-top: 16px; padding: 10px 20px; border: none; border-radius: 8px;
-            background: #cfcfcf; color: #444; font-weight: 700; cursor: not-allowed;
-            font-family: 'DM Sans', sans-serif;
+        input[type="text"]:disabled, select:disabled, textarea:disabled { cursor: not-allowed; color: #6b7a80; }
+
+        .toggle { display: flex; align-items: center; gap: 10px; margin: 16px 0 6px; }
+        .toggle span { font-weight: 700; font-size: 13.5px; }
+        .toggle input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--mauve); cursor: not-allowed; }
+
+        button.acao, .reset {
+            border: none; border-radius: 999px; font-weight: 700;
+            font-family: 'DM Sans', sans-serif; cursor: not-allowed;
+            background: #e9edef; color: #8b979b;
         }
-        .toggle { display: flex; align-items: center; gap: 10px; margin: 14px 0 6px; }
-        .toggle span { font-weight: 700; font-size: 14px; }
-        .reset {
-            width: 100%; margin-top: 20px; padding: 12px; border: none; border-radius: 10px;
-            background: #1f5fa6; color: #fff; font-weight: 700; cursor: not-allowed;
-            font-family: 'DM Sans', sans-serif;
+        button.acao { margin-top: 18px; padding: 10px 22px; font-size: 13.5px; }
+        .reset { width: 100%; margin-top: 4px; padding: 13px; font-size: 14px; }
+
+        @media (max-width: 720px) {
+            .painel { grid-template-columns: 1fr; }
+            .coluna:first-child { border-right: none; padding-right: 0; border-bottom: 1px solid #eef1f2; padding-bottom: 14px; margin-bottom: 8px; }
+            .banner { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
-
-        <div class="aviso">
-            ⚠️ Esta tela é apenas uma demonstração visual do protótipo — nenhum campo aqui salva
-            dados de verdade. Não há tabela no banco para "parâmetros do sistema" ainda.
+        <div class="topo">
+            <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
         </div>
 
-        <div class="faixa">Parâmetros de Sistema</div>
+        <div class="banner">
+            <span class="icone-caixa">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 01-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 010-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 014 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.9V9a1.7 1.7 0 001.5 1H21a2 2 0 010 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>
+            </span>
+            <div>
+                <h1>Parâmetros do Sistema</h1>
+                <p>Configurações gerais da plataforma.</p>
+            </div>
+        </div>
+
+        <div class="aviso">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
+            <span>Esta tela é apenas uma demonstração visual do protótipo — nenhum campo aqui salva dados de verdade. Não há tabela no banco para "parâmetros do sistema" ainda.</span>
+        </div>
+
         <div class="painel">
             <div class="coluna">
                 <h2>Informações Gerais</h2>
@@ -88,6 +152,7 @@
                 <button class="acao" disabled>Aplicar Configurações</button>
             </div>
         </div>
+
         <button class="reset" disabled>Resetar cache do sistema</button>
     </div>
 </body>

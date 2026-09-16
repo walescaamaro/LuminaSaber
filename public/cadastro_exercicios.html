@@ -3,222 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Questão</title>
+    <title>Nova Questão · LuminaSaber</title>
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+            --red: #b00020;
+        }
+
         * { box-sizing: border-box; }
         body {
-            margin: 0;
-            min-height: 100vh;
-            background-color: #00e1e1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-family: 'DM Sans', sans-serif;
-            padding: 40px 20px;
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
+            background-color: #00e1e1; padding: 32px 20px 60px; color: var(--ink);
         }
-        .container {
-            background: #fff;
-            width: 900px;
-            max-width: 100%;
-            padding: clamp(22px, 4vw, 36px);
-            border-radius: 8px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+
+        .wrapper { max-width: 900px; margin: 0 auto; }
+
+        .topo { margin-bottom: 24px; }
+        .voltar {
+            display: inline-block; font-weight: 700; font-size: 14px; color: var(--ink);
+            text-decoration: none; background: #fff; border: 2px solid var(--ink);
+            padding: 8px 18px; border-radius: 999px; transition: background-color .15s;
         }
-        .title { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; }
-        .icon {
-            background: #f4c430; color: white; width: 32px; height: 32px;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-weight: bold;
+        .voltar:hover { background-color: var(--lemon-chiffon); }
+
+        .banner {
+            background: #fff; border-radius: 20px; padding: 22px 32px; margin-bottom: 24px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+            display: flex; align-items: center; gap: 16px;
         }
-        .title h2 { font-size: 25px; margin: 0; text-decoration: underline; }
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px 40px;
+        .banner .icone-caixa {
+            width: 52px; height: 52px; border-radius: 16px; background: var(--aquamarine);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
+        .banner .icone-caixa svg { width: 26px; height: 26px; stroke: var(--ink); }
+        .banner h1 { margin: 0; font-size: 24px; font-weight: 800; }
+        .banner p { margin: 4px 0 0; font-size: 13.5px; color: rgba(22,50,61,0.7); }
+
+        .painel-form {
+            background: #fff; border-radius: 20px; padding: clamp(22px, 4vw, 34px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12); margin-bottom: 32px;
+        }
+
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 32px; }
         .field { display: flex; flex-direction: column; }
-        label { font-size: 14.5px; margin-bottom: 5px; font-weight: bold; }
+        label { font-size: 13.5px; margin-bottom: 6px; font-weight: 700; }
+
         input, select {
-            padding: 10px 12px;
-            border: 1px solid #b8c0c8;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: 'DM Sans', sans-serif;
+            padding: 11px 14px; border: 1.5px solid #d7dee2; border-radius: 10px;
+            font-size: 14.5px; font-family: 'DM Sans', sans-serif; color: var(--ink);
+            background: #fff; transition: border-color .15s, box-shadow .15s;
         }
         input:focus, select:focus {
-            border-color: #1f5fa6;
-            outline: 2px solid rgba(31, 95, 166, 0.16);
+            outline: none; border-color: var(--frosted-blue);
+            box-shadow: 0 0 0 3px rgba(144, 219, 244, 0.35);
         }
-        input::placeholder { color: #aaa; }
-        .full { grid-column: span 2; }
-        .btn { grid-column: span 2; display: flex; justify-content: center; margin-top: 15px; }
-        button {
-            background: #1f5fa6; color: white; border: none;
-            padding: 11px 22px; border-radius: 8px; cursor: pointer;
-            font-weight: bold; font-family: 'DM Sans', sans-serif; font-size: 15px;
-        }
-        button:hover { background: #174b85; }
-        #mensagem { text-align: center; margin-top: 16px; font-weight: 600; font-size: 15px; }
-        .voltar {
-            margin-bottom: 16px;
-            font-size: 13px;
-            color: #1f5fa6;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .voltar:hover { text-decoration: underline; }
+        input::placeholder { color: #9fadb3; }
 
-        /* Tabela de listagem */
-        .tabela-container { width: 900px; max-width: 100%; margin-top: 32px; overflow-x: auto; }
-        .tabela-container h3 { font-size: 18px; margin-bottom: 12px; }
-        table { width: 100%; min-width: 720px; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08); }
-        th { background: #1f5fa6; color: #fff; padding: 10px; font-size: 13px; text-align: left; }
-        td { padding: 9px 10px; font-size: 13px; border-bottom: 1px solid #eee; }
+        .full { grid-column: span 2; }
+        .btn-linha { grid-column: span 2; display: flex; justify-content: center; margin-top: 6px; }
+
+        button[type="submit"] {
+            background: var(--ink); color: #fff; border: none;
+            padding: 12px 30px; border-radius: 999px; cursor: pointer;
+            font-weight: 700; font-family: 'DM Sans', sans-serif; font-size: 14.5px;
+            transition: opacity .15s;
+        }
+        button[type="submit"]:hover { opacity: 0.85; }
+
+        #mensagem { text-align: center; margin: 16px 0 0; font-weight: 700; font-size: 14px; }
+
+        /* ── Tabela de listagem ── */
+        .tabela-container {
+            background: #fff; border-radius: 20px; padding: 24px clamp(18px, 3vw, 28px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12); overflow-x: auto;
+        }
+        .tabela-container h3 { margin: 0 0 16px; font-size: 16px; font-weight: 800; }
+
+        table { width: 100%; min-width: 720px; border-collapse: collapse; }
+        th {
+            background: var(--pink-orchid); color: var(--ink);
+            padding: 10px 12px; font-size: 12.5px; font-weight: 700;
+            text-align: left; text-transform: uppercase; letter-spacing: .03em;
+        }
+        th:first-child { border-radius: 10px 0 0 10px; }
+        th:last-child { border-radius: 0 10px 10px 0; }
+        td { padding: 11px 12px; font-size: 13.5px; border-bottom: 1px solid #f0f2f3; }
         tr:last-child td { border-bottom: none; }
-        .btn-excluir {
-            background: #c0392b; color: #fff; border: none;
-            padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
+        tr:hover td { background: rgba(144, 219, 244, 0.12); }
+
+        .btn-editar, .btn-excluir {
+            border: none; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+            font-size: 12px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            transition: opacity .15s;
         }
-        .btn-excluir:hover { background: #96281b; }
-        .btn-editar {
-            background: #1f5fa6; color: #fff; border: none;
-            padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;
-            margin-right: 4px;
-        }
-        .btn-editar:hover { background: #174b85; }
+        .btn-editar { background: var(--frosted-blue); color: var(--ink); margin-right: 4px; }
+        .btn-excluir { background: var(--cotton-rose); color: var(--red); }
+        .btn-editar:hover, .btn-excluir:hover { opacity: 0.8; }
 
         @media (max-width: 720px) {
-            body {
-                justify-content: flex-start;
-                padding: 24px 14px;
-            }
-
-            form {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .full,
-            .btn {
-                grid-column: auto;
-            }
-
-            .title h2 {
-                font-size: 22px;
-            }
-
-            button[type="submit"] {
-                width: 100%;
-            }
+            form { grid-template-columns: 1fr; gap: 16px; }
+            .full, .btn-linha { grid-column: auto; }
+            .banner { flex-direction: column; text-align: center; }
+            button[type="submit"] { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <a href="/admin" class="voltar">← Voltar ao gerenciamento</a>
-
-    <div class="container">
-        <div class="title">
-            <div class="icon">?</div>
-            <h2>Nova Questão</h2>
+    <div class="wrapper">
+        <div class="topo">
+            <a href="/admin" class="voltar">&larr; Voltar ao gerenciamento</a>
         </div>
 
-        <form id="formQuestao">
-            <div class="field">
-                <label>Enunciado</label>
-                <input type="text" id="enunciado" placeholder="Digite um enunciado..." required>
+        <div class="banner">
+            <span class="icone-caixa">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17h.01"/><path d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2.5 2-2.5 4"/><circle cx="12" cy="12" r="9"/></svg>
+            </span>
+            <div>
+                <h1>Nova Questão</h1>
+                <p>Cadastre uma nova questão ou edite uma já existente.</p>
             </div>
+        </div>
 
-            <div class="field">
-                <label>Alternativa D</label>
-                <input type="text" id="alternativa_D" placeholder="Digite algo..." required>
-            </div>
+        <div class="painel-form">
+            <form id="formQuestao">
+                <div class="field">
+                    <label>Enunciado</label>
+                    <input type="text" id="enunciado" placeholder="Digite um enunciado..." required>
+                </div>
 
-            <div class="field">
-                <label>Alternativa A</label>
-                <input type="text" id="alternativa_A" placeholder="Digite algo..." required>
-            </div>
+                <div class="field">
+                    <label>Alternativa D</label>
+                    <input type="text" id="alternativa_D" placeholder="Digite algo..." required>
+                </div>
 
-            <div class="field">
-                <label>Alternativa Correta</label>
-                <select id="alternativa_correta" required>
-                    <option value="" selected disabled>Selecione...</option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
-                </select>
-            </div>
+                <div class="field">
+                    <label>Alternativa A</label>
+                    <input type="text" id="alternativa_A" placeholder="Digite algo..." required>
+                </div>
 
-            <div class="field">
-                <label>Alternativa B</label>
-                <input type="text" id="alternativa_B" placeholder="Digite algo..." required>
-            </div>
+                <div class="field">
+                    <label>Alternativa Correta</label>
+                    <select id="alternativa_correta" required>
+                        <option value="" selected disabled>Selecione...</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                        <option value="c">C</option>
+                        <option value="d">D</option>
+                    </select>
+                </div>
 
-            <div class="field">
-                <label>Disciplina</label>
-                <select id="cod_disc" required>
-                    <option value="82211">Matemática</option>
-                    <option value="44457">Português</option>
-                    <option value="76326">História</option>
-                    <option value="98743">Geografia</option>
-                    <option value="34512">Artes</option>
-                    <option value="57713">Inglês</option>
-                    <option value="90021">Ciências</option>
-                </select>
-            </div>
+                <div class="field">
+                    <label>Alternativa B</label>
+                    <input type="text" id="alternativa_B" placeholder="Digite algo..." required>
+                </div>
 
-            <div class="field">
-                <label>Alternativa C</label>
-                <input type="text" id="alternativa_C" placeholder="Digite algo..." required>
-            </div>
+                <div class="field">
+                    <label>Disciplina</label>
+                    <select id="cod_disc" required>
+                        <option value="82211">Matemática</option>
+                        <option value="44457">Português</option>
+                        <option value="76326">História</option>
+                        <option value="98743">Geografia</option>
+                        <option value="34512">Artes</option>
+                        <option value="57713">Inglês</option>
+                        <option value="90021">Ciências</option>
+                    </select>
+                </div>
 
-            <div class="field">
-                <label>Nível de Dificuldade</label>
-                <select id="dificuldade" required>
-                    <option value="" selected disabled>Selecione...</option>
-                    <option value="fácil">fácil</option>
-                    <option value="médio">médio</option>
-                    <option value="difícil">difícil</option>
-                </select>
-            </div>
+                <div class="field">
+                    <label>Alternativa C</label>
+                    <input type="text" id="alternativa_C" placeholder="Digite algo..." required>
+                </div>
 
-            <div class="btn">
-                <button type="submit">Cadastrar Questão</button>
-            </div>
-        </form>
+                <div class="field">
+                    <label>Nível de Dificuldade</label>
+                    <select id="dificuldade" required>
+                        <option value="" selected disabled>Selecione...</option>
+                        <option value="fácil">fácil</option>
+                        <option value="médio">médio</option>
+                        <option value="difícil">difícil</option>
+                    </select>
+                </div>
 
-        <p id="mensagem"></p>
+                <div class="btn-linha">
+                    <button type="submit">Cadastrar Questão</button>
+                </div>
+            </form>
+
+            <p id="mensagem"></p>
+        </div>
+
+        <!-- Listagem das questões cadastradas -->
+        <div class="tabela-container">
+            <h3>Questões cadastradas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Matéria</th>
+                        <th>Enunciado</th>
+                        <th>Dificuldade</th>
+                        <th>Editar</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaQuestoes">
+                    <tr><td colspan="6">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- Listagem das questões cadastradas -->
-    <div class="tabela-container">
-    <h3>Questões cadastradas</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Matéria</th>
-                <th>Enunciado</th>
-                <th>Dificuldade</th>
-                <th>Editar</th>
-                <th>Excluir</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaQuestoes">
-            <tr><td colspan="6">Carregando...</td></tr>
-        </tbody>
-    </table>
-</div>
 
 <script>
     const msg = document.getElementById('mensagem');
@@ -332,8 +345,8 @@
             if (res.ok) {
                 msg.style.color = 'green';
                 msg.textContent = editandoId
-                    ? `✅ Questão ${editandoId} atualizada com sucesso!`
-                    : `✅ Questão cadastrada com sucesso! (ID: ${dados.id})`;
+                    ? `✓ Questão ${editandoId} atualizada com sucesso!`
+                    : `✓ Questão cadastrada com sucesso! (ID: ${dados.id})`;
                 editandoId = null;
                 document.querySelector('button[type="submit"]').textContent = 'Cadastrar Questão';
                 document.getElementById('formQuestao').reset();
@@ -358,7 +371,7 @@
 
             if (res.ok) {
                 msg.style.color = 'green';
-                msg.textContent = `✅ Questão ${id} excluída.`;
+                msg.textContent = ` ✓ Questão ${id} excluída.`;
                 if (editandoId === id) {
                     editandoId = null;
                     document.querySelector('button[type="submit"]').textContent = 'Cadastrar Questão';

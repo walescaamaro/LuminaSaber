@@ -6,67 +6,144 @@
     <title>Gerenciamento de Usuários · LuminaSaber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
 
     <style>
+        :root {
+            --lemon-chiffon: #fbf8cc;
+            --powder-petal: #fde4cf;
+            --cotton-rose: #ffcfd2;
+            --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0;
+            --baby-blue-ice: #a3c4f3;
+            --frosted-blue: #90dbf4;
+            --electric-aqua: #8eecf5;
+            --aquamarine: #98f5e1;
+            --celadon: #b9fbc0;
+            --ink: #16323d;
+            --green: #1a7f37;
+            --red: #b00020;
+        }
+
         * { box-sizing: border-box; }
         body {
             margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif;
-            background-color: #00e1e1; padding: 40px 20px;
+            background-color: #00e1e1; padding: 32px 20px 60px; color: var(--ink);
         }
-        .wrapper { max-width: 780px; margin: 0 auto; }
+
+        .wrapper { max-width: 800px; margin: 0 auto; }
+
+        .topo { margin-bottom: 24px; }
         .voltar {
-            display: inline-block; margin-bottom: 20px; font-weight: 700; color: #000;
-            text-decoration: none; background: rgba(255,255,255,0.7); padding: 8px 16px; border-radius: 12px;
+            display: inline-block; font-weight: 700; font-size: 14px; color: var(--ink);
+            text-decoration: none; background: #fff; border: 2px solid var(--ink);
+            padding: 8px 18px; border-radius: 999px; transition: background-color .15s;
         }
-        h1 {
-            background-color: rgba(255, 255, 255, 0.658); display: inline-block;
-            padding: 10px 20px; border-radius: 10px; font-size: 26px; margin: 0 0 24px;
+        .voltar:hover { background-color: var(--lemon-chiffon); }
+
+        .banner {
+            background: #fff; border-radius: 20px; padding: 22px 32px; margin-bottom: 24px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+            display: flex; align-items: center; gap: 16px;
         }
-        .lista { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 24px rgba(0,0,0,0.1); }
+        .banner .icone-caixa {
+            width: 52px; height: 52px; border-radius: 16px; background: var(--pink-orchid);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .banner .icone-caixa svg { width: 26px; height: 26px; stroke: var(--ink); }
+        .banner h1 { margin: 0; font-size: 24px; font-weight: 800; }
+        .banner p { margin: 4px 0 0; font-size: 13.5px; color: rgba(22,50,61,0.7); }
+
+        /* ── Lista de usuários ── */
+        .lista {
+            background: #fff; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+        }
         .item {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 20px; border-bottom: 1px solid #eee;
+            padding: 16px 22px; border-bottom: 1px solid #f0f2f3; gap: 12px;
         }
         .item:last-child { border-bottom: none; }
-        .item .nome { font-weight: 700; }
-        .item .tipo { font-size: 12px; color: #666; margin-left: 8px; }
-        .item button {
-            background: #b8bfc7; color: #000; border: none; padding: 6px 16px;
-            border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px;
-        }
-        .item button:hover { background: #9aa3ad; }
+        .item:hover { background: rgba(144, 219, 244, 0.10); }
 
-        /* Painel de perfil */
+        .item-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .avatar {
+            width: 38px; height: 38px; border-radius: 50%; background: var(--baby-blue-ice);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            font-weight: 800; font-size: 14px; color: var(--ink);
+        }
+        .item.admin-item .avatar { background: var(--celadon); }
+
+        .item-texto { min-width: 0; }
+        .item .nome { font-weight: 700; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .item .tipo {
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+            color: rgba(22,50,61,0.65);
+        }
+
+        .item button {
+            background: #fff; color: var(--ink); border: 2px solid var(--ink);
+            padding: 7px 18px; border-radius: 999px; cursor: pointer;
+            font-weight: 700; font-size: 12.5px; font-family: 'DM Sans', sans-serif;
+            transition: background-color .15s, color .15s; flex-shrink: 0;
+        }
+        .item button:hover { background: var(--ink); color: #fff; }
+
+        /* ── Painel de perfil ── */
         .perfil {
-            display: none; background: #fff; border-radius: 14px; padding: 24px;
-            margin-top: 20px; box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+            display: none; background: #fff; border-radius: 20px; padding: 26px 28px;
+            margin-top: 20px; box-shadow: 0 10px 26px rgba(0,0,0,0.12); position: relative;
         }
         .perfil.aberto { display: block; }
-        .perfil h2 { margin-top: 0; }
-        .perfil p { margin: 4px 0; }
+        .perfil h2 { margin: 0 8px 14px 0; font-size: 20px; font-weight: 800; }
+        .perfil p { margin: 5px 0; font-size: 14px; }
         .perfil .fechar {
-            float: right; background: none; border: none; font-size: 18px;
-            cursor: pointer; color: #666;
+            position: absolute; top: 18px; right: 20px; background: rgba(22,50,61,0.06);
+            border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 15px;
+            cursor: pointer; color: var(--ink); transition: background-color .15s;
         }
-        .perfil h3 { margin-top: 20px; font-size: 15px; border-top: 1px solid #eee; padding-top: 16px; }
+        .perfil .fechar:hover { background: rgba(22,50,61,0.14); }
+
+        .perfil h3 {
+            margin: 22px 0 12px; font-size: 14.5px; font-weight: 800;
+            border-top: 1px solid #f0f2f3; padding-top: 18px;
+        }
         .hist-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0; border-bottom: 1px solid #f2f2f2; font-size: 13px;
+            display: flex; justify-content: space-between; align-items: center; gap: 12px;
+            padding: 10px 0; border-bottom: 1px solid #f5f6f7; font-size: 13px;
         }
-        .status { font-weight: 700; padding: 3px 10px; border-radius: 999px; font-size: 12px; }
-        .status.acertou { background: #d4f7dc; color: #1a7f37; }
-        .status.errou { background: #ffd9d9; color: #b00020; }
-        .vazio { color: #999; font-style: italic; font-size: 13px; }
+        .hist-item:last-child { border-bottom: none; }
+        .status {
+            font-weight: 700; padding: 4px 12px; border-radius: 999px; font-size: 11.5px;
+            flex-shrink: 0; white-space: nowrap;
+        }
+        .status.acertou { background: var(--celadon); color: var(--green); }
+        .status.errou { background: var(--cotton-rose); color: var(--red); }
+        .vazio { color: rgba(22,50,61,0.55); font-style: italic; font-size: 13.5px; }
+
+        @media (max-width: 560px) {
+            .item { flex-wrap: wrap; }
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
-        <h1>👤 Gerenciamento de Usuários</h1>
+        <div class="topo">
+            <a class="voltar" href="/admin">&larr; Voltar ao gerenciamento</a>
+        </div>
+
+        <div class="banner">
+            <span class="icone-caixa">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+            </span>
+            <div>
+                <h1>Gerenciamento de Usuários</h1>
+                <p>Veja alunos e administradores cadastrados na plataforma.</p>
+            </div>
+        </div>
 
         <div class="lista" id="lista">
             <div class="item"><span class="vazio">Carregando...</span></div>
@@ -86,6 +163,13 @@
     <script>
         let usuarios = [];
 
+        function iniciais(nome) {
+            const partes = nome.trim().split(/\s+/);
+            const primeira = partes[0]?.[0] || '';
+            const ultima = partes.length > 1 ? partes[partes.length - 1][0] : '';
+            return (primeira + ultima).toUpperCase();
+        }
+
         async function carregarUsuarios() {
             const lista = document.getElementById('lista');
             try {
@@ -102,8 +186,14 @@
                 }
 
                 lista.innerHTML = usuarios.map(u => `
-                    <div class="item">
-                        <span><span class="nome">${u.nome}</span><span class="tipo">${u.tipo === 'administrador' ? 'Administrador' : 'Aluno'}</span></span>
+                    <div class="item ${u.tipo === 'administrador' ? 'admin-item' : ''}">
+                        <span class="item-info">
+                            <span class="avatar">${iniciais(u.nome)}</span>
+                            <span class="item-texto">
+                                <span class="nome">${u.nome}</span>
+                                <span class="tipo">${u.tipo === 'administrador' ? 'Administrador' : 'Aluno'}</span>
+                            </span>
+                        </span>
                         <button onclick="abrirPerfil(${u.cod_usuario})">Acessar perfil</button>
                     </div>
                 `).join('');

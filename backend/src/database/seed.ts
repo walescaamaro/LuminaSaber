@@ -16,8 +16,8 @@ async function runSeed() {
   const usuarios = [
     { cod_usuario: 76554, nome: 'Ana Ferreira',    email: 'anaferreira@gmail.com', senha: 'hylu',  grau_escolar: '2° ano', data_nasc: new Date('2019-08-09'), tipo: 'aluno'          as const },
     { cod_usuario: 43221, nome: 'Pedro Torres',    email: 'pedrotorres@gmail.com', senha: 'ophj',  grau_escolar: '1° ano', data_nasc: new Date('2013-07-10'), tipo: 'aluno'          as const },
-    { cod_usuario: 99530, nome: 'Walesca Amaro',   email: 'walesca@gmail.com',     senha: 'maqb',  grau_escolar: null,     data_nasc: new Date('2009-06-07'), tipo: 'administrador'  as const },
-    { cod_usuario: 10267, nome: 'Rayssa Priscila', email: 'rayssa@gmail.com',      senha: 'iikjr', grau_escolar: null,     data_nasc: new Date('2009-03-29'), tipo: 'administrador'  as const },
+    { cod_usuario: 99530, nome: 'Walesca Amaro',   email: 'walesca@gmail.com',     senha: 'maqb',  grau_escolar: null,     data_nasc: new Date('2009-06-07'), tipo: 'administrador'  as const, estrelas: 1000 },
+    { cod_usuario: 10267, nome: 'Rayssa Priscila', email: 'rayssa@gmail.com',      senha: 'iikjr', grau_escolar: null,     data_nasc: new Date('2009-03-29'), tipo: 'administrador'  as const, estrelas: 1000 },
     { cod_usuario: 84721, nome: 'Lucas Andrade',   email: 'lucas@gmail.com',       senha: 'abc1',  grau_escolar: '7° ano', data_nasc: new Date('2012-04-15'), tipo: 'aluno'          as const },
     { cod_usuario: 59384, nome: 'Marina Souza',    email: 'marina@gmail.com',      senha: 'def2',  grau_escolar: '6° ano', data_nasc: new Date('2013-09-22'), tipo: 'aluno'          as const },
     { cod_usuario: 21097, nome: 'Carlos Henrique', email: 'carlos@gmail.com',      senha: 'ghi3',  grau_escolar: '4° ano', data_nasc: new Date('2009-11-30'), tipo: 'aluno'          as const },
@@ -25,7 +25,7 @@ async function runSeed() {
     { cod_usuario: 43890, nome: 'Bruno Martins',   email: 'bruno@gmail.com',       senha: 'mno5',  grau_escolar: '9° ano', data_nasc: new Date('2010-05-18'), tipo: 'aluno'          as const },
     { cod_usuario: 65928, nome: 'Fernanda Alves',  email: 'fernanda@gmail.com',    senha: 'fna1',  grau_escolar: '8° ano', data_nasc: new Date('2011-07-25'), tipo: 'aluno'          as const },
   ];
-  for (const u of usuarios) {
+for (const u of usuarios) {
     const senhaHash = await hashPassword(u.senha);
     await prisma.usuario.upsert({
       where:  { cod_usuario: u.cod_usuario },
@@ -36,6 +36,7 @@ async function runSeed() {
         grau_escolar: u.grau_escolar,
         data_nasc: u.data_nasc,
         tipo: u.tipo,
+        ...(u.estrelas !== undefined ? { estrelas: u.estrelas } : {}),
       },
       create: {
         ...u,
@@ -43,8 +44,6 @@ async function runSeed() {
       },
     });
   }
-  console.log(`  ✓ ${usuarios.length} usuários.`);
-
   console.log('  Inserindo disciplinas...');
   const disciplinas = [
     { cod_disc: 82211, nome_disc: 'Matemática' },
