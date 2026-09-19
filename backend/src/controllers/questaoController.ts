@@ -16,25 +16,18 @@ const mapearParaFrontend = (q: QuestaoBanco): QuestaoFrontend => {
   };
 };
 
-const CAMPOS_OBRIGATORIOS: Array<keyof QuestaoPayload> = [
-  'cod_disc',
-  'enunciado',
-  'alternativa_A',
-  'alternativa_B',
-  'alternativa_C',
-  'alternativa_D',
-  'alternativa_correta',
-  'dificuldade',
-];
-
-const LETRAS_VALIDAS = ['a', 'b', 'c', 'd'] as const;
-
-type LetraValida = (typeof LETRAS_VALIDAS)[number];
-
 export const QuestaoController = {
+  // cod_disc e dificuldade (quando enviados) já foram conferidos pelo
+  // middleware validate(listarQuestoesSchema) na rota — aqui só repassamos
+  // os filtros, já convertidos para número/string, ao model.
   async listar(req: Request, res: Response, next: NextFunction) {
+    const { cod_disc, dificuldade } = req.query as { cod_disc?: string; dificuldade?: string };
+
     try {
-      const questoesBanco = await QuestaoModel.listarTodas();
+      const questoesBanco = await QuestaoModel.listarTodas({
+        cod_disc: cod_disc ? Number(cod_disc) : undefined,
+        dificuldade,
+      });
       const formatadas = questoesBanco.map(mapearParaFrontend);
       return res.status(200).json(formatadas);
     } catch (error) {
@@ -42,13 +35,11 @@ export const QuestaoController = {
     }
   },
 
+  // O formato do :id (precisa ser numérico) já foi conferido pelo
+  // middleware validate(buscarQuestaoPorIdSchema) na rota.
   async buscarPorId(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const numeroId = Number(id);
-
-    if (Number.isNaN(numeroId)) {
-      return next(new HttpError(400, 'O ID deve ser um número inteiro.'));
-    }
 
     try {
       const questao = await QuestaoModel.buscarPorId(numeroId);
@@ -61,21 +52,15 @@ export const QuestaoController = {
     }
   },
 
+  // Campos obrigatórios, tamanho mínimo e a letra de alternativa_correta
+  // já foram conferidos pelo middleware validate(criarQuestaoSchema) na
+  // rota — só a regra de "enunciado repetido" fica aqui, porque depende
+  // de consultar o banco (o Model lança 'DUPLICADO').
   async criar(req: Request, res: Response, next: NextFunction) {
     const dados = req.body as QuestaoPayload;
 
-    const faltando = CAMPOS_OBRIGATORIOS.filter((campo) => !dados[campo]);
-    if (faltando.length > 0) {
-      return next(new HttpError(400, `Campos obrigatórios ausentes: ${faltando.join(', ')}`));
-    }
-
-    const alternativa = String(dados.alternativa_correta).toLowerCase() as LetraValida;
-    if (!LETRAS_VALIDAS.includes(alternativa)) {
-      return next(new HttpError(400, 'alternativa_correta deve ser uma das letras: a, b, c ou d.'));
-    }
-
     try {
-      const novoId = await QuestaoModel.criar({ ...dados, alternativa_correta: alternativa });
+      const novoId = await QuestaoModel.criar(dados);
       return res.status(201).json({ mensagem: 'Questão criada com sucesso!', id: novoId });
     } catch (error: unknown) {
       if (error instanceof Error && error.message === 'DUPLICADO') {
@@ -85,37 +70,12 @@ export const QuestaoController = {
     }
   },
 
+  // O schema (atualizarQuestaoSchema) já garante: :id numérico, ao menos
+  // um campo enviado e alternativa_correta válida quando presente.
   async atualizar(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const dados = req.body as Partial<QuestaoPayload>;
     const numeroId = Number(id);
-
-    if (Number.isNaN(numeroId)) {
-      return next(new HttpError(400, 'O ID deve ser um número inteiro.'));
-    }
-
-    const camposEditaveis: Array<keyof QuestaoPayload> = [
-      'cod_disc',
-      'enunciado',
-      'alternativa_A',
-      'alternativa_B',
-      'alternativa_C',
-      'alternativa_D',
-      'alternativa_correta',
-      'dificuldade',
-    ];
-    const temAlgumCampo = camposEditaveis.some((campo) => dados[campo] !== undefined);
-    if (!temAlgumCampo) {
-      return next(new HttpError(400, 'Envie ao menos um campo para atualizar.'));
-    }
-
-    if (dados.alternativa_correta) {
-      const alternativaAtualizada = String(dados.alternativa_correta).toLowerCase() as LetraValida;
-      if (!LETRAS_VALIDAS.includes(alternativaAtualizada)) {
-        return next(new HttpError(400, 'alternativa_correta deve ser: a, b, c ou d.'));
-      }
-      dados.alternativa_correta = alternativaAtualizada;
-    }
 
     try {
       const alteracoes = await QuestaoModel.atualizar(numeroId, dados);
@@ -128,13 +88,10 @@ export const QuestaoController = {
     }
   },
 
+  // O formato do :id já foi conferido pelo middleware validate(deletarQuestaoSchema).
   async deletar(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const numeroId = Number(id);
-
-    if (Number.isNaN(numeroId)) {
-      return next(new HttpError(400, 'O ID deve ser um número inteiro.'));
-    }
 
     try {
       const alteracoes = await QuestaoModel.deletar(numeroId);

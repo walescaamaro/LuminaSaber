@@ -57,12 +57,11 @@ async function chamarGroq(prompt: string): Promise<string> {
 }
 
 export async function analisar(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { prompt } = req.body;
-    if (!prompt || typeof prompt !== 'string') {
-      throw new HttpError(400, 'Campo "prompt" é obrigatório.');
-    }
+  // prompt obrigatório e não-vazio já foi conferido pelo middleware
+  // validate(analisarSchema) na rota.
+  const { prompt } = req.body as { prompt: string };
 
+try {
     let texto: string;
     let fonte: 'gemini' | 'groq';
 

@@ -17,7 +17,7 @@
             --lemon-chiffon: #fbf8cc; --powder-petal: #fde4cf; --cotton-rose: #ffcfd2;
             --pink-orchid: #f1c0e8; --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3;
             --frosted-blue: #90dbf4; --electric-aqua: #8eecf5; --aquamarine: #98f5e1;
-            --celadon: #b9fbc0; --ink: #16323d;
+            --celadon: #b9fbc0; --ink: #16323d; --red: #b00020; --green: #1a7f37;
         }
         * { box-sizing: border-box; }
         html, body { height: 100%; }
@@ -62,6 +62,26 @@
         }
         input:focus, select:focus { border-color: var(--baby-blue-ice); background: #fff; }
 
+        /* ── Estado inválido: aparece só depois que o form tenta enviar
+           (classe was-validated no <form>) ou quando a API aponta um
+           campo específico (classe is-invalid direto no input). ── */
+        .was-validated input:invalid,
+        .was-validated select:invalid,
+        input.is-invalid,
+        select.is-invalid {
+            border-color: var(--cotton-rose);
+            background: #fff6f6;
+        }
+        .invalid-feedback {
+            display: none; font-size: 12px; font-weight: 600; color: var(--red); margin-top: 5px;
+        }
+        .was-validated input:invalid ~ .invalid-feedback,
+        .was-validated select:invalid ~ .invalid-feedback,
+        input.is-invalid ~ .invalid-feedback,
+        select.is-invalid ~ .invalid-feedback {
+            display: block;
+        }
+
         .btn-wrap { grid-column: span 2; display: flex; justify-content: center; margin-top: 8px; }
         button {
             padding: 14px 60px; background-color: var(--ink); color: #fff;
@@ -69,12 +89,31 @@
             cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity .2s;
         }
         button:hover { opacity: 0.85; }
+        button:disabled { opacity: .6; cursor: not-allowed; }
 
-        #mensagem { grid-column: span 2; text-align: center; margin: 4px 0 0; font-weight: 700; font-size: 13.5px; }
+        #mensagem { grid-column: span 2; text-align: center; margin: 4px 0 0; font-weight: 700; font-size: 13.5px; min-height: 18px; }
+
+        .link-login { grid-column: span 2; text-align: center; margin-top: 4px; font-size: 13.5px; color: rgba(22,50,61,0.75); }
+        .link-login a { color: var(--ink); font-weight: 700; text-decoration: underline; }
+
+        /* ── Toast: só para erros que não pertencem a nenhum campo ──
+        Escondido com "right" em pixel fixo (não com transform em %),
+        porque quando o texto do erro ainda não foi definido a caixa
+        fica estreita e translateX(120%) não desloca o suficiente —
+        sobrava uma fatia vermelha visível no canto. ── */
+        #liveToast {
+            position: fixed; top: 20px; right: -420px; z-index: 50;
+            background: #fff; border-left: 5px solid var(--red); border-radius: 12px;
+            padding: 14px 18px; box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+            font-size: 13.5px; font-weight: 600; max-width: 320px;
+            transition: right .25s ease;
+        }
+        #liveToast.visivel { right: 20px; }
+        #liveToast strong { display: block; margin-bottom: 2px; font-size: 13px; color: var(--red); }
 
         @media (max-width: 560px) {
             form { grid-template-columns: 1fr; }
-            .btn-wrap, #mensagem { grid-column: span 1; }
+            .btn-wrap, #mensagem, .link-login { grid-column: span 1; }
         }
     </style>
 </head>
@@ -91,26 +130,30 @@
         <p class="kicker">Vamos começar!</p>
         <h1>Crie sua conta</h1>
 
-        <form id="formCadastro">
+        <form id="formCadastro" novalidate>
             <div class="field">
                 <label for="nome">Nome</label>
-                <input type="text" id="nome" placeholder="Seu nome completo" required>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" minlength="2" required>
+                <span class="invalid-feedback">Informe seu nome (pelo menos 2 caracteres).</span>
             </div>
             <div class="field">
                 <label for="email">E-mail</label>
-                <input type="email" id="email" placeholder="voce@email.com" required>
+                <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+                <span class="invalid-feedback">Informe um e-mail válido.</span>
             </div>
             <div class="field">
                 <label for="senha">Senha</label>
-                <input type="password" id="senha" placeholder="••••••••" required>
+                <input type="password" id="senha" name="senha" placeholder="••••••••" minlength="6" required>
+                <span class="invalid-feedback">A senha deve ter pelo menos 6 caracteres.</span>
             </div>
             <div class="field">
                 <label for="confirmarSenha">Confirme a senha</label>
-                <input type="password" id="confirmarSenha" placeholder="••••••••" required>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="••••••••" required>
+                <span class="invalid-feedback">As senhas precisam ser iguais.</span>
             </div>
             <div class="field">
                 <label for="grau_escolar">Grau escolar</label>
-                <select id="grau_escolar" required>
+                <select id="grau_escolar" name="grau_escolar" required>
                     <option value="" selected disabled>Selecione...</option>
                     <option>Jardim I</option>
                     <option>Jardim II</option>
@@ -124,74 +167,135 @@
                     <option>8º ano</option>
                     <option>9º ano</option>
                 </select>
+                <span class="invalid-feedback">Selecione o grau escolar.</span>
             </div>
             <div class="field">
                 <label for="data_nasc">Data de nascimento</label>
-                <input type="date" id="data_nasc" required>
+                <input type="date" id="data_nasc" name="data_nasc" max="" required>
+                <span class="invalid-feedback">Informe uma data de nascimento válida.</span>
             </div>
 
             <div class="btn-wrap">
-                <button type="submit">Cadastrar</button>
+                <button type="submit" id="btnCadastrar">Cadastrar</button>
             </div>
             <p id="mensagem"></p>
+
+            <p class="link-login">Já tem conta? <a href="/login">Entrar</a></p>
         </form>
     </div>
 
+    <div id="liveToast" role="alert" aria-live="assertive" aria-atomic="true">
+        <strong>Ops!</strong>
+        <span id="liveToastTexto"></span>
+    </div>
+
     <script>
-        document.getElementById('formCadastro').addEventListener('submit', async function(e) {
+        const form = document.getElementById('formCadastro');
+        const msg = document.getElementById('mensagem');
+        const btnCadastrar = document.getElementById('btnCadastrar');
+
+        // Trava a data máxima em "hoje" — mesma regra que o back-end aplica
+        // (data de nascimento não pode estar no futuro), mas já dá o retorno
+        // ao usuário sem precisar de uma ida ao servidor.
+        document.getElementById('data_nasc').max = new Date().toISOString().slice(0, 10);
+
+        // Validação nativa (required, minlength, type="email") cobre a maior
+        // parte dos campos. A confirmação de senha é uma regra que o HTML
+        // sozinho não expressa, então usamos setCustomValidity pra que o
+        // próprio navegador bloqueie o envio enquanto as duas não baterem —
+        // igual ao padrão usado no restante do sistema.
+        function validarConfirmacaoSenha() {
+            const senha = form.senha.value;
+            const confirmacao = form.confirmarSenha.value;
+
+            if (confirmacao && senha !== confirmacao) {
+                form.confirmarSenha.setCustomValidity('As senhas precisam ser iguais.');
+            } else {
+                form.confirmarSenha.setCustomValidity('');
+            }
+        }
+        form.senha.oninput = validarConfirmacaoSenha;
+        form.confirmarSenha.oninput = validarConfirmacaoSenha;
+
+        // Assim que a pessoa mexe no e-mail de novo, tira o erro de
+        // "e-mail já cadastrado" que a API pode ter colocado ali.
+        form.email.oninput = () => {
+            form.email.classList.remove('is-invalid');
+            form.email.setCustomValidity('');
+        };
+
+        function showToast(texto) {
+            const toast = document.getElementById('liveToast');
+            document.getElementById('liveToastTexto').textContent = texto;
+            toast.classList.add('visivel');
+            setTimeout(() => toast.classList.remove('visivel'), 4500);
+        }
+
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const nome      = document.getElementById('nome').value.trim();
-            const email     = document.getElementById('email').value.trim();
-            const senha     = document.getElementById('senha').value;
-            const confirmar = document.getElementById('confirmarSenha').value;
-            const grau      = document.getElementById('grau_escolar').value;
-            const data_nasc = document.getElementById('data_nasc').value;
-            const msg       = document.getElementById('mensagem');
-
-            if (!nome || !email || !senha || !grau || !data_nasc) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'Preencha todos os campos obrigatórios.';
+            // A validação do navegador é só o primeiro filtro — dá retorno
+            // instantâneo sem round-trip ao servidor. Quem garante os dados
+            // de verdade é a API (Zod) e, por trás dela, o banco: o mesmo
+            // formulário poderia ser enviado direto via curl/Postman, sem
+            // passar pelo navegador, então a regra tem que existir nos dois
+            // lugares — o front cuida da experiência, a API cuida da segurança.
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
                 return;
             }
 
-            if (senha !== confirmar) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'As senhas não coincidem.';
-                return;
-            }
+            const nome = form.nome.value.trim();
+            const email = form.email.value.trim();
+            const senha = form.senha.value;
+            const grau_escolar = form.grau_escolar.value;
+            const data_nasc = form.data_nasc.value;
 
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'Informe um e-mail válido.';
-                return;
-            }
+            btnCadastrar.disabled = true;
+            msg.textContent = '';
 
             try {
                 const res = await fetch('/api/usuarios', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nome, email, senha,
-                        grau_escolar: grau,
-                        data_nasc,
-                        tipo: 'aluno'
-                    })
+                    body: JSON.stringify({ nome, email, senha, grau_escolar, data_nasc }),
                 });
 
                 const dados = await res.json();
 
                 if (res.ok) {
-                    msg.style.color = '#1a7f37';
-                    msg.textContent = 'Cadastro realizado com sucesso! Você já pode fazer login.';
-                    document.getElementById('formCadastro').reset();
+                    // O cadastro já devolve o token de sessão — evita pedir
+                    // pra pessoa fazer login de novo logo em seguida.
+                    salvarSessao(dados.token, dados.usuario);
+                    msg.style.color = 'var(--green)';
+                    msg.textContent = 'Cadastro realizado! Enviamos um e-mail de confirmação — redirecionando...';
+                    setTimeout(() => window.location.replace('/painel'), 900);
+                    return;
+                }
+
+                if (res.status === 409) {
+                    // E-mail já cadastrado: erro pertence ao campo "email",
+                    // então mostra ali (e não num toast genérico).
+                    const erro = dados.error || 'Este e-mail já está cadastrado.';
+                    form.email.setCustomValidity(erro);
+                    form.email.classList.add('is-invalid');
+                    const feedback = document.querySelector('#email ~ .invalid-feedback');
+                    feedback.textContent = erro;
+                    form.classList.add('was-validated');
+                } else if (res.status === 400 && Array.isArray(dados.issues) && dados.issues.length > 0) {
+                    // 400 do Zod: cada "issue" tem path (o campo) e message.
+                    // Mostra a primeira mensagem relevante no toast — o
+                    // usuário raramente vê isso, porque a validação nativa
+                    // já bloqueia antes, mas cobre o caso de alguém burlar
+                    // o HTML (ex.: reabrir um campo desabilitado via devtools).
+                    showToast(dados.issues[0].message || 'Confira os dados informados.');
                 } else {
-                    msg.style.color = '#b00020';
-                    msg.textContent = dados.error;
+                    showToast(dados.error || 'Não foi possível concluir o cadastro.');
                 }
             } catch (err) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'Não foi possível conectar ao servidor.';
+                showToast('Não foi possível conectar ao servidor.');
+            } finally {
+                btnCadastrar.disabled = false;
             }
         });
     </script>

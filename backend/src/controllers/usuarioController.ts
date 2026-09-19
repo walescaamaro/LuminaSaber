@@ -3,35 +3,18 @@ import { HttpError } from '../errors/HttpError.js';
 import { generateToken } from '../lib/auth.js';
 import { verifyPassword } from '../lib/crypto.js';
 import { UsuarioModel } from '../models/usuarioModel.js';
+import { SendMail } from '../services/SendMail.js';
 import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
 
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const OITO_HORAS_MS = 8 * 60 * 60 * 1000;
 
 export const UsuarioController = {
+  // Formato, tamanho mínimo e obrigatoriedade de cada campo já foram
+  // conferidos pelo middleware validate(criarUsuarioSchema) na rota — o
+  // controller só cuida da regra de negócio que o Zod não pode checar
+  // sozinho (e-mail duplicado depende de consultar o banco).
   async criar(req: Request, res: Response, next: NextFunction) {
     const { nome, email, senha, grau_escolar, data_nasc } = req.body as UsuarioCreatePayload;
-
-    if (!nome || !email || !senha || !data_nasc) {
-      return next(new HttpError(400, 'Preencha todos os campos obrigatórios.'));
-    }
-
-    if (nome.trim().length < 2) {
-      return next(new HttpError(400, 'O nome deve ter pelo menos 2 caracteres.'));
-    }
-
-    const dataNascimento = new Date(`${data_nasc}T00:00:00`);
-    if (Number.isNaN(dataNascimento.getTime()) || dataNascimento > new Date()) {
-      return next(new HttpError(400, 'Informe uma data de nascimento válida.'));
-    }
-
-    if (!grau_escolar) {
-      return next(new HttpError(400, 'Alunos devem informar o grau escolar.'));
-    }
-
-    if (!emailRegex.test(email)) {
-      return next(new HttpError(400, 'E-mail inválido.'));
-    }
 
     try {
       const emailNormalizado = email.trim().toLowerCase();
@@ -67,6 +50,18 @@ export const UsuarioController = {
         maxAge: OITO_HORAS_MS,
       });
 
+      // O envio é depois de gravar no banco: não faz sentido avisar sobre
+      // uma conta que falhou ao ser criada. Não usamos "await" aqui de
+      // propósito — o e-mail é disparado em segundo plano, sem segurar a
+      // resposta. É o padrão de produção que o próprio material da
+      // disciplina recomenda ("enfileira o e-mail e responde sem depender
+      // do servidor de e-mail"). O .catch cobre a falha: um SMTP fora do
+      // ar não pode impedir alguém de criar conta, então o erro é só
+      // registrado no log.
+      SendMail.boasVindas(usuario.email, usuario.nome).catch((erroEnvio) => {
+        console.error('Falha ao enviar o e-mail de boas-vindas:', erroEnvio);
+      });
+
       return res.status(201).json({
         mensagem: 'Usuário cadastrado com sucesso!',
         token,
@@ -84,17 +79,11 @@ export const UsuarioController = {
     }
   },
 
+  // Formato de e-mail e senha obrigatória já foram conferidos pelo
+  // middleware validate(loginUsuarioSchema) na rota.
   async login(req: Request, res: Response, next: NextFunction) {
-    const { email: emailInformado, senha } = req.body as { email?: string; senha?: string };
-
-    if (!emailInformado || !senha) {
-      return next(new HttpError(400, 'E-mail e senha são obrigatórios.'));
-    }
-
+    const { email: emailInformado, senha } = req.body as { email: string; senha: string };
     const email = emailInformado.trim().toLowerCase();
-    if (!emailRegex.test(email)) {
-      return next(new HttpError(400, 'E-mail inválido.'));
-    }
 
     try {
       const usuario = await UsuarioModel.buscarPorEmailCompleto(email);

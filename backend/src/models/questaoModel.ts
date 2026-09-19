@@ -21,8 +21,12 @@ function mapearQuestao(questao: NonNullable<QuestaoComDisciplina>): QuestaoBanco
 }
 
 export const QuestaoModel = {
-  async listarTodas(): Promise<QuestaoBanco[]> {
+  async listarTodas(filtros: { cod_disc?: number; dificuldade?: string } = {}): Promise<QuestaoBanco[]> {
     const questoes = await prisma.questao.findMany({
+      where: {
+        ...(filtros.cod_disc !== undefined && { cod_disc: filtros.cod_disc }),
+        ...(filtros.dificuldade !== undefined && { dificuldade: filtros.dificuldade }),
+      },
       include: { disciplina: true },
       orderBy: [{ disciplina: { nome_disc: 'asc' } }, { cod_quest: 'asc' }],
     });

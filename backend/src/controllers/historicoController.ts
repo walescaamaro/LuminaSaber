@@ -2,8 +2,6 @@ import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/HttpError.js';
 import { HistoricoModel } from '../models/historicoModel.js';
 
-const LETRAS_VALIDAS = ['a', 'b', 'c', 'd'];
-
 export const HistoricoController = {
   async listarMeu(req: Request, res: Response, next: NextFunction) {
     const usuarioLogado = req.user;
@@ -19,13 +17,10 @@ export const HistoricoController = {
 
   // Usado pelo admin, na tela "Gerenciamento de Usuários", pra ver o
   // histórico de QUALQUER aluno (não só o do próprio usuário logado).
-  // Protegido por authMiddleware + adminMiddleware na rota.
+  // Protegido por authMiddleware + adminMiddleware na rota, e o formato
+  // de :id já foi conferido pelo middleware validate(listarHistoricoDeUsuarioSchema).
   async listarDeUsuario(req: Request, res: Response, next: NextFunction) {
     const codUsuario = Number(req.params.id);
-
-    if (Number.isNaN(codUsuario)) {
-      return next(new HttpError(400, 'O ID do usuário deve ser um número inteiro.'));
-    }
 
     try {
       const historico = await HistoricoModel.listarPorUsuario(codUsuario);
@@ -35,21 +30,20 @@ export const HistoricoController = {
     }
   },
 
+  // cod_quest (número positivo) e alternativa (uma de a/b/c/d, já
+  // normalizada para minúscula pelo schema) já foram conferidos pelo
+  // middleware validate(registrarHistoricoSchema) na rota.
   async registrar(req: Request, res: Response, next: NextFunction) {
     const usuarioLogado = req.user;
     if (!usuarioLogado) return next(new HttpError(401, 'Usuário não autenticado.'));
 
-    const { cod_quest, alternativa } = req.body as { cod_quest?: number; alternativa?: string };
-
-    if (!cod_quest || !alternativa || !LETRAS_VALIDAS.includes(String(alternativa).toLowerCase())) {
-      return next(new HttpError(400, 'Informe cod_quest e uma alternativa válida (a, b, c ou d).'));
-    }
+    const { cod_quest, alternativa } = req.body as { cod_quest: number; alternativa: string };
 
     try {
       const { status, estrelasGanhas } = await HistoricoModel.registrar(
         usuarioLogado.id,
-        Number(cod_quest),
-        String(alternativa),
+        cod_quest,
+        alternativa,
       );
       return res.status(201).json({ mensagem: 'Resposta registrada com sucesso!', status, estrelasGanhas });
     } catch (error) {

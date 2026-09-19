@@ -22,6 +22,18 @@ Accept: application/json
 GET http://localhost:3000/api/questoes/abc
 Accept: application/json
 
+### Listar questões filtrando por disciplina e dificuldade (query válida) → 200
+GET http://localhost:3000/api/questoes?cod_disc=82211&dificuldade=fácil
+Accept: application/json
+
+### Listar questões com dificuldade inválida (query inválida) → 400
+GET http://localhost:3000/api/questoes?dificuldade=impossível
+Accept: application/json
+
+### Listar questões com cod_disc inválido (query inválida, não é número positivo) → 400
+GET http://localhost:3000/api/questoes?cod_disc=-5
+Accept: application/json
+
 
 ### ─── POST (CRIAÇÃO) ────────────────────────────────────────────────
 
@@ -117,7 +129,10 @@ Accept: application/json
 
 ### ─── AUTENTICAÇÃO (USUÁRIOS) ────────────────────────────────────────
 
-### Cadastro válido → 201
+### Cadastro válido → 201, dispara o e-mail de boas-vindas
+# Depois de rodar este bloco, confira o terminal do "npm run dev":
+# deve aparecer a linha "[e-mail] Prévia da mensagem: https://ethereal.email/..."
+# Abra essa URL no navegador para ver a mensagem (HTML e texto puro).
 POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
@@ -131,6 +146,8 @@ Content-Type: application/json
 }
 
 ### Cadastro com e-mail já existente → 409 (rode o bloco acima 2x pra ver)
+# CA11.2: cadastro recusado por e-mail duplicado não deve enviar nenhum e-mail
+# — confira que NÃO aparece uma nova linha de prévia no terminal para este bloco.
 POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
@@ -143,13 +160,38 @@ Content-Type: application/json
   "tipo": "aluno"
 }
 
-### Cadastro com campos obrigatórios faltando → 400
+### Cadastro com campos obrigatórios faltando (corpo inválido) → 400
+# A resposta traz "issues" do Zod identificando cada campo que falhou (path + message).
 POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
 {
   "email": "incompleto@luminasaber.com",
   "senha": "123456"
+}
+
+### Cadastro com e-mail em formato inválido (corpo inválido) → 400
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Aluno Teste",
+  "email": "nao-e-um-email",
+  "senha": "SenhaForte123",
+  "grau_escolar": "5º ano",
+  "data_nasc": "2014-03-10"
+}
+
+### Cadastro com data de nascimento no futuro (corpo inválido) → 400
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Aluno Teste",
+  "email": "aluno.futuro@luminasaber.com",
+  "senha": "SenhaForte123",
+  "grau_escolar": "5º ano",
+  "data_nasc": "2099-01-01"
 }
 
 

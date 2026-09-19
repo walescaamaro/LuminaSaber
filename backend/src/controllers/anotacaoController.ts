@@ -15,19 +15,18 @@ export const AnotacaoController = {
     }
   },
 
+  // titulo e texto_anota obrigatórios, e cod_pasta (quando enviado) como
+  // número positivo, já foram conferidos pelo middleware
+  // validate(criarAnotacaoSchema) na rota.
   async criar(req: Request, res: Response, next: NextFunction) {
     const usuarioLogado = req.user;
     if (!usuarioLogado) return next(new HttpError(401, 'Usuário não autenticado.'));
 
     const { titulo, texto_anota, cod_pasta } = req.body as {
-      titulo?: string;
-      texto_anota?: string;
+      titulo: string;
+      texto_anota: string;
       cod_pasta?: number;
     };
-
-    if (!titulo || !texto_anota) {
-      return next(new HttpError(400, 'Preencha o título e o texto da anotação.'));
-    }
 
     try {
       const id = await AnotacaoModel.criar(usuarioLogado.id, titulo, texto_anota, cod_pasta);

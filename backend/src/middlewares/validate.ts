@@ -12,7 +12,7 @@ export const validate =
     });
 
     if (!result.success) {
-      throw new HttpError(400, 'Validation error', result.error.issues);
+      throw new HttpError(400, 'Dados inválidos. Confira os campos indicados em "issues".', result.error.issues);
     }
 
     next();
