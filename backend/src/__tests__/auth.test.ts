@@ -1,7 +1,11 @@
+import 'dotenv/config';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+process.env.JWT_SECRET ??= '12345678901234567890123456789012';
+
 import { generateToken, verifyToken } from '../lib/auth.js';
+import { validarSenha } from '../lib/password.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { HttpError } from '../errors/HttpError.js';
 
@@ -35,4 +39,13 @@ test('middleware bloqueia acesso sem token de autenticação', () => {
 
   assert.ok(capturedError instanceof HttpError);
   assert.equal((capturedError as HttpError).statusCode, 401);
+});
+
+test('valida critérios de senha no backend', () => {
+  assert.deepEqual(validarSenha('Abcdef1!'), []);
+  assert.deepEqual(validarSenha('abcdef1!'), ['A senha deve conter pelo menos uma letra maiúscula.']);
+  assert.deepEqual(validarSenha('ABCDEF1!'), ['A senha deve conter pelo menos uma letra minúscula.']);
+  assert.deepEqual(validarSenha('Abcdefgh!'), ['A senha deve conter pelo menos um número.']);
+  assert.deepEqual(validarSenha('Abcdefg1'), ['A senha deve conter pelo menos um caractere especial.']);
+  assert.deepEqual(validarSenha('Ab1!'), ['A senha deve ter pelo menos 8 caracteres.']);
 });

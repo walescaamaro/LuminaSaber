@@ -2,11 +2,13 @@ import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/HttpError.js';
 import { generateToken } from '../lib/auth.js';
 import { verifyPassword } from '../lib/crypto.js';
+import { gerarTokenRecuperacao, hashTokenRecuperacao, senhaAtendeCritérios, validarSenha } from '../lib/password.js';
 import { UsuarioModel } from '../models/usuarioModel.js';
 import { SendMail } from '../services/SendMail.js';
 import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
 
 const OITO_HORAS_MS = 8 * 60 * 60 * 1000;
+const UMA_HORA_MS = 60 * 60 * 1000;
 
 export const UsuarioController = {
   // Formato, tamanho mínimo e obrigatoriedade de cada campo já foram
@@ -17,6 +19,11 @@ export const UsuarioController = {
     const { nome, email, senha, grau_escolar, data_nasc } = req.body as UsuarioCreatePayload;
 
     try {
+      const errosSenha = validarSenha(senha);
+      if (errosSenha.length > 0) {
+        return next(new HttpError(400, `Senha inválida. ${errosSenha.join(' ')}`));
+      }
+
       const emailNormalizado = email.trim().toLowerCase();
       const emailExiste = await UsuarioModel.buscarPorEmail(emailNormalizado);
       if (emailExiste) {
@@ -126,6 +133,70 @@ export const UsuarioController = {
           data_nasc: usuario.data_nasc.toISOString().slice(0, 10),
         },
       });
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async solicitarRedefinicaoSenha(req: Request, res: Response, next: NextFunction) {
+    const { email } = req.body as { email: string };
+    const emailNormalizado = email.trim().toLowerCase();
+
+    try {
+      const usuario = await UsuarioModel.buscarPorEmailCompleto(emailNormalizado);
+
+      if (!usuario) {
+        return res.status(200).json({
+          mensagem: 'Se este e-mail estiver cadastrado, enviaremos instruções para redefinir sua senha.',
+        });
+      }
+
+      const token = gerarTokenRecuperacao();
+      await UsuarioModel.invalidarTokensPendentes(usuario.cod_usuario);
+      await UsuarioModel.criarTokenRecuperacao(usuario.cod_usuario, token, UMA_HORA_MS);
+
+      SendMail.redefinicaoSenha(usuario.email, usuario.nome, token).catch((erroEnvio) => {
+        console.error('Falha ao enviar e-mail de redefinição de senha:', erroEnvio);
+      });
+
+      return res.status(200).json({
+        mensagem: 'Se este e-mail estiver cadastrado, enviaremos instruções para redefinir sua senha.',
+      });
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  async redefinirSenha(req: Request, res: Response, next: NextFunction) {
+    const { token, novaSenha, senha } = req.body as { token?: string; novaSenha?: string; senha?: string };
+    const tokenInformado = token?.trim();
+    const novaSenhaInformada = (novaSenha ?? senha)?.trim();
+
+    try {
+      if (!tokenInformado) {
+        return next(new HttpError(400, 'Token de redefinição é obrigatório.'));
+      }
+
+      if (!novaSenhaInformada) {
+        return next(new HttpError(400, 'A nova senha é obrigatória.'));
+      }
+
+      const errosSenha = validarSenha(novaSenhaInformada);
+      if (errosSenha.length > 0) {
+        return next(new HttpError(400, `Senha inválida. ${errosSenha.join(' ')}`));
+      }
+
+      const tokenHash = hashTokenRecuperacao(tokenInformado);
+      const tokenValido = await UsuarioModel.buscarTokenValidoPorHash(tokenHash);
+
+      if (!tokenValido) {
+        return next(new HttpError(400, 'Token de redefinição inválido ou expirado.'));
+      }
+
+      await UsuarioModel.atualizarSenha(tokenValido.cod_usuario, novaSenhaInformada);
+      await UsuarioModel.marcarTokenUtilizado(tokenValido.cod_token);
+
+      return res.status(200).json({ mensagem: 'Senha redefinida com sucesso.' });
     } catch (error) {
       return next(error);
     }

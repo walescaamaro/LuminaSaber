@@ -71,6 +71,23 @@
 
         .link-cadastro { margin-top: 20px; font-size: 13.5px; color: rgba(22,50,61,0.75); }
         .link-cadastro a { color: var(--ink); font-weight: 700; text-decoration: underline; }
+        .link-recuperar {
+            margin-top: 8px; text-align: right; font-size: 13px;
+        }
+        .link-recuperar a {
+            color: rgba(22,50,61,0.8); text-decoration: underline; cursor: pointer; font-weight: 700;
+        }
+        .recuperacao-box {
+            display: none; margin-top: 10px;
+        }
+        .recuperacao-box.visible { display: block; }
+        .recuperacao-box .titulo { font-size: 18px; font-weight: 800; margin: 0 0 12px; }
+        .recuperacao-box .subtitulo { margin: 0 0 14px; color: rgba(22,50,61,0.7); font-size: 13.5px; }
+        .btn-secondary {
+            margin-top: 6px; padding: 12px 14px; background-color: #eef3f5; color: var(--ink);
+            border: none; border-radius: 999px; font-size: 14px; font-weight: 700;
+            cursor: pointer; font-family: 'DM Sans', sans-serif;
+        }
 
         #mensagem { margin-top: 14px; font-weight: 700; font-size: 13.5px; min-height: 18px; }
     </style>
@@ -99,8 +116,41 @@
                 <input type="password" id="senha" placeholder="••••••••" required>
             </div>
 
+            <div class="link-recuperar">
+                <a href="#" id="linkEsqueciSenha">Esqueci minha senha</a>
+            </div>
+
             <button type="submit">Entrar</button>
         </form>
+
+        <div id="recuperacaoBox" class="recuperacao-box">
+            <h2 class="titulo">Redefinir senha</h2>
+            <p class="subtitulo">Informe seu e-mail para receber o token de redefinição.</p>
+
+            <form id="formSolicitacaoSenha">
+                <div class="field">
+                    <label for="emailRecuperacao">E-mail da conta</label>
+                    <input type="email" id="emailRecuperacao" placeholder="voce@email.com" required>
+                </div>
+                <button type="submit">Enviar instruções</button>
+            </form>
+
+            <form id="formResetSenha" class="recuperacao-box" style="display:none; margin-top:16px;">
+                <div class="field">
+                    <label for="tokenRecuperacao">Token de redefinição</label>
+                    <input type="text" id="tokenRecuperacao" placeholder="Cole o token recebido" required>
+                </div>
+
+                <div class="field">
+                    <label for="novaSenha">Nova senha</label>
+                    <input type="password" id="novaSenha" placeholder="Nova senha" required>
+                </div>
+
+                <button type="submit">Salvar nova senha</button>
+            </form>
+
+            <button type="button" id="voltarAoLogin" class="btn-secondary" style="width:100%; margin-top:14px;">Voltar ao login</button>
+        </div>
 
         <p id="mensagem"></p>
 
@@ -110,16 +160,54 @@
     </div>
 
     <script>
-        document.getElementById('formLogin').addEventListener('submit', async function (e) {
+        const formLogin = document.getElementById('formLogin');
+        const formSolicitacaoSenha = document.getElementById('formSolicitacaoSenha');
+        const formResetSenha = document.getElementById('formResetSenha');
+        const recuperacaoBox = document.getElementById('recuperacaoBox');
+        const linkEsqueciSenha = document.getElementById('linkEsqueciSenha');
+        const voltarAoLogin = document.getElementById('voltarAoLogin');
+        const msg = document.getElementById('mensagem');
+
+        function mostrarMensagem(texto, tipo = 'erro') {
+            msg.style.color = tipo === 'sucesso' ? '#1a7f37' : '#b00020';
+            msg.textContent = texto;
+        }
+
+        function mostrarLogin() {
+            formLogin.style.display = 'grid';
+            recuperacaoBox.classList.remove('visible');
+            formResetSenha.style.display = 'none';
+            formSolicitacaoSenha.reset();
+            formResetSenha.reset();
+        }
+
+        function mostrarRecuperacao() {
+            formLogin.style.display = 'none';
+            recuperacaoBox.classList.add('visible');
+            formResetSenha.style.display = 'none';
+            formSolicitacaoSenha.style.display = 'block';
+            document.getElementById('emailRecuperacao').focus();
+        }
+
+        linkEsqueciSenha.addEventListener('click', function (e) {
+            e.preventDefault();
+            mostrarMensagem('');
+            mostrarRecuperacao();
+        });
+
+        voltarAoLogin.addEventListener('click', function () {
+            mostrarMensagem('');
+            mostrarLogin();
+        });
+
+        formLogin.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value.trim();
             const senha = document.getElementById('senha').value;
-            const msg = document.getElementById('mensagem');
 
             if (!email || !senha) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'Preencha e-mail e senha.';
+                mostrarMensagem('Preencha e-mail e senha.');
                 return;
             }
 
@@ -134,16 +222,76 @@
 
                 if (res.ok) {
                     salvarSessao(dados.token, dados.usuario);
-                    msg.style.color = '#1a7f37';
-                    msg.textContent = 'Login realizado com sucesso!';
+                    mostrarMensagem('Login realizado com sucesso!', 'sucesso');
                     setTimeout(() => window.location.replace('/painel'), 600);
                 } else {
-                    msg.style.color = '#b00020';
-                    msg.textContent = dados.error || 'Falha ao fazer login.';
+                    mostrarMensagem(dados.error || 'Falha ao fazer login.');
                 }
             } catch (err) {
-                msg.style.color = '#b00020';
-                msg.textContent = 'Não foi possível conectar ao servidor.';
+                mostrarMensagem('Não foi possível conectar ao servidor.');
+            }
+        });
+
+        formSolicitacaoSenha.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('emailRecuperacao').value.trim();
+            if (!email) {
+                mostrarMensagem('Informe o e-mail da conta.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/usuarios/solicitar-redefinicao-senha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const dados = await res.json();
+                if (res.ok) {
+                    mostrarMensagem(dados.mensagem || 'Instruções enviadas com sucesso.', 'sucesso');
+                    formSolicitacaoSenha.style.display = 'none';
+                    formResetSenha.style.display = 'block';
+                    document.getElementById('tokenRecuperacao').focus();
+                } else {
+                    mostrarMensagem(dados.error || 'Não foi possível solicitar a redefinição.');
+                }
+            } catch (err) {
+                mostrarMensagem('Não foi possível conectar ao servidor.');
+            }
+        });
+
+        formResetSenha.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const token = document.getElementById('tokenRecuperacao').value.trim();
+            const novaSenha = document.getElementById('novaSenha').value;
+
+            if (!token || !novaSenha) {
+                mostrarMensagem('Informe o token e a nova senha.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/usuarios/redefinir-senha', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, novaSenha })
+                });
+
+                const dados = await res.json();
+                if (res.ok) {
+                    mostrarMensagem('Senha redefinida com sucesso! Você pode entrar com a nova senha.', 'sucesso');
+                    setTimeout(() => {
+                        formResetSenha.reset();
+                        mostrarLogin();
+                    }, 1400);
+                } else {
+                    mostrarMensagem(dados.error || 'Não foi possível redefinir a senha.');
+                }
+            } catch (err) {
+                mostrarMensagem('Não foi possível conectar ao servidor.');
             }
         });
     </script>

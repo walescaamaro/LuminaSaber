@@ -72,5 +72,41 @@ async function boasVindas(destinatario: string, nome: string) {
   await enviar(destinatario, 'Conta criada no LuminaSaber 🎉', texto, html);
 }
 
-export const SendMail = { boasVindas };
+async function redefinicaoSenha(destinatario: string, nome: string, token: string) {
+  const primeiroNome = nome.trim().split(/\s+/)[0] || nome;
+  const link = `${process.env.APP_URL || 'http://localhost:3000'}/redefinir-senha?token=${encodeURIComponent(token)}`;
+
+  const texto =
+    `Olá, ${primeiroNome}!\n\n` +
+    'Recebemos sua solicitação para redefinir a senha da sua conta no LuminaSaber.\n' +
+    `Use o token abaixo para concluir a alteração:\n\n${token}\n\n` +
+    `Ou acesse: ${link}\n\n` +
+    'Este token expira em 1 hora e só pode ser usado uma vez.\n\n' +
+    'Se você não solicitou esta alteração, ignore esta mensagem.';
+
+  const html = `
+    <div style="font-family: 'DM Sans', Arial, sans-serif; max-width: 480px; margin: 0 auto; color: #16323d;">
+      <h1 style="font-size: 20px;">Redefinição de senha</h1>
+      <p style="font-size: 14.5px; line-height: 1.6;">
+        Olá, ${primeiroNome}! Recebemos sua solicitação para redefinir a senha da sua conta no <strong>LuminaSaber</strong>.
+      </p>
+      <p style="font-size: 14.5px; line-height: 1.6;">
+        Use este token para concluir a alteração:
+        <br />
+        <strong>${token}</strong>
+      </p>
+      <p style="font-size: 14.5px; line-height: 1.6;">
+        Ou acesse esta URL:
+        <br />
+        <a href="${link}">${link}</a>
+      </p>
+      <p style="font-size: 12.5px; color: #6b7a80; margin-top: 24px;">
+        Este token expira em 1 hora e só pode ser usado uma vez. Se você não solicitou esta alteração, pode ignorar esta mensagem.
+      </p>
+    </div>`;
+
+  await enviar(destinatario, 'Redefinição de senha no LuminaSaber', texto, html);
+}
+
+export const SendMail = { boasVindas, redefinicaoSenha };
 export default SendMail;
