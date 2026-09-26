@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../errors/HttpError.js';
 import { generateToken } from '../lib/auth.js';
 import { verifyPassword } from '../lib/crypto.js';
-import { gerarTokenRecuperacao, hashTokenRecuperacao, senhaAtendeCritérios, validarSenha } from '../lib/password.js';
+import { gerarTokenRecuperacao, hashTokenRecuperacao } from '../lib/password.js';
 import { UsuarioModel } from '../models/usuarioModel.js';
 import { SendMail } from '../services/SendMail.js';
 import type { UsuarioCreatePayload, UsuarioListItem, UsuarioTipo } from '../types/usuario.js';
@@ -15,17 +15,15 @@ export const UsuarioController = {
   // conferidos pelo middleware validate(criarUsuarioSchema) na rota — o
   // controller só cuida da regra de negócio que o Zod não pode checar
   // sozinho (e-mail duplicado depende de consultar o banco).
+  // Formato, tamanho mínimo, obrigatoriedade e força da senha já foram
+  // conferidos pelo middleware validate(criarUsuarioSchema) na rota — o
+  // controller só cuida da regra de negócio que o Zod não pode checar
+  // sozinho (e-mail duplicado depende de consultar o banco).
   async criar(req: Request, res: Response, next: NextFunction) {
     const { nome, email, senha, grau_escolar, data_nasc } = req.body as UsuarioCreatePayload;
 
     try {
-      const errosSenha = validarSenha(senha);
-      if (errosSenha.length > 0) {
-        return next(new HttpError(400, `Senha inválida. ${errosSenha.join(' ')}`));
-      }
-
-      const emailNormalizado = email.trim().toLowerCase();
-      const emailExiste = await UsuarioModel.buscarPorEmail(emailNormalizado);
+      const emailNormalizado = email.trim().toLowerCase();      const emailExiste = await UsuarioModel.buscarPorEmail(emailNormalizado);
       if (emailExiste) {
         return next(new HttpError(409, 'Este e-mail já está cadastrado. Use outro e-mail.'));
       }
@@ -167,33 +165,21 @@ export const UsuarioController = {
     }
   },
 
+  // Token obrigatório e força da nova senha já foram conferidos pelo
+  // middleware validate(redefinirSenhaSchema) na rota — aqui só a regra
+  // de negócio: o token precisa existir e ainda ser válido no banco.
   async redefinirSenha(req: Request, res: Response, next: NextFunction) {
-    const { token, novaSenha, senha } = req.body as { token?: string; novaSenha?: string; senha?: string };
-    const tokenInformado = token?.trim();
-    const novaSenhaInformada = (novaSenha ?? senha)?.trim();
+    const { token, novaSenha } = req.body as { token: string; novaSenha: string };
 
     try {
-      if (!tokenInformado) {
-        return next(new HttpError(400, 'Token de redefinição é obrigatório.'));
-      }
-
-      if (!novaSenhaInformada) {
-        return next(new HttpError(400, 'A nova senha é obrigatória.'));
-      }
-
-      const errosSenha = validarSenha(novaSenhaInformada);
-      if (errosSenha.length > 0) {
-        return next(new HttpError(400, `Senha inválida. ${errosSenha.join(' ')}`));
-      }
-
-      const tokenHash = hashTokenRecuperacao(tokenInformado);
+      const tokenHash = hashTokenRecuperacao(token.trim());
       const tokenValido = await UsuarioModel.buscarTokenValidoPorHash(tokenHash);
 
       if (!tokenValido) {
         return next(new HttpError(400, 'Token de redefinição inválido ou expirado.'));
       }
 
-      await UsuarioModel.atualizarSenha(tokenValido.cod_usuario, novaSenhaInformada);
+      await UsuarioModel.atualizarSenha(tokenValido.cod_usuario, novaSenha.trim());
       await UsuarioModel.marcarTokenUtilizado(tokenValido.cod_token);
 
       return res.status(200).json({ mensagem: 'Senha redefinida com sucesso.' });
