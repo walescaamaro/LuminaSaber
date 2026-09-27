@@ -11,10 +11,6 @@ const OITO_HORAS_MS = 8 * 60 * 60 * 1000;
 const UMA_HORA_MS = 60 * 60 * 1000;
 
 export const UsuarioController = {
-  // Formato, tamanho mínimo e obrigatoriedade de cada campo já foram
-  // conferidos pelo middleware validate(criarUsuarioSchema) na rota — o
-  // controller só cuida da regra de negócio que o Zod não pode checar
-  // sozinho (e-mail duplicado depende de consultar o banco).
   // Formato, tamanho mínimo, obrigatoriedade e força da senha já foram
   // conferidos pelo middleware validate(criarUsuarioSchema) na rota — o
   // controller só cuida da regra de negócio que o Zod não pode checar
