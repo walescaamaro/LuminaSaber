@@ -1,6 +1,8 @@
 import express from 'express';
 import { UsuarioController } from '../controllers/usuarioController.js';
+import { ProfileImageController } from '../controllers/profileImageController.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { uploadImage } from '../middlewares/uploadImage.js';
 import { adminMiddleware } from '../middlewares/adminMiddleware.js';
 import { validate } from '../middlewares/validate.js';
 import {
@@ -19,5 +21,7 @@ router.post('/api/usuarios/redefinir-senha', validate(redefinirSenhaSchema), Usu
 router.post('/api/usuarios/logout', authMiddleware, UsuarioController.logout);
 router.get('/api/usuarios', authMiddleware, adminMiddleware, UsuarioController.listar);
 router.get('/api/usuarios/perfil', authMiddleware, UsuarioController.perfil);
+router.post('/api/users/image', authMiddleware, uploadImage.single('image'), ProfileImageController.salvar);
+router.put('/api/users/image', authMiddleware, uploadImage.single('image'), ProfileImageController.salvar);
 
 export default router;

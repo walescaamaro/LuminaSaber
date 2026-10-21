@@ -1,0 +1,7 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const currentDirectory = path.dirname(fileURLToPath(import.meta.url));
+
+export const UPLOADS_DIRECTORY = path.resolve(currentDirectory, '../../uploads');
+export const UPLOADS_PUBLIC_PATH = '/uploads';

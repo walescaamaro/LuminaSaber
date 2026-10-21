@@ -19,6 +19,7 @@ import { contentTypeJson } from './src/middlewares/contentTypeJson.js';
 import { blockDirectHtmlAccess } from './src/middlewares/blockDirectHtmlAccess.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
 import { HttpError } from './src/errors/HttpError.js';
+import { UPLOADS_DIRECTORY, UPLOADS_PUBLIC_PATH } from './src/lib/uploadPaths.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,6 +37,7 @@ app.use(morgan('dev'));
 
 // Precisa rodar ANTES do express.static.
 app.use(blockDirectHtmlAccess);
+app.use(UPLOADS_PUBLIC_PATH, express.static(UPLOADS_DIRECTORY, { dotfiles: 'deny', index: false }));
 app.use(express.static(publicDir));
 
 app.use('/api', contentTypeJson);

@@ -39,8 +39,21 @@ model Usuario {
   compras              Compra[]
   beneficios           InventarioBeneficio[]
   tokensRecuperacao    PasswordResetToken[]
+  imagemPerfil         Image?
 
   @@map("USUARIO")
+}
+
+model Image {
+  cod_imagem  Int      @id @default(autoincrement()) @map("cod_imagem")
+  cod_usuario Int      @unique @map("cod_usuario")
+  caminho     String   @map("caminho")
+  criado_em   DateTime @default(now()) @map("criado_em")
+  atualizado_em DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [cod_usuario], references: [cod_usuario], onDelete: Cascade)
+
+  @@map("imagem_perfil")
 }
 
 model PasswordResetToken {

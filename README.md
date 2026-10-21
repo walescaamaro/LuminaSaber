@@ -353,6 +353,19 @@ Content-Type: application/json
 |--------|------|-----------|--------|
 | `POST` | `/api/usuarios` | Cadastra um novo usuário | `201` / `400` / `409` |
 | `GET` | `/api/usuarios` | Lista todos os usuários | `200` |
+| `POST` | `/api/users/image` | Envia a imagem de perfil autenticada | `201` / `400` / `401` |
+| `PUT` | `/api/users/image` | Substitui a imagem de perfil autenticada | `200` / `201` / `400` / `401` |
+
+As rotas de imagem exigem `Authorization: Bearer <token>` e recebem um arquivo multipart no campo `image`. São aceitos JPEG, PNG e GIF de até 2 MB; o caminho retornado em `imageUrl` pode ser acessado publicamente em `/uploads/...`. A migration da imagem é aplicada pelo mesmo `npx prisma migrate dev` do passo 6, sem comandos adicionais.
+
+Resposta de sucesso:
+
+```json
+{
+      "mensagem": "Imagem de perfil salva com sucesso.",
+      "imageUrl": "/uploads/2de8e4de-54a3-4a15-a677-4d8d3974e6ca.png"
+}
+```
 
 **Exemplo — cadastrar usuário:**
 

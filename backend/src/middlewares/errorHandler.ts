@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
+import multer from 'multer';
 import { HttpError } from '../errors/HttpError.js';
 
 export function errorHandler(error: unknown, req: Request, res: Response, next: NextFunction) {
@@ -11,6 +12,13 @@ export function errorHandler(error: unknown, req: Request, res: Response, next: 
       error: error.message,
       ...(error.issues ? { issues: error.issues } : {}),
     });
+  }
+
+  if (error instanceof multer.MulterError) {
+    const message = error.code === 'LIMIT_FILE_SIZE'
+      ? 'O arquivo excede o limite de 2 MB.'
+      : 'Não foi possível processar o arquivo enviado.';
+    return res.status(400).json({ error: message });
   }
 
   console.error('Unhandled error:', error);
