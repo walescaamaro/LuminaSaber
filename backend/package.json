@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "migrate": "tsx src/database/migration.ts",
     "seed": "tsx src/database/seed.ts",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test:files": "node scripts/gerar-arquivos-teste.mjs"
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.9.0",

@@ -10,6 +10,7 @@ const PAGINAS_PRIVADAS = new Set([
   '/meta_questoes.html',
   '/relatorio.html',
   '/tela_exercicios/exercicios.html',
+  '/perfil.html',
 ]);
 
 const PAGINAS_ADMIN = new Set([

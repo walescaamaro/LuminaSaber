@@ -12,6 +12,7 @@ export default function configurePageRoutes(publicDir: string) {
 
   router.get('/painel', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'painel.html')));
   router.get('/anotacoes', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'anotacoes.html')));
+  router.get('/perfil', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'perfil.html')));
   router.get('/historico', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'historico.html')));
   router.get('/selecao', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'seleção_disciplinas.html')));
   router.get('/tempo', authPageMiddleware, (req, res) => res.sendFile(path.join(publicDir, 'defina_seu_tempo.html')));

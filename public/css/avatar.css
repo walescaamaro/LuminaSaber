@@ -1,0 +1,10 @@
+/* Avatar circular reutilizado no painel, no perfil e na lista de usuários. */
+.avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--baby-blue-ice, #a3c4f3); color: var(--ink, #16323d);
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-weight: 800; font-size: 15px; overflow: hidden;
+  text-decoration: none; border: 2px solid #fff;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avatar-grande { width: 140px; height: 140px; font-size: 44px; border-width: 4px; box-shadow: 0 10px 22px rgba(0,0,0,.14); }

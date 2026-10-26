@@ -1,3 +1,11 @@
 node_modules/
 *.sqlite
+generated/
 .env
+
+# Uploads: ignora os arquivos enviados, mas mantém a pasta (.gitkeep)
+/backend/uploads/*
+!/backend/uploads/.gitkeep
+
+uploads/*
+!uploads/.gitkeep

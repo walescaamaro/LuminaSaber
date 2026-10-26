@@ -10,6 +10,7 @@
 
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
+    <script src="/js/avatar.js"></script>
 
     <style>
         :root {
@@ -71,6 +72,8 @@
 
         .item-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
         .avatar {
+            .avatar { overflow: hidden; }
+            .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
             width: 38px; height: 38px; border-radius: 50%; background: var(--baby-blue-ice);
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
             font-weight: 800; font-size: 14px; color: var(--ink);
@@ -188,7 +191,7 @@
                 lista.innerHTML = usuarios.map(u => `
                     <div class="item ${u.tipo === 'administrador' ? 'admin-item' : ''}">
                         <span class="item-info">
-                            <span class="avatar">${iniciais(u.nome)}</span>
+                            <span class="avatar" data-id="${u.cod_usuario}"></span>
                             <span class="item-texto">
                                 <span class="nome">${u.nome}</span>
                                 <span class="tipo">${u.tipo === 'administrador' ? 'Administrador' : 'Aluno'}</span>
@@ -197,6 +200,10 @@
                         <button onclick="abrirPerfil(${u.cod_usuario})">Acessar perfil</button>
                     </div>
                 `).join('');
+                usuarios.forEach(u => {
+                    const el = lista.querySelector(`.avatar[data-id="${u.cod_usuario}"]`);
+                    if (el) Avatar.renderizar(el, { nome: u.nome, imageUrl: u.imageUrl });
+                });
             } catch (err) {
                 lista.innerHTML = '<div class="item"><span class="vazio">Não foi possível conectar ao servidor.</span></div>';
             }

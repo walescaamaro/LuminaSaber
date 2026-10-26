@@ -36,6 +36,7 @@ export const UsuarioModel = {
         grau_escolar: true,
         data_nasc: true,
         tipo: true,
+        imagemPerfil: { select: { caminho: true } },
       },
     });
   },
@@ -126,12 +127,14 @@ export const UsuarioModel = {
         grau_escolar: true,
         data_nasc: true,
         tipo: true,
+        imagemPerfil: { select: { caminho: true } },   // ← LINHA NOVA
       },
       orderBy: { nome: 'asc' },
     });
-    return usuarios.map((usuario) => ({
+    return usuarios.map(({ imagemPerfil, ...usuario }) => ({
       ...usuario,
       data_nasc: usuario.data_nasc.toISOString().slice(0, 10),
+      imageUrl: imagemPerfil?.caminho ?? null,
     }));
-  },
+  }
 };

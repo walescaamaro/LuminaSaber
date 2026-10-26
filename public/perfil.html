@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil · LuminaSaber</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/avatar.css">
+
+    <script src="/js/auth.js"></script>
+    <script>protegerPagina();</script>
+    <script src="/js/avatar.js"></script>
+
+    <style>
+        :root {
+            --lemon-chiffon: #fbf8cc; --cotton-rose: #ffcfd2; --pink-orchid: #f1c0e8;
+            --mauve: #cfbaf0; --baby-blue-ice: #a3c4f3; --celadon: #b9fbc0;
+            --ink: #16323d; --bg-card: #fffdf8;
+            --erro: #b3261e; --erro-bg: #ffe3e1; --ok: #1d6b3b; --ok-bg: #d9f7e3;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: 'DM Sans', sans-serif; color: var(--ink);
+            background: radial-gradient(circle at 20% 15%, #5fe3d9 0%, #4fd1c5 45%, #3fc0b8 100%);
+            padding: 24px 16px 60px;
+        }
+        .topo { max-width: 560px; margin: 0 auto 20px; }
+        .btn-voltar {
+            border: 2px solid var(--ink); background: var(--bg-card); color: var(--ink);
+            padding: 10px 22px; border-radius: 999px; font-weight: 700; font-size: 13.5px;
+            cursor: pointer; font-family: inherit; text-decoration: none; display: inline-block;
+        }
+        .btn-voltar:hover { background: var(--ink); color: var(--bg-card); }
+
+        .cartao {
+            max-width: 560px; margin: 0 auto; background: var(--bg-card); border-radius: 24px;
+            padding: 32px 28px; box-shadow: 0 14px 32px rgba(0,0,0,.14); text-align: center;
+        }
+        .saudacao { font-family: 'Caveat', cursive; font-size: 26px; color: #2a8f80; margin: 0; }
+        h1 { margin: 0 0 4px; font-size: 26px; font-weight: 800; word-break: break-word; }
+        .email { margin: 0 0 22px; font-size: 14px; color: rgba(22,50,61,.65); word-break: break-all; }
+
+        .avatar-area { display: flex; justify-content: center; margin-bottom: 8px; }
+
+        form { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        .arquivo-label {
+            display: inline-block; cursor: pointer; padding: 10px 22px; border-radius: 999px;
+            border: 2px dashed var(--ink); font-weight: 700; font-size: 14px; background: #fff;
+        }
+        .arquivo-label:hover, .arquivo-label:focus-within { background: var(--lemon-chiffon); }
+        input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+        .dica { font-size: 12.5px; color: rgba(22,50,61,.65); margin: 0; }
+        .nome-arquivo { font-size: 13px; font-weight: 600; min-height: 1.2em; margin: 0; word-break: break-all; }
+
+        .btn-enviar {
+            border: none; background: var(--ink); color: #fff; padding: 12px 30px; border-radius: 999px;
+            font-weight: 700; font-size: 14.5px; cursor: pointer; font-family: inherit;
+        }
+        .btn-enviar:disabled { opacity: .45; cursor: not-allowed; }
+
+        .mensagem {
+            display: none; width: 100%; padding: 11px 14px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; margin: 0;
+        }
+        .mensagem.erro { display: block; background: var(--erro-bg); color: var(--erro); }
+        .mensagem.ok { display: block; background: var(--ok-bg); color: var(--ok); }
+    </style>
+</head>
+<body>
+    <div class="topo"><a class="btn-voltar" href="/painel">← Voltar ao painel</a></div>
+
+    <main class="cartao">
+        <p class="saudacao">Meu perfil</p>
+        <h1 id="nome">Carregando...</h1>
+        <p class="email" id="email"></p>
+
+        <div class="avatar-area">
+            <div class="avatar avatar-grande" id="avatar" aria-live="polite"></div>
+        </div>
+
+        <form id="formImagem" novalidate>
+            <label class="arquivo-label" for="image">Escolher foto</label>
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/gif">
+            <p class="nome-arquivo" id="nomeArquivo">Nenhum arquivo selecionado</p>
+            <p class="dica">JPEG, PNG ou GIF · até 2 MB</p>
+
+            <p class="mensagem" id="mensagem" role="alert"></p>
+
+            <button type="submit" class="btn-enviar" id="btnEnviar" disabled>Salvar foto</button>
+        </form>
+    </main>
+
+    <script>
+        const TIPOS_PERMITIDOS = ['image/jpeg', 'image/png', 'image/gif'];
+        const TAMANHO_MAXIMO = 2 * 1024 * 1024; // mesmo limite do Multer no servidor
+
+        const form = document.getElementById('formImagem');
+        const input = document.getElementById('image');
+        const avatarEl = document.getElementById('avatar');
+        const btnEnviar = document.getElementById('btnEnviar');
+        const nomeArquivoEl = document.getElementById('nomeArquivo');
+        const mensagemEl = document.getElementById('mensagem');
+
+        let nomeUsuario = '';
+        let imagemAtual = null;   // caminho público já salvo no servidor (ou null)
+        let urlPreview = null;    // URL temporária da pré-visualização local
+
+        function mostrarMensagem(texto, tipo) {
+            mensagemEl.textContent = texto;
+            mensagemEl.className = texto ? `mensagem ${tipo}` : 'mensagem';
+        }
+
+        function limparPreview() {
+            if (urlPreview) URL.revokeObjectURL(urlPreview);
+            urlPreview = null;
+        }
+
+        // Validação de UX no cliente; a validação que vale é a do servidor.
+        function validarArquivo(arquivo) {
+            if (!TIPOS_PERMITIDOS.includes(arquivo.type)) {
+                return 'Tipo de arquivo não permitido. Envie JPEG, PNG ou GIF.';
+            }
+            if (arquivo.size > TAMANHO_MAXIMO) {
+                return 'O arquivo excede o limite de 2 MB.';
+            }
+            return null;
+        }
+
+        input.addEventListener('change', () => {
+            mostrarMensagem('', '');
+            limparPreview();
+
+            const arquivo = input.files[0];
+            if (!arquivo) {
+                nomeArquivoEl.textContent = 'Nenhum arquivo selecionado';
+                btnEnviar.disabled = true;
+                Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: imagemAtual });
+                return;
+            }
+
+            nomeArquivoEl.textContent = arquivo.name;
+            const erro = validarArquivo(arquivo);
+            if (erro) {
+                mostrarMensagem(erro, 'erro');
+                btnEnviar.disabled = true;
+                input.value = '';
+                Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: imagemAtual });
+                return;
+            }
+
+            // Pré-visualização antes de enviar.
+            urlPreview = URL.createObjectURL(arquivo);
+            Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: urlPreview });
+            btnEnviar.disabled = false;
+        });
+
+        form.addEventListener('submit', async (evento) => {
+            evento.preventDefault();
+            const arquivo = input.files[0];
+            if (!arquivo) return;
+
+            // O nome do campo ("image") precisa ser o mesmo de uploadImage.single('image').
+            const dados = new FormData();
+            dados.append('image', arquivo);
+
+            btnEnviar.disabled = true;
+            btnEnviar.textContent = 'Enviando...';
+            mostrarMensagem('', '');
+
+            try {
+                // Sem definir Content-Type: o navegador monta multipart/form-data com o boundary.
+                // fetchAutenticado inclui o header Authorization: Bearer <token>.
+                const resposta = await fetchAutenticado('/api/users/image', {
+                    method: imagemAtual ? 'PUT' : 'POST',
+                    body: dados,
+                });
+                const corpo = await resposta.json().catch(() => ({}));
+
+                if (!resposta.ok) {
+                    // 400: tipo/tamanho recusado pelo servidor. Volta para a foto salva.
+                    mostrarMensagem(corpo.error || 'Não foi possível enviar a imagem.', 'erro');
+                    limparPreview();
+                    Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: imagemAtual });
+                    return;
+                }
+
+                imagemAtual = corpo.imageUrl;
+                limparPreview();
+                Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: imagemAtual });
+                nomeArquivoEl.textContent = 'Nenhum arquivo selecionado';
+                input.value = '';
+                mostrarMensagem(corpo.mensagem || 'Foto salva com sucesso!', 'ok');
+            } catch (erro) {
+                if (erro.message !== 'Sessão expirada.') {
+                    mostrarMensagem('Não foi possível conectar ao servidor.', 'erro');
+                }
+            } finally {
+                btnEnviar.textContent = 'Salvar foto';
+                btnEnviar.disabled = !input.files[0];
+            }
+        });
+
+        (async function carregarPerfil() {
+            try {
+                const res = await fetchAutenticado('/api/usuarios/perfil');
+                const { usuario } = await res.json();
+                nomeUsuario = usuario.nome;
+                imagemAtual = usuario.imageUrl;
+                document.getElementById('nome').textContent = usuario.nome;
+                document.getElementById('email').textContent = usuario.email;
+                Avatar.renderizar(avatarEl, { nome: nomeUsuario, imageUrl: imagemAtual });
+            } catch (erro) {
+                document.getElementById('nome').textContent = 'Não foi possível carregar o perfil.';
+            }
+        })();
+    </script>
+</body>
+</html>

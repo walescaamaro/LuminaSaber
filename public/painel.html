@@ -12,6 +12,8 @@
     <script src="/js/auth.js"></script>
     <script>protegerPagina();</script>
     <script src="/js/estrelas.js"></script>
+    <script src="/js/avatar.js"></script>
+    <link rel="stylesheet" href="/css/avatar.css">
 
     <style>
         :root {
@@ -93,6 +95,8 @@
         .btn-sair svg { width: 15px; height: 15px; stroke: currentColor; flex-shrink: 0; }
 
         .barra-topo-direita { display: flex; align-items: center; gap: 12px; }
+        .barra-topo-direita .avatar { transition: transform .15s ease; }
+        .barra-topo-direita .avatar:hover { transform: translateY(-2px); }
         .barra-topo-direita #badgeSaldo { cursor: pointer; transition: transform .15s ease; }
         .barra-topo-direita #badgeSaldo:hover { transform: translateY(-2px); }
 
@@ -196,6 +200,8 @@
         </button>
         <div class="barra-topo-direita">
             <div id="badgeSaldo" onclick="window.location.href='/loja'"></div>
+            <div id="badgeSaldo" onclick="window.location.href='/loja'"></div>
+            <a class="avatar" id="avatarTopo" href="/perfil" title="Meu perfil" aria-label="Meu perfil"></a>
         </div>
     </div>
 
@@ -254,7 +260,10 @@
                 const res = await fetchAutenticado('/api/usuarios/perfil');
                 const dados = await res.json();
                 document.getElementById('saudacao').textContent = `Olá, ${dados.usuario.nome.split(' ')[0]}!`;
-
+                Avatar.renderizar(document.getElementById('avatarTopo'), {
+                    nome: dados.usuario.nome,
+                    imageUrl: dados.usuario.imageUrl,
+                });
                 if (dados.usuario.tipo === 'administrador') {
                     const gradeExtra = document.getElementById('gradeExtra');
                     gradeExtra.classList.add('tem-admin');

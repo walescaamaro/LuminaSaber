@@ -203,10 +203,13 @@ export const UsuarioController = {
         return next(new HttpError(404, 'Usuário não encontrado.'));
       }
 
+      const { imagemPerfil, ...dadosUsuario } = usuario;
+
       return res.status(200).json({
         usuario: {
-          ...usuario,
+          ...dadosUsuario,
           data_nasc: usuario.data_nasc.toISOString().slice(0, 10),
+          imageUrl: imagemPerfil?.caminho ?? null,
         },
       });
     } catch (error) {

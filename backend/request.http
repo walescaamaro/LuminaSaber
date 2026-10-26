@@ -139,7 +139,7 @@ Content-Type: application/json
 {
   "nome": "Aluno Teste",
   "email": "aluno.teste2@luminasaber.com",
-  "senha": "SenhaForte123",
+  "senha": "SenhaForte@123",
   "grau_escolar": "5º ano",
   "data_nasc": "2014-03-10",
   "tipo": "aluno"
@@ -202,7 +202,7 @@ Content-Type: application/json
 
 {
   "email": "aluno.teste2@luminasaber.com",
-  "senha": "SenhaForte123"
+  "senha": "SenhaForte@123"
 }
 
 ### Login com senha incorreta → 401
@@ -253,3 +253,78 @@ POST http://localhost:3000/api/usuarios/logout
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 Accept: application/json
+
+
+### ─── UPLOAD DE IMAGEM DE PERFIL ────────────────────────────────────
+# Antes: npm run test:files (gera os arquivos em backend/test-files/)
+# O campo do arquivo precisa se chamar "image" (uploadImage.single('image')).
+
+### Upload SEM token → 401 (o Multer nem processa o arquivo)
+POST http://localhost:3000/api/users/image
+Content-Type: multipart/form-data; boundary=----LuminaBoundary
+
+------LuminaBoundary
+Content-Disposition: form-data; name="image"; filename="valido.png"
+Content-Type: image/png
+
+< ./test-files/valido.png
+------LuminaBoundary--
+
+### Upload válido → 201 + imageUrl
+# @name envio
+POST http://localhost:3000/api/users/image
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: multipart/form-data; boundary=----LuminaBoundary
+
+------LuminaBoundary
+Content-Disposition: form-data; name="image"; filename="valido.png"
+Content-Type: image/png
+
+< ./test-files/valido.png
+------LuminaBoundary--
+
+### Acessar o caminho devolvido → 200, a imagem é exibida
+GET http://localhost:3000{{envio.response.body.imageUrl}}
+
+### Arquivo maior que 2 MB → 400
+POST http://localhost:3000/api/users/image
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: multipart/form-data; boundary=----LuminaBoundary
+
+------LuminaBoundary
+Content-Disposition: form-data; name="image"; filename="grande.png"
+Content-Type: image/png
+
+< ./test-files/grande.png
+------LuminaBoundary--
+
+### Tipo não permitido (text/plain) → 400
+POST http://localhost:3000/api/users/image
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: multipart/form-data; boundary=----LuminaBoundary
+
+------LuminaBoundary
+Content-Disposition: form-data; name="image"; filename="documento.txt"
+Content-Type: text/plain
+
+< ./test-files/documento.txt
+------LuminaBoundary--
+
+### Reenvio pelo mesmo usuário (PUT) → 200, caminho atualizado
+# @name reenvio
+PUT http://localhost:3000/api/users/image
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: multipart/form-data; boundary=----LuminaBoundary
+
+------LuminaBoundary
+Content-Disposition: form-data; name="image"; filename="segundo.gif"
+Content-Type: image/gif
+
+< ./test-files/segundo.gif
+------LuminaBoundary--
+
+### Caminho novo é exibido → 200 (image/gif)
+GET http://localhost:3000{{reenvio.response.body.imageUrl}}
+
+### Caminho antigo foi apagado → 404
+GET http://localhost:3000{{envio.response.body.imageUrl}}

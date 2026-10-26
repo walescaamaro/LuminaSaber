@@ -16,4 +16,5 @@ export interface UsuarioListItem {
   grau_escolar: string | null;
   data_nasc: string;
   tipo: UsuarioTipo;
+  imageUrl: string | null;  
 }
