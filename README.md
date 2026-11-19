@@ -667,6 +667,18 @@ O comando `npm run seed` popula o banco com dados de exemplo para testes:
 
 ---
 
+## 🧪 Testes automatizados do backend
+
+Os testes de unidade e de API usam o `node:test`. Para executá-los, entre em `backend` e rode:
+
+```bash
+npm test
+```
+
+`npm run test:unit` executa os testes de schemas, regras de negócio e funções utilitárias sem servidor, banco ou rede. `npm run test:api` prepara um arquivo SQLite temporário exclusivo, aplica nele as migrations existentes e testa as rotas com Supertest sem abrir uma porta HTTP. O arquivo temporário é removido ao final; o banco de desenvolvimento e os scripts de inicialização não são usados nem alterados pelos testes. O envio de e-mails fica desabilitado em `NODE_ENV=test`.
+
+---
+
 ## 📄 Licença
 
 Este projeto foi desenvolvido para fins educacionais. Teve início como atividade da disciplina de **Projeto Integrador**, já concluída, e atualmente segue em desenvolvimento como atividade da disciplina de **Linguagem e Técnicas de Programação II**, ambas do **Instituto Federal de Educação, Ciência e Tecnologia da Paraíba (IFPB)**.

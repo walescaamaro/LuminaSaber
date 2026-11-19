@@ -15,6 +15,10 @@ import mailConfig from '../config/mail.js';
 const REMETENTE = 'LuminaSaber <naoresponda@luminasaber.app>';
 
 async function enviar(destinatario: string, assunto: string, texto: string, html: string) {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   const config = await mailConfig();
 
   // Sem SMTP configurado (ex.: em teste automatizado) o envio é apenas
