@@ -66,20 +66,8 @@ async function redirecionarSeAutenticado() {
 }
 
 async function fetchAutenticado(url, opcoes = {}) {
-  const token = obterToken();
-
-  const resposta = await fetch(url, {
-    ...opcoes,
-    headers: { ...(opcoes.headers || {}), Authorization: `Bearer ${token}` },
-  });
-
-  if (resposta.status === 401) {
-    limparSessao();
-    window.location.replace('/login');
-    throw new Error('Sessão expirada.');
-  }
-
-  return resposta;
+  const apiClient = await import('./api-client.js');
+  return apiClient.fetchAutenticado(url, opcoes);
 }
 
 async function sair() {
@@ -95,3 +83,17 @@ async function sair() {
     window.location.replace('/login');
   }
 }
+
+// API explícita para que os helpers possam ser exercitados isoladamente sem
+// remover as funções globais usadas pelas páginas HTML legadas.
+window.Auth = {
+  salvarSessao,
+  obterToken,
+  obterUsuario,
+  estaAutenticado,
+  limparSessao,
+  protegerPagina,
+  redirecionarSeAutenticado,
+  fetchAutenticado,
+  sair,
+};

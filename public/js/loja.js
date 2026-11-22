@@ -85,7 +85,7 @@ function mostrarErroCarregamento(erro) {
         </div>
     `;
     const btn = document.getElementById('btnTentarDeNovo');
-    if (btn) btn.addEventListener('click', () => carregarTudo());
+    btn.addEventListener('click', () => carregarTudo());
 }
 
 async function comprarItem(item, botao) {
@@ -111,7 +111,7 @@ async function comprarItem(item, botao) {
     }
 }
 
-let atualizarBadgeSaldo = function () {};
+let atualizarBadgeSaldo;
 
 async function carregarTudo(saldoConhecido, inventarioConhecido) {
     try {
@@ -126,6 +126,16 @@ async function carregarTudo(saldoConhecido, inventarioConhecido) {
         mostrarErroCarregamento(err);
     }
 }
+
+// Mantém a página clássica e oferece operações explícitas para integração e teste.
+window.Loja = {
+    mostrarToast,
+    buscarJson,
+    renderizarItens,
+    mostrarErroCarregamento,
+    comprarItem,
+    carregarTudo,
+};
 
 (async function iniciar() {
     try {

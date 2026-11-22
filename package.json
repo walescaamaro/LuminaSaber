@@ -1,17 +1,17 @@
 {
+  "private": true,
   "scripts": {
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push"
+    "prisma:generate": "npm --prefix backend run prisma:generate",
+    "prisma:push": "npm --prefix backend run prisma:push",
+    "test:unit": "npm --prefix backend run test:unit",
+    "test:api": "npm --prefix backend run test:api",
+    "front:test": "npm --prefix backend run front:test",
+    "front:coverage": "npm --prefix backend run front:coverage",
+    "e2e": "npm --prefix backend run e2e",
+    "coverage": "npm --prefix backend run coverage",
+    "test": "npm run test:unit && npm run test:api && npm run front:test && npm run e2e"
   },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^25.9.3",
-    "prisma": "^7.8.0"
-  },
-  "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.8.0",
-    "@prisma/client": "^7.8.0",
-    "dotenv": "^17.4.2",
-    "typescript": "^6.0.3"
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   }
 }

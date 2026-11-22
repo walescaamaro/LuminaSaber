@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { aplicarMigracoes } from './test-database.mjs';
 
 const backendDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const databaseName = `.luminasaber-test-${process.pid}.sqlite`;
@@ -40,8 +41,8 @@ function runNode(args) {
 
 try {
   runNode(['node_modules/prisma/build/index.js', 'generate']);
-  runNode(['node_modules/prisma/build/index.js', 'migrate', 'deploy']);
-  runNode(['--import', 'tsx', '--test', 'src/__tests__/api.test.ts']);
+  aplicarMigracoes(databasePath);
+  runNode(['--import', 'tsx', 'src/__tests__/api.test.ts']);
 } finally {
   for (const suffix of ['', '-journal', '-shm', '-wal']) {
     rmSync(`${databasePath}${suffix}`, { force: true });

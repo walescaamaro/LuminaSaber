@@ -232,7 +232,7 @@
                     <input type="text" id="titulo" placeholder="Título da anotação" required maxlength="120">
                     <textarea id="texto" rows="4" placeholder="Digite suas ideias..." required></textarea>
                     <div class="form-rodape">
-                        <select id="pastaForm"></select>
+                        <select id="pastaForm" aria-label="Pasta da nova anotação"></select>
                         <p id="mensagemForm"></p>
                         <button type="submit">Salvar anotação</button>
                     </div>
@@ -245,7 +245,7 @@
 
     <!-- Modal genérico: confirmação e criar/renomear pasta -->
     <div class="modal-fundo" id="modalFundo">
-        <div class="modal-caixa">
+        <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
             <h3 id="modalTitulo">Título</h3>
             <p id="modalTexto"></p>
             <p id="modalErro"></p>
@@ -527,9 +527,9 @@
                         </div>
                     </div>
                     <div class="conteudo-edicao">
-                        <input type="text" class="edit-titulo" value="${escaparHtml(a.titulo)}" maxlength="120">
-                        <textarea class="edit-texto" rows="4">${escaparHtml(a.texto_anota)}</textarea>
-                        <select class="edit-pasta">
+                        <input type="text" class="edit-titulo" aria-label="Título da anotação" value="${escaparHtml(a.titulo)}" maxlength="120">
+                        <textarea class="edit-texto" aria-label="Texto da anotação" rows="4">${escaparHtml(a.texto_anota)}</textarea>
+                        <select class="edit-pasta" aria-label="Pasta da anotação">
                             ${pastas.map(p => `<option value="${p.cod_pasta}" ${p.cod_pasta === a.cod_pasta ? 'selected' : ''}>${escaparHtml(p.nome_pasta)}</option>`).join('')}
                         </select>
                         <p class="erro-edicao" style="color:#b00020; font-size:12.5px; font-weight:700; display:none; margin:0 0 8px;"></p>

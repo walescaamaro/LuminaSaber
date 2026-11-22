@@ -179,6 +179,25 @@ A modelagem está em [`backend/prisma/schema.prisma`](backend/prisma/schema.pris
 
 O cadastro público sempre cria usuários como **alunos**; o campo `tipo` enviado pelo cliente não concede privilégios administrativos. Administradores são provisionados pelo seed ou por uma operação administrativa controlada. O backend também valida formato de e-mail, nome e data de nascimento antes de acessar o banco. O `JWT_SECRET` é obrigatório e deve ter pelo menos 32 caracteres; copie `.env.example` para `.env` e substitua o valor de exemplo por um segredo aleatório (o arquivo `.env` nunca vai para o Git).
 
+### Testes automatizados
+
+Use Node.js 22 (definido em `.nvmrc`; o Prisma instalado aceita Node 20.19+, 22.12+ ou 24+). Com `nvm`, ative a versão com `nvm use`. Instale as dependências respeitando o lockfile com `npm ci --prefix backend`; os scripts da raiz delegam ao backend para manter uma única instalação das dependências, inclusive dos módulos nativos. Depois de trocar a versão principal do Node, repita `npm ci --prefix backend` para instalar os binários nativos compatíveis com a ABI ativa.
+
+```bash
+npm run test:unit     # testes rápidos sem servidor ou banco
+npm run test:api      # rotas via Supertest e SQLite temporário
+npm run front:test    # Vitest + JSDOM, sem navegador
+npm run e2e           # Playwright: cadastro, pasta e CRUD de anotação no navegador
+npm run coverage      # cobertura backend e front-end com pisos configurados
+npm test              # suíte completa: unitários, API, front-end e E2E
+```
+
+`test:unit` e `front:test` são as verificações rápidas; `test:api` valida a integração com o banco temporário; `e2e` valida o fluxo completo no navegador; `npm test` agrega as quatro categorias. O runner E2E mantém o Express na porta efêmera que o sistema operacional atribui, e Playwright bloqueia todas as requisições fora da origem local. Os runners criam um SQLite temporário exclusivo, aplicam as migrations e removem os arquivos ao terminar; `NODE_ENV=test` desativa o envio de e-mails. Instale o Chromium uma vez, se ainda não estiver disponível: `npx --prefix backend playwright install chromium`.
+
+O comando `coverage` falha se a cobertura backend ficar abaixo de 80% em statements, branches, funções ou linhas. O front-end exige 90% em cada métrica nos módulos incluídos (`api-client.js`, `auth.js`, `avatar.js`, `estrelas.js`, `loja.js` e `tema.js`). Os relatórios de texto listam os arquivos e as linhas descobertas; os relatórios HTML ficam em `backend/coverage/backend/index.html` e `backend/coverage/frontend/index.html`.
+
+Para verificar a tipagem do backend, do servidor E2E, das specs Playwright e de `playwright.config.ts`, execute `npm --prefix backend run check`. O script executa o TypeScript de produção e a configuração isolada `backend/tsconfig.e2e.json`.
+
 ### Autenticação e proteção de rotas
 
 O projeto possui um fluxo completo de autenticação por **JWT**. O cadastro é feito em `POST /api/usuarios` e o login em `POST /api/usuarios/login`. Quando o usuário faz login com e-mail e senha válidos, o backend gera um token com `jsonwebtoken` e o retorna no corpo da resposta. Esse token deve ser enviado no header `Authorization: Bearer <token>` em rotas privadas. O front-end guarda o token e o envia pelo helper `fetchAutenticado` (`public/js/auth.js`); se o servidor responder `401`, a sessão é limpa e o usuário volta para o login.
@@ -391,7 +410,7 @@ LuminaSaber/
 
 ### Pré-requisitos
 
-- [Node.js](https://nodejs.org/) (recomendado: versão 22 ou superior)
+- [Node.js](https://nodejs.org/) (recomendado: 22.12 ou 24+, conforme `.nvmrc` e `engines`)
 - [Git](https://git-scm.com/)
 - Uma chave gratuita da [API do Google Gemini](https://aistudio.google.com/) (apenas para a análise de IA no relatório)
 - Extensão **REST Client** no VSCode (para os testes da API)
@@ -406,8 +425,8 @@ cd LuminaSaber
 # 2. Acesse a pasta do backend (toda a aplicação fica aqui)
 cd backend
 
-# 3. Instale as dependências
-npm install
+# 3. Instale as dependências respeitando o lockfile
+npm ci
 
 # 4. Crie o arquivo de variáveis de ambiente
 cp .env.example .env

@@ -2,6 +2,9 @@ node_modules/
 *.sqlite
 generated/
 .env
+/coverage/
+/test-results/
+/playwright-report/
 
 # Uploads: ignora os arquivos enviados, mas mantém a pasta (.gitkeep)
 /backend/uploads/*

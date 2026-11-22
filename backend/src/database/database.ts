@@ -7,7 +7,18 @@ type SqlParams = unknown | readonly unknown[];
 
 interface SqliteRunResult {
   changes: number;
-  lastInsertRowid: number;
+  lastInsertRowid: number | bigint;
+}
+
+interface SqliteStatementLike {
+  run(...params: unknown[]): SqliteRunResult;
+  get(...params: unknown[]): unknown;
+  all(...params: unknown[]): unknown[];
+}
+
+interface SqliteDatabaseLike {
+  prepare(sql: string): SqliteStatementLike;
+  close(): void;
 }
 
 export interface SqliteConnection {
@@ -25,7 +36,7 @@ function parseRow<T>(row: T | undefined): T | undefined {
   return row ? { ...row } : undefined;
 }
 
-function createPromiseDatabase(database: any): SqliteConnection {
+export function createPromiseDatabase(database: SqliteDatabaseLike): SqliteConnection {
   return {
     async run(sql, params) {
       const result = database.prepare(sql).run(...parseParams(params));
@@ -35,12 +46,12 @@ function createPromiseDatabase(database: any): SqliteConnection {
       };
     },
 
-    async get(sql, params) {
-      return parseRow(database.prepare(sql).get(...parseParams(params)));
+    async get<T = unknown>(sql: string, params?: SqlParams) {
+      return parseRow(database.prepare(sql).get(...parseParams(params)) as T | undefined);
     },
 
-    async all(sql, params) {
-      return database.prepare(sql).all(...parseParams(params)).map(parseRow);
+    async all<T = unknown>(sql: string, params?: SqlParams) {
+      return (database.prepare(sql).all(...parseParams(params)) as T[]).map((row) => parseRow(row) as T);
     },
 
     async close() {
@@ -50,7 +61,7 @@ function createPromiseDatabase(database: any): SqliteConnection {
 }
 
 export async function connect(): Promise<SqliteConnection> {
-  return createPromiseDatabase(new Database(dbFile, { readonly: false }));
+  return createPromiseDatabase(new Database(dbFile, { readonly: false }) as unknown as SqliteDatabaseLike);
 }
 
 export default { connect };

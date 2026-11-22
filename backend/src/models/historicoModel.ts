@@ -26,10 +26,8 @@ export const HistoricoModel = {
   // Recalcula se acertou/errou no SERVIDOR (não confia no que o front manda),
   // comparando com a alternativa_correta salva no banco.
   //
-  // Também premia o aluno com Estrelas (Mercado Lumina) quando ele acerta
-  // uma questão que já havia errado anteriormente — a verificação do erro
-  // anterior é feita consultando o histórico já salvo, então não dá pra
-  // manipular pelo front-end.
+  // Uma resposta correta recebe a recompensa se esse usuário já errou esta
+  // mesma questão alguma vez. Tentativas de outras questões/usuários não contam.
   async registrar(
     codUsuario: number,
     codQuest: number,
@@ -48,12 +46,12 @@ export const HistoricoModel = {
     let estrelasGanhas = 0;
 
     if (status === 'Acertou') {
-      const errouAntes = await prisma.historico.findFirst({
+      const erroAnterior = await prisma.historico.findFirst({
         where: { cod_usuario: codUsuario, cod_quest: codQuest, status: 'Errou' },
         select: { cod_resposta: true },
       });
 
-      if (errouAntes) {
+      if (erroAnterior) {
         estrelasGanhas = ESTRELAS_POR_CORRECAO_DE_ERRO;
       }
     }
