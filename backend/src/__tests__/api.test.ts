@@ -78,7 +78,7 @@ function payloadQuestao(enunciado: string) {
   };
 }
 
-test('rotas de pastas suportam CRUD e impedem acesso entre usuários', async () => {
+test('SUCESSO + ERRO: rotas de pastas fazem CRUD e impedem acesso entre usuários', async () => {
   const semAutenticacao = await request(app).get('/api/pastas');
   assert.equal(semAutenticacao.status, 401);
 
@@ -142,7 +142,7 @@ test('rotas de pastas suportam CRUD e impedem acesso entre usuários', async () 
   assert.equal(inexistente.status, 404);
 });
 
-test('rotas de anotações suportam CRUD, erros HTTP e isolamento por usuário', async () => {
+test('SUCESSO + ERRO: rotas de anotações fazem CRUD e isolam usuários', async () => {
   const semToken = await request(app).post('/api/anotacoes').send({ titulo: 'A', texto_anota: 'B' });
   assert.equal(semToken.status, 401);
 
@@ -224,7 +224,7 @@ test('rotas de anotações suportam CRUD, erros HTTP e isolamento por usuário',
   assert.equal(excluirInexistente.status, 404);
 });
 
-test('cadastro diferencia criação válida de e-mail duplicado sem enviar e-mail real', async () => {
+test('SUCESSO + ERRO: cadastro aceita conta nova e rejeita e-mail duplicado sem enviar e-mail real', async () => {
   const body = {
     nome: 'Conta de Teste',
     email: 'signup@luminasaber.test',
@@ -271,7 +271,7 @@ test('cadastro diferencia criação válida de e-mail duplicado sem enviar e-mai
   assert.ok(listaAdmin.body.every((usuario: { senha?: string }) => usuario.senha === undefined));
 });
 
-test('loja exige autenticação e valida operações sem saldo', async () => {
+test('SUCESSO + ERRO: loja protege operações e valida saldo e itens', async () => {
   const semAutenticacao = await request(app).get('/api/loja/itens');
   assert.equal(semAutenticacao.status, 401);
 
@@ -336,7 +336,7 @@ test('loja exige autenticação e valida operações sem saldo', async () => {
   assert.equal(saldoDeOutro.body.estrelas, 0);
 });
 
-test('recuperação de senha não revela se o e-mail existe', async () => {
+test('SUCESSO + ERRO: recuperação de senha responde sem revelar se o e-mail existe', async () => {
   const existente = await request(app)
     .post('/api/usuarios/solicitar-redefinicao-senha')
     .send({ email: 'owner@luminasaber.test' });
@@ -371,7 +371,7 @@ test('recuperação de senha não revela se o e-mail existe', async () => {
   assert.match(reutilizado.body.error, /inválido ou expirado/);
 });
 
-test('questões permitem leitura e protegem CRUD para administradores', async () => {
+test('SUCESSO + ERRO: questões permitem leitura e protegem CRUD de administrador', async () => {
   const leituraPublica = await request(app).get('/api/questoes');
   assert.equal(leituraPublica.status, 200);
   assert.deepEqual(leituraPublica.body, []);
@@ -448,7 +448,7 @@ test('questões permitem leitura e protegem CRUD para administradores', async ()
   assert.equal(excluirInexistente.status, 404);
 });
 
-test('histórico registra erros e acertos, recompensa correção e isola por usuário', async () => {
+test('SUCESSO + ERRO: histórico registra respostas, recompensa correções e isola usuário/questão', async () => {
   const criada = await prisma.questao.create({
     data: payloadQuestao('Quanto é 8 vezes 8?'),
   });
@@ -538,7 +538,7 @@ test('histórico registra erros e acertos, recompensa correção e isola por usu
   assert.equal(questaoInexistente.status, 404);
 });
 
-test('upload de perfil valida arquivos, cria e substitui a imagem com limpeza do arquivo anterior', async () => {
+test('SUCESSO + ERRO: upload valida arquivos e substitui imagem do perfil', async () => {
   const auth = { Authorization: `Bearer ${ownerToken}` };
   const pastaValida = path.resolve('test-files/valido.png');
   const pastaGif = path.resolve('test-files/segundo.gif');
@@ -608,7 +608,7 @@ test('upload de perfil valida arquivos, cria e substitui a imagem com limpeza do
   }
 });
 
-test('páginas privadas, páginas administrativas e HTML direto respeitam o cookie de sessão', async () => {
+test('SUCESSO + ERRO: páginas privadas e administrativas respeitam autenticação e permissão', async () => {
   const anonimo = await request(app).get('/painel');
   assert.equal(anonimo.status, 302);
   assert.equal(anonimo.headers.location, '/login');
@@ -647,7 +647,7 @@ test('páginas privadas, páginas administrativas e HTML direto respeitam o cook
   assert.equal(htmlPublico.status, 200);
 });
 
-test('análise de IA valida o prompt, usa Gemini e recorre a Groq quando necessário', async () => {
+test('SUCESSO + ERRO: análise valida prompt e usa Groq quando Gemini falha', async () => {
   const chaveGeminiOriginal = process.env.GEMINI_API_KEY;
   const chaveGroqOriginal = process.env.GROQ_API_KEY;
   const fetchOriginal = globalThis.fetch;

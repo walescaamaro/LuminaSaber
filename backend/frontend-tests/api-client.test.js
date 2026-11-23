@@ -44,18 +44,20 @@ describe('fetchAutenticado', () => {
     });
   });
 
-  it('permite substituir fetch e localStorage globais por dublês controlados', async () => {
+  it('MOCK DE SUCESSO: envia URL, método e Authorization e recebe HTTP 200', async () => {
     const armazenamento = {
       getItem: vi.fn().mockReturnValue('token-mocado'),
       removeItem: vi.fn(),
     };
-    const buscar = vi.fn().mockResolvedValue({ status: 200, ok: true });
+    const resposta = { status: 200, ok: true, json: vi.fn().mockResolvedValue({ dados: [] }) };
+    const buscar = vi.fn().mockResolvedValue(resposta);
     vi.stubGlobal('localStorage', armazenamento);
     vi.stubGlobal('fetch', buscar);
 
-    const resposta = await fetchAutenticado('/api/perfil', { method: 'GET' });
+    const resultado = await fetchAutenticado('/api/perfil', { method: 'GET' });
 
-    expect(resposta.status).toBe(200);
+    expect(resultado).toBe(resposta);
+    expect(resultado.status).toBe(200);
     expect(armazenamento.getItem).toHaveBeenCalledWith('luminasaber_token');
     expect(buscar).toHaveBeenCalledWith('/api/perfil', {
       method: 'GET',
@@ -63,18 +65,27 @@ describe('fetchAutenticado', () => {
     });
   });
 
-  it('remove a sessão e rejeita a chamada quando a API responde 401', async () => {
-    localStorage.setItem('luminasaber_token', 'token-expirado');
-    localStorage.setItem('luminasaber_user', '{"nome":"Teste"}');
-    const buscar = vi.fn().mockResolvedValue({ status: 401 });
-    const aoExpirar = vi.fn();
+  it('MOCK DE ERRO: HTTP 401 limpa localStorage, redireciona e rejeita a chamada', async () => {
+    const armazenamento = {
+      getItem: vi.fn().mockReturnValue('token-expirado'),
+      removeItem: vi.fn(),
+    };
+    const buscar = vi.fn().mockResolvedValue({ status: 401, ok: false });
+    const replace = vi.fn();
+    vi.stubGlobal('localStorage', armazenamento);
+    vi.stubGlobal('fetch', buscar);
+    vi.stubGlobal('window', { location: { replace } });
 
-    await expect(fetchAutenticado('/api/anotacoes', {}, { buscar, aoExpirar }))
+    await expect(fetchAutenticado('/api/anotacoes', { method: 'GET' }))
       .rejects.toThrow('Sessão expirada.');
 
-    expect(aoExpirar).toHaveBeenCalledOnce();
-    expect(localStorage.getItem('luminasaber_token')).toBeNull();
-    expect(localStorage.getItem('luminasaber_user')).toBeNull();
+    expect(buscar).toHaveBeenCalledWith('/api/anotacoes', {
+      method: 'GET',
+      headers: { Authorization: 'Bearer token-expirado' },
+    });
+    expect(armazenamento.removeItem).toHaveBeenNthCalledWith(1, 'luminasaber_token');
+    expect(armazenamento.removeItem).toHaveBeenNthCalledWith(2, 'luminasaber_user');
+    expect(replace).toHaveBeenCalledWith('/login');
   });
 
   it('propaga falhas de rede e preserva a sessão em respostas que não são 401', async () => {

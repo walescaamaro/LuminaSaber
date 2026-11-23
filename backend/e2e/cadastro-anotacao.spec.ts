@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { expect, test } from './fixtures.js';
 
-test('cadastro e criação de anotação pela interface', async ({ page }) => {
+test('SUCESSO E2E: cadastra usuário e cria, edita e exclui anotação pela interface', async ({ page }) => {
   const identificador = randomUUID();
   const email = `e2e-${identificador}@luminasaber.test`;
   const titulo = `Anotação E2E ${identificador}`;
@@ -54,7 +54,7 @@ test('cadastro e criação de anotação pela interface', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Comprar' }).first()).toBeDisabled();
 });
 
-test('login rejeita credenciais incorretas com mensagem acessível', async ({ page }) => {
+test('ERRO E2E: login com credenciais incorretas exibe mensagem acessível', async ({ page }) => {
   await page.goto('/login');
   await page.getByLabel('E-mail', { exact: true }).fill('nao-existe@luminasaber.test');
   await page.getByLabel('Senha', { exact: true }).fill('SenhaErrada1!');

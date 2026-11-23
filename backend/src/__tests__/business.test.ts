@@ -9,7 +9,7 @@ import { criarPastaSchema, atualizarPastaSchema, excluirPastaSchema } from '../s
 import { criarQuestaoSchema, listarQuestoesSchema } from '../schemas/questao.schema.js';
 import { criarUsuarioSchema, redefinirSenhaSchema } from '../schemas/usuario.schema.js';
 
-test('schemas de anotação aceitam dados válidos e normalizam campos', () => {
+test('SUCESSO: schema de anotação aceita dados válidos e normaliza campos', () => {
   const parsed = criarAnotacaoSchema.parse({
     body: { titulo: '  Resumo  ', texto_anota: '  Conteúdo  ', cod_pasta: '12' },
   });
@@ -19,7 +19,7 @@ test('schemas de anotação aceitam dados válidos e normalizam campos', () => {
   assert.equal(excluirAnotacaoSchema.safeParse({ params: { id: 1 } }).success, true);
 });
 
-test('schemas de anotação rejeitam campos vazios, ids inválidos e atualização vazia', () => {
+test('ERRO: schemas de anotação rejeitam campos vazios, ids inválidos e atualização vazia', () => {
   assert.equal(criarAnotacaoSchema.safeParse({ body: { titulo: ' ', texto_anota: 'Texto' } }).success, false);
   assert.equal(criarAnotacaoSchema.safeParse({ body: { titulo: 'Título', texto_anota: 'Texto', cod_pasta: 0 } }).success, false);
   assert.equal(atualizarAnotacaoSchema.safeParse({ params: { id: 'abc' }, body: { titulo: 'Novo' } }).success, false);
@@ -30,7 +30,7 @@ test('schemas de anotação rejeitam campos vazios, ids inválidos e atualizaç�
   assert.equal(criarAnotacaoSchema.safeParse({ body: { titulo: 'x'.repeat(201), texto_anota: 'Texto' } }).success, false);
 });
 
-test('schemas de pasta validam limites e identificadores', () => {
+test('SUCESSO + ERRO: schemas de pasta validam limites e identificadores', () => {
   assert.equal(criarPastaSchema.safeParse({ body: { nome_pasta: ' Estudos ' } }).success, true);
   assert.equal(criarPastaSchema.safeParse({ body: { nome_pasta: ' ' } }).success, false);
   assert.equal(criarPastaSchema.safeParse({ body: { nome_pasta: 'x'.repeat(61) } }).success, false);
@@ -40,7 +40,7 @@ test('schemas de pasta validam limites e identificadores', () => {
   assert.equal(criarPastaSchema.safeParse({ body: { nome_pasta: null } }).success, false);
 });
 
-test('schema de usuário valida datas reais do calendário, data futura e senha', () => {
+test('SUCESSO + ERRO: schema de usuário aceita datas reais e rejeita datas inválidas', () => {
   const usuarioValido = {
     nome: 'Ana Silva',
     email: 'ana@example.com',
@@ -67,7 +67,7 @@ test('schema de usuário valida datas reais do calendário, data futura e senha'
   assert.equal(criarUsuarioSchema.safeParse({ body: { ...usuarioValido, senha: null } }).success, false);
 });
 
-test('schemas de questões e loja validam enums e valores de fronteira', () => {
+test('SUCESSO + ERRO: schemas de questões e loja validam enums e valores de fronteira', () => {
   const questao = {
     cod_disc: '1',
     enunciado: 'Enunciado',
@@ -89,7 +89,7 @@ test('schemas de questões e loja validam enums e valores de fronteira', () => {
   assert.equal(sessaoConcluidaSchema.safeParse({ body: { meta: -1, respondidas: 0 } }).success, false);
 });
 
-test('regras de senha e tokens de recuperação cobrem formatos e consistência', () => {
+test('SUCESSO + ERRO: regras de senha e tokens de recuperação validam formatos', () => {
   assert.deepEqual(validarSenha('Abcdef1!'), []);
   assert.equal(senhaAtendeCritérios('Abcdef1!'), true);
   assert.equal(senhaAtendeCritérios('abcdef1!'), false);
@@ -100,7 +100,7 @@ test('regras de senha e tokens de recuperação cobrem formatos e consistência'
   assert.match(hashTokenRecuperacao(token), /^[a-f0-9]{64}$/);
 });
 
-test('recompensas aplicam limites da meta e catálogo tem custos positivos', () => {
+test('SUCESSO + LIMITE: recompensas respeitam metas e catálogo tem custos positivos', () => {
   assert.equal(calcularEstrelasPorConclusaoDeSessao(0, 0), 2);
   assert.equal(calcularEstrelasPorConclusaoDeSessao(-1, 10), 2);
   assert.equal(calcularEstrelasPorConclusaoDeSessao(10, 0), 2);

@@ -10,7 +10,7 @@ import { validarSenha } from '../lib/password.js';
 import { authMiddleware } from '../middlewares/authMiddleware.js';
 import { HttpError } from '../errors/HttpError.js';
 
-test('gera e valida token JWT com payload do usuário', () => {
+test('SUCESSO: gera e valida token JWT com payload do usuário', () => {
   const token = generateToken({ id: 42, email: 'aluno@luminasaber.com' });
   const payload = verifyToken(token);
 
@@ -18,7 +18,7 @@ test('gera e valida token JWT com payload do usuário', () => {
   assert.equal(payload?.email, 'aluno@luminasaber.com');
 });
 
-test('rejeita tokens expirados, malformados e assinados com outro segredo', () => {
+test('ERRO: rejeita tokens expirados, malformados e assinados com outro segredo', () => {
   const segredo = process.env.JWT_SECRET!;
   const expirado = jwt.sign({ id: 42, email: 'aluno@luminasaber.com' }, segredo, { expiresIn: -1 });
   const outroSegredo = jwt.sign({ id: 42, email: 'aluno@luminasaber.com' }, `${segredo}-outro`);
@@ -28,7 +28,7 @@ test('rejeita tokens expirados, malformados e assinados com outro segredo', () =
   assert.equal(verifyToken(outroSegredo), null);
 });
 
-test('não gera token quando o segredo está ausente ou é curto', () => {
+test('ERRO: não gera token quando o segredo está ausente ou é curto', () => {
   const segredoOriginal = process.env.JWT_SECRET;
   try {
     delete process.env.JWT_SECRET;
@@ -42,7 +42,7 @@ test('não gera token quando o segredo está ausente ou é curto', () => {
   }
 });
 
-test('middleware bloqueia acesso sem token de autenticação', () => {
+test('ERRO: middleware bloqueia acesso sem token de autenticação', () => {
   const req = { headers: {} } as any;
   const res = {
     status(code: number) {
@@ -66,7 +66,7 @@ test('middleware bloqueia acesso sem token de autenticação', () => {
   assert.equal((capturedError as HttpError).statusCode, 401);
 });
 
-test('middleware rejeita token malformado sem autenticar a requisição', () => {
+test('ERRO: middleware rejeita token malformado sem autenticar a requisição', () => {
   const req = { headers: { authorization: 'Bearer token-invalido' } } as any;
   const res = {} as any;
   let capturedError: unknown = null;
@@ -78,7 +78,7 @@ test('middleware rejeita token malformado sem autenticar a requisição', () => 
   assert.equal(req.user, undefined);
 });
 
-test('valida critérios de senha no backend', () => {
+test('SUCESSO + ERRO: valida critérios de senha no backend', () => {
   assert.deepEqual(validarSenha('Abcdef1!'), []);
   assert.deepEqual(validarSenha('abcdef1!'), ['A senha deve conter pelo menos uma letra maiúscula.']);
   assert.deepEqual(validarSenha('ABCDEF1!'), ['A senha deve conter pelo menos uma letra minúscula.']);
